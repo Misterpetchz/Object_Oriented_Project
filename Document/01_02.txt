@@ -15,7 +15,7 @@
 - PaymentMethod
 - DeliveryDetail
 - DeliveryMethod
-- Advertisment
+- Advertisement
 - Receipt
 - PreOrderList
 - Cart
