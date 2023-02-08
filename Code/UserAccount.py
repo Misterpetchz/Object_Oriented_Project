@@ -10,12 +10,12 @@ class UserAccount:
 
 class Customer(UserAccount):
     def __init__(self, email, password, full_name, gender, tel, address, email_noti, sms_noti):
-        UserAccount.__init__(self, email, password, full_name, gender, tel)
+        super.__init__(self, email, password, full_name, gender, tel)
         self.__address = address
         self.__email_noti = email_noti
         self.__sms_noti = sms_noti
 
 class Admin(UserAccount):
     def __init__(self, email, password, full_name, gender, tel, permission):
-        UserAccount.__init__(self, email, password, full_name, gender, tel)
+        super.__init__(self, email, password, full_name, gender, tel)
         self.__permission = permission
