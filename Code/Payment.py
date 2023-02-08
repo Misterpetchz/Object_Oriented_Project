@@ -17,7 +17,6 @@ class Bank(Payment):
         super().__init__(amount, order_id, date, status)
         pass
 
-class Cash(Payment):
+class cash(Payment):
     def __init__(self, amount, order_id, date, status):
         super().__init__(amount, order_id, date, status)
-        pass
