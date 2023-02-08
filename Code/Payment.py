@@ -4,9 +4,8 @@ class Payment:
         self._date = date
 
 class QrPayment(Payment):
-    def __init__(self, amount, date, brief):
+    def __init__(self, amount, date):
         super().__init__(amount, date)
-        self._brief = brief
 
 class CreditCard(Payment):
     def __init__(self, amount, date, card_num, expire_date, cvc):
