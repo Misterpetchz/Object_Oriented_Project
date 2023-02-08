@@ -1,6 +1,7 @@
 class Basket:
-    def __init__(self, list_of_order):
-        self._list_of_order = list_of_order
+    def __init__(self, items, pay_method):
+        self._items = items
+        self.pay_method = pay_method
 
     def test():
         pass
