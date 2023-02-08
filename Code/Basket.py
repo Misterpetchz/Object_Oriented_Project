@@ -1,7 +1,4 @@
 class Basket:
     def __init__(self, items, pay_method):
-        self._items = items
-        self.pay_method = pay_method
-
-    def test():
-        pass
+        self._items_book = items
+        self.__pay_method = pay_method
