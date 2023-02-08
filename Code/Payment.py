@@ -3,6 +3,8 @@ class Payment:
         self._amount = amount
         self._date = date
 
+# Inheritance of Payment
+
 class QrPayment(Payment):
     def __init__(self, amount, date):
         super().__init__(amount, date)
