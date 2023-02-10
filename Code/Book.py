@@ -1,6 +1,6 @@
 class Book : 
     def __init__(self, product_id, cover, brief, creator, name, book_info, book_ISBN_id, book_publisher, book_preview, 
-                 critic_review, table_of_content, summary, genre, date_created) :
+                 critic_review, table_of_content, summary, genre, date_created, rating, discount, catalog):
         self.__product_id = product_id
         self.__cover = cover
         self.__brief = brief
@@ -14,4 +14,7 @@ class Book :
         self.__table_of_content = table_of_content
         self.__summary = summary
         self.__genre = genre
-        self.__date_created = date_created 
+        self.__date_created = date_created
+        self.__rating = rating
+        self.__discount = discount
+        self.__catalog = catalog

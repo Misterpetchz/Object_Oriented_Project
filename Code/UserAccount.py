@@ -9,11 +9,11 @@ class UserAccount:
 # Inheritance from UserAccount
 
 class Customer(UserAccount):
-    def __init__(self, email, password, full_name, gender, tel, address, email_noti, sms_noti):
+    def __init__(self, email, password, full_name, gender, tel, address, email_notification, sms_notification):
         super().__init__(self, email, password, full_name, gender, tel)
         self.__address = address
-        self.__email_noti = email_noti
-        self.__sms_noti = sms_noti
+        self.__email_notification = email_notification
+        self.__sms_notification = sms_notification
 
 class Admin(UserAccount):
     def __init__(self, email, password, full_name, gender, tel, permission):
