@@ -12,7 +12,7 @@ class UserAccount:
 class Customer(UserAccount):
     def __init__(self, email, password, full_name, gender, tel, address, email_notification, sms_notification):
         super().__init__(self, email, password, full_name, gender, tel, shipping)
-        self.__address = address
+        self._address = address
         self.__email_notification = email_notification
         self.__sms_notification = sms_notification
 
