@@ -1,6 +1,6 @@
 class Book : 
     def __init__(self, product_id, cover, brief, creator, name, book_info, book_ISBN_id, book_publisher, book_preview, 
-                 critic_review, table_of_content, summary, genre, date_created, rating, discount, catalog):
+                 critic_review, table_of_content, summary, genre, date_created, rating, discount, catalog,branch):
         self.__product_id = product_id
         self.__cover = cover
         self.__brief = brief
@@ -18,3 +18,4 @@ class Book :
         self.__rating = rating
         self.__discount = discount
         self.__catalog = catalog
+        self.__branch = [] #list of branch
