@@ -1,21 +1,22 @@
 class UserAccount:
-    def __init__(self, email, password, full_name, gender, tel):
+    def __init__(self, email, password, full_name, gender, tel , shipping):
         self._email = email
         self._password = password
         self._full_name = full_name
         self._gender = gender
         self._tel = tel
+        self._shipping = shipping
 
 # Inheritance from UserAccount
 
 class Customer(UserAccount):
     def __init__(self, email, password, full_name, gender, tel, address, email_notification, sms_notification):
-        super().__init__(self, email, password, full_name, gender, tel)
+        super().__init__(self, email, password, full_name, gender, tel, shipping)
         self.__address = address
         self.__email_notification = email_notification
         self.__sms_notification = sms_notification
 
 class Admin(UserAccount):
     def __init__(self, email, password, full_name, gender, tel, permission):
-        super().__init__(self, email, password, full_name, gender, tel)
+        super().__init__(self, email, password, full_name, gender, tel, shipping)
         self.__permission = permission
