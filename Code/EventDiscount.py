@@ -1,8 +1,8 @@
 class EventDiscount():
-    def __init__(self, event_name, event_start, event_end, discounted_book, discounted_price, book):
-        self._event_name = event_name
-        self._event_start = event_start
-        self._event_end = event_end
-        self._discounted_book = discounted_book
-        self._discounted_price = discounted_price
-        self._book = book
+    def __init__(self, event_name, event_start, event_end, discounted_book, discounted_price, book_item):
+        self.__event_name = event_name
+        self.__event_start = event_start
+        self.__event_end = event_end
+        self.__discounted_book = discounted_book
+        self.__discounted_price = discounted_price
+        self.__book_item = book_item
