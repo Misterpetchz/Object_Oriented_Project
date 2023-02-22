@@ -1,4 +1,4 @@
-class Shipping:
+class Order:
     def __init__(self, purchased_item, order_id, shipping_status,payment,user):
         self._purchased_item = purchased_item
         self._order_id = order_id
