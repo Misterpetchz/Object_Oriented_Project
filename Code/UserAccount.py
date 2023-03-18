@@ -20,3 +20,4 @@ class Admin(UserAccount):
     def __init__(self, email, password, full_name, gender, tel, shipping, permission):
         super().__init__(email, password, full_name, gender, tel, shipping)
         self.__permission = permission
+        
