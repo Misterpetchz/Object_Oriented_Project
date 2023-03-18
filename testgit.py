@@ -1,1 +1,2 @@
 fname = 'Petch'
+nickname = 'Petch'
