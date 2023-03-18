@@ -6,3 +6,4 @@ class EventDiscount():
         self.__discounted_book = discounted_book
         self.__discounted_price = discounted_price
         self.__book_item = book_item
+        
