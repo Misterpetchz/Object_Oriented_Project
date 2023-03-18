@@ -1,2 +1,0 @@
-fname = 'Petch'
-nickname = 'Petch'
