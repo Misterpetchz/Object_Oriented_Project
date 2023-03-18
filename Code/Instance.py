@@ -22,6 +22,7 @@ pookantong_book1 = BookItem(2547,
                        ['comedy','adult','intense','violent','drama','romantic','Yuri','Yaoi','School life'],
                        '18/12/29999',
                        Rating,
+                       999,
                        EventDiscount)
 
 pookantong_book2 = BookItem(9875,
@@ -39,6 +40,7 @@ pookantong_book2 = BookItem(9875,
                        ['Comedy','Adult','Intense','Violent','Drama','Romantic','Yuri','Yaoi','School life','Shounen']
                        ,'18/12/29999',
                        Rating,
+                       999,
                        EventDiscount)
 
 book1 = BookItem(4090,
@@ -56,9 +58,9 @@ book1 = BookItem(4090,
                  'fantasy',
                  '18-Mar-2016',
                  Rating,
+                 10,
                  EventDiscount)
 
-# 170 bant
 book2 = BookItem(1080,
                  'แค่ใช้คำให้ฉลาด.png',
                  'tips',
@@ -74,6 +76,7 @@ book2 = BookItem(1080,
                  'self-help book',
                  '1-Jan-2013',
                  Rating,
+                 20,
                  EventDiscount)
 
 book3 = BookItem(78254,
@@ -90,8 +93,9 @@ book3 = BookItem(78254,
                  "He found something",
                  ["Fantasy", "SCI-FI"],
                  "14-Dec-01",
-                 Rating(),
-                 EventDiscount())
+                 Rating,
+                 200,
+                 EventDiscount)
 
 book4 = BookItem(58488,
                  "cover58488.png",
@@ -107,8 +111,9 @@ book4 = BookItem(58488,
                  "The god have been angered",
                  ["Fantasy", "Historical"],
                  "17-Nov-01",
-                 Rating(),
-                 EventDiscount())
+                 Rating,
+                 500,
+                 EventDiscount)
 
 book_one = BookItem(5566,
                    "bookcover1.png",
@@ -122,8 +127,9 @@ book_one = BookItem(5566,
                    "He got hit by truck get reborn as ape",
                    ["Fantasy"],
                    "18-Mar-2023",
-                   Rating(),
-                   EventDiscount())
+                   Rating,
+                   777,
+                   EventDiscount)
 
 book_two = BookItem(6452,
                    "bookcover2.png",
@@ -138,6 +144,7 @@ book_two = BookItem(6452,
                    ["Cooking"],
                    "18-Mar-2023",
                    Rating(),
+                   777,
                    EventDiscount())
 #-------------------------------------------------------------------------------------------------------------------
 #Branch
