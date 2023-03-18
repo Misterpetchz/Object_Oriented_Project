@@ -17,6 +17,6 @@ class Book :
         self._rating = rating
         self._price = price
 class BookItem(Book):
-    def __init__(self, product_id, cover, brief, creator, name, book_info, book_ISBN_id, book_publisher, critic_review, table_of_content, summary, genre, date_created, rating,price, event_discount):
-        super().__init__(product_id, cover, brief, creator, name, book_info, book_ISBN_id, book_publisher, critic_review, table_of_content, summary, genre, date_created, rating,price)
+    def __init__(self, product_id, cover, brief, creator, name, book_info, book_ISBN_id, book_publisher, book_preview, critic_review, table_of_content, summary, genre, date_created, rating,price, event_discount):
+        super().__init__(product_id, cover, brief, creator, name, book_info, book_ISBN_id, book_publisher, book_preview, critic_review, table_of_content, summary, genre, date_created, rating,price)
         
