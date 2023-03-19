@@ -8,3 +8,5 @@ class Branch():
         self._facebook_id = facebook_id
         self._gps = gps
         self._product_in_stock = product_in_stock
+
+

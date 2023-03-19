@@ -1,6 +1,6 @@
 class Book : 
     def __init__(self, product_id, cover, brief, creator, name, book_info, book_ISBN_id, book_publisher, book_preview, 
-                 critic_review, table_of_content, summary, genre, date_created, rating):
+                 critic_review, table_of_content, summary, genre, date_created, rating, price):
         self._product_id = product_id
         self._cover = cover
         self._brief = brief
@@ -16,7 +16,8 @@ class Book :
         self._genre = genre
         self._date_created = date_created
         self._rating = rating
+        self._price = price
 class BookItem(Book):
-    def __init__(self, product_id, cover, brief, creator, name, book_info, book_ISBN_id, book_publisher, book_preview, critic_review, table_of_content, summary, genre, date_created, rating, event_discount):
-        super().__init__(product_id, cover, brief, creator, name, book_info, book_ISBN_id, book_publisher, book_preview, critic_review, table_of_content, summary, genre, date_created, rating)
+    def __init__(self, product_id, cover, brief, creator, name, book_info, book_ISBN_id, book_publisher, book_preview, critic_review, table_of_content, summary, genre, date_created, rating, price, event_discount):
+        super().__init__(product_id, cover, brief, creator, name, book_info, book_ISBN_id, book_publisher, book_preview, critic_review, table_of_content, summary, genre, date_created, rating, price)
         self.__event_discount = event_discount
