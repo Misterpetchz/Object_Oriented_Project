@@ -30,7 +30,12 @@ class Customer(UserAccount):
         pass
     def add_book_to_basket():
         pass
-
+    def make_order(Basket, Coupon):
+        pass
+    def make_payment(payment_type):
+        pass
+    
+    
 class Admin(UserAccount):
     def __init__(self, email, password, full_name, gender, tel, shipping, permission):
         super().__init__(email, password, full_name, gender, tel, shipping)
