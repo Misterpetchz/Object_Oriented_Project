@@ -2,7 +2,7 @@ from Book import BookItem
 from EventDiscount import EventDiscount
 from Rating import Rating
 
-book1 = BookItem(78254,
+book3 = BookItem(78254,
                  "cover78254.png",
                  "Leave now, Human. You don't know what you are facing",
                  "Eoin Colfer",
@@ -18,7 +18,7 @@ book1 = BookItem(78254,
                  "14-Dec-01",
                  Rating(),
                  EventDiscount())
-book2 = BookItem(58488,
+book4 = BookItem(58488,
                  "cover58488.png",
                  "Welcome to the mysterious world of god.",
                  "Cosmos",
