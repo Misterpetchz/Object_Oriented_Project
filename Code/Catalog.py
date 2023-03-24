@@ -1,6 +1,6 @@
 class Catalog():
     def __init__(self, list_of_book):
-        self.__list_of_book = [] #list_of_book
+        self._list_of_book = list_of_book
 
     def get_book_info(search_string):
         pass

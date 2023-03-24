@@ -1,3 +1,5 @@
+from Basket import *
+
 class UserAccount:
     def __init__(self, email, password, full_name, gender, tel , shipping):
         self._email = email
@@ -15,7 +17,7 @@ class Customer(UserAccount):
         self._address = address
         self.__email_notification = email_notification
         self.__sms_notification = sms_notification
-        
+        self._basket = Basket([])
     def search_book(search_string):
         pass
     def search_available_branch():
@@ -28,8 +30,8 @@ class Customer(UserAccount):
         pass
     def add_credit_card_info(card_info):
         pass
-    def add_book_to_basket():
-        pass
+    def add_book_to_basket(self, catalog,  book):
+        self._basket.add_book(catalog, book)
     def make_order(Basket, Coupon):
         pass
     def make_payment(payment_type):
