@@ -7,3 +7,7 @@ class EventDiscount():
         self.__discounted_price = discounted_price
         self.__book_item = book_item
         
+    def get_event_name(self):
+        return self.__event_name
+    
+    event_name = property(get_event_name)

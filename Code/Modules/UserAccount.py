@@ -4,6 +4,7 @@ from Modules.Book import BookItem
 from Modules.Branch import Branch
 from Modules.BranchList import BranchList
 from Modules.Rating import Rating
+from Modules.EventDiscount import EventDiscount
 
 class UserAccount:
     def __init__(self, email, password, full_name, gender, tel , shipping):
@@ -81,5 +82,6 @@ class Admin(UserAccount):
     def add_book(self, book,catalog:Catalog):
         if book == BookItem:
             catalog.list_of_book.append(book)
-    def add_event(event_name, event_start, event_end, discounted_book, discounted_price, book_item):
-        pass
+    def add_event(self, book:BookItem, event_discount:EventDiscount):
+        if isinstance(event_discount, EventDiscount):
+            book.event_discount.append(event_discount)

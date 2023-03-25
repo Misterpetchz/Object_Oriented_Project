@@ -24,3 +24,11 @@ class BookItem(Book):
         
     def get_branch_with_book(Book):
         pass
+    
+    def get_event_discount(self):
+        return self.__event_discount
+    
+    def set_event_discount(self, new_event_discount):
+        self.__event_discount = new_event_discount
+
+    event_discount = property(get_event_discount,set_event_discount)
