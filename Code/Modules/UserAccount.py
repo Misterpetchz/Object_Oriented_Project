@@ -22,8 +22,12 @@ class Customer(UserAccount):
         self.__email_notification = email_notification
         self.__sms_notification = sms_notification
         self.__basket = Basket([])
-    def search_book(search_string):
-        pass
+    def search_book(self, search_string, catalog:Catalog):
+        lists=[]
+        for element in catalog.list_of_book:
+            if search_string in element._name:
+                lists.append(element)
+        return lists
     def search_available_branch(self, book, all_branch):
         lists = []
         for element in all_branch.list_of_branch:
