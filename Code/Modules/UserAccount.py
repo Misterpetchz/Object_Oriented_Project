@@ -1,6 +1,8 @@
 from Modules.Basket import Basket
 from Modules.Catalog import Catalog
 from Modules.Book import BookItem
+from Modules.Branch import Branch
+from Modules.BranchList import BranchList
 
 class UserAccount:
     def __init__(self, email, password, full_name, gender, tel , shipping):
@@ -56,6 +58,9 @@ class Admin(UserAccount):
         
     def modify_delete_branch(type,Branch):
         pass
+    def add_branch(self, branch_list:BranchList, branch):
+        if isinstance(branch, Branch):
+            branch_list.list_of_branch.append(branch)
     def modify_branch(branch_name, open_time, location, tel, line_id, facebook_id, gps, product_in_stock):
         pass
     def modify_delete_book(type,Book):

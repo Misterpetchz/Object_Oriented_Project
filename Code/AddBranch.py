@@ -1,16 +1,14 @@
-from Modules.UserAccount import*
-from Modules.Branch import Branch
+from Modules.UserAccount import Admin
 from Modules.Book import BookItem
 from Modules.BranchList import BranchList
+from Modules.Branch import Branch
 
-pookaneiei = Customer('pookantong.p@gmail.com',
-                 'PomyukmeFan555',
-                 'PookanNaja',
+pookan_admin555 = Admin('65010895@kmitl.ac.th',
+                 'PomyukmeFan55',
+                 'Yotsapat',
                  'Male',
-                 '0980231173',
+                 '0980231172',
                  [],
-                 '29/7 หมู่2 ตำบลบั้นเด้า อำเภอรถแห่ จังหวัดสก๊อย ประเทศหิวข้าว ดาวSun',
-                 True,
                  True)
 pookantong_book1 = BookItem(2547,
                        'random.png',
@@ -92,5 +90,6 @@ moon_branch = Branch('Moon',
                      'moon_bookshop'
                      ,[pookantong_book1])
 
-all_branch = BranchList([bangkok,nonthaburi1,moon_branch,rangsit])
-print(pookaneiei.search_available_branch(pookantong_book1,all_branch))
+all_branch = BranchList([moon_branch,rangsit,bangkok])
+pookan_admin555.add_branch(all_branch, nonthaburi1)
+print(all_branch.list_of_branch)

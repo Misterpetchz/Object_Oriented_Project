@@ -7,8 +7,5 @@ class Branch():
         self._line_id = line_id
         self._facebook_id = facebook_id
         self._product_in_stock = product_in_stock
-        
-    def add_branch(branch):
-        pass
 
 
