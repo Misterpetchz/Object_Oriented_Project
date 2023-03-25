@@ -3,6 +3,7 @@ from Modules.Catalog import Catalog
 from Modules.Book import BookItem
 from Modules.Branch import Branch
 from Modules.BranchList import BranchList
+from Modules.Rating import Rating
 
 class UserAccount:
     def __init__(self, email, password, full_name, gender, tel , shipping):
@@ -45,6 +46,8 @@ class Customer(UserAccount):
         pass
     def add_book_to_basket(self, catalog,  book):
         self.__basket.add_book(catalog, book)
+    def add_rating(self, book:BookItem, rating:Rating):
+        book._rating.append(rating)
     def make_order(Basket, Coupon):
         pass
     def make_payment(payment_type):
@@ -74,8 +77,6 @@ class Admin(UserAccount):
     def modify_delete_event(type,event_name):
         pass
     def apply_event_modification(event_name, event_start, event_end, discounted_book, discounted_price, book_item):
-        pass
-    def add_rating(rating):
         pass
     def add_book(self, book,catalog:Catalog):
         if book == BookItem:
