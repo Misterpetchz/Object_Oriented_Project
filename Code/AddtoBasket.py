@@ -1,11 +1,6 @@
-from UserAccount import *
-from Book import *
-from Rating import *
-from EventDiscount import *
-from Branch import *
-from Coupon import *
-from Basket import *
-from Catalog import *
+from Modules.UserAccount import Customer
+from Modules.Book import BookItem
+from Modules.Catalog import Catalog
 pookantong_book1 = BookItem(2547,
                        'random.png',
                        'ในคืนที่โหดร้ายพระเอกตายแต่.....',
@@ -55,5 +50,4 @@ pookaneiei = Customer('pookantong.p@gmail.com',
 batalog = Catalog([pookantong_book1, pookantong_book2])
 pookaneiei.add_book_to_basket(batalog, pookantong_book1)
 pookaneiei.add_book_to_basket(batalog, pookantong_book2)
-print(pookaneiei._basket._book_item)
-print(pookaneiei._basket._book_item[0]._name)
+print(pookaneiei.basket.book_item)

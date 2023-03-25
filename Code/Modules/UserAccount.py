@@ -1,4 +1,6 @@
-from Basket import *
+from Modules.Basket import Basket
+from Modules.Catalog import Catalog
+from Modules.Book import BookItem
 
 class UserAccount:
     def __init__(self, email, password, full_name, gender, tel , shipping):
@@ -17,11 +19,16 @@ class Customer(UserAccount):
         self._address = address
         self.__email_notification = email_notification
         self.__sms_notification = sms_notification
-        self._basket = Basket([])
+        self.__basket = Basket([])
     def search_book(search_string):
         pass
-    def search_available_branch():
-        pass
+    def search_available_branch(self, book, all_branch):
+        lists = []
+        for element in all_branch.list_of_branch:
+            for elements in element._product_in_stock:
+                if elements == book:
+                    lists.append(element)
+        return lists
     def request_edit():
         pass
     def info_verification(email, password, full_name, gender, tel, shipping, address, email_notification, sms_notification):
@@ -31,11 +38,15 @@ class Customer(UserAccount):
     def add_credit_card_info(card_info):
         pass
     def add_book_to_basket(self, catalog,  book):
-        self._basket.add_book(catalog, book)
+        self.__basket.add_book(catalog, book)
     def make_order(Basket, Coupon):
         pass
     def make_payment(payment_type):
         pass
+    def get_basket(self):
+        return self.__basket
+        
+    basket = property(get_basket)
     
     
 class Admin(UserAccount):
@@ -57,7 +68,8 @@ class Admin(UserAccount):
         pass
     def add_rating(rating):
         pass
-    def add_book(book):
-        pass
+    def add_book(self, book,catalog:Catalog):
+        if book == BookItem:
+            catalog.list_of_book.append(book)
     def add_event(event_name, event_start, event_end, discounted_book, discounted_price, book_item):
         pass
