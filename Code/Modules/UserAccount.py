@@ -3,6 +3,7 @@ from Modules.Catalog import Catalog
 from Modules.Book import BookItem
 from Modules.Branch import Branch
 from Modules.BranchList import BranchList
+from Modules.Order import Order
 
 class UserAccount:
     def __init__(self, email, password, full_name, gender, tel , shipping):
@@ -22,6 +23,8 @@ class Customer(UserAccount):
         self.__email_notification = email_notification
         self.__sms_notification = sms_notification
         self.__basket = Basket([])
+        self.__order_id = 1
+        self.__order_list = []
     def search_book(self, search_string, catalog:Catalog):
         lists=[]
         for element in catalog.list_of_book:
@@ -45,8 +48,17 @@ class Customer(UserAccount):
         pass
     def add_book_to_basket(self, catalog,  book):
         self.__basket.add_book(catalog, book)
-    def make_order(Basket, Coupon):
-        pass
+    def make_order(self, coupon=0):
+        if coupon != 0:
+            
+        if len(self.__basket.book_item) > 0:
+            self.__order_list.append(Order(self.__basket,
+                                        self.__order_id,
+                                        False,
+                                        False,
+                                        self
+                                        ))
+            self.__order_id+=1
     def make_payment(payment_type):
         pass
     def get_basket(self):
