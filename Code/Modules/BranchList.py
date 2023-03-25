@@ -5,8 +5,12 @@ class BranchList():
         
     def remove_branch(Branch):
         pass
-    def modify_branch(Branch):
-        pass
+    def get_specific_branch(self,Branch):
+        for element in self.__list_of_branch:
+            if Branch == element._branch_name:
+                self.select_branch = element
+                return self.select_branch
+            
     def get_list(self):
         return self.__list_of_branch
     def set_list(self,new_branch):

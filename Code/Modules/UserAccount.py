@@ -60,13 +60,39 @@ class Admin(UserAccount):
         super().__init__(email, password, full_name, gender, tel, shipping)
         self.__permission = permission
         
-    def modify_delete_branch(type,Branch):
-        pass
+    def modify_delete_branch(self,type,branch_list:BranchList,Branch):
+        if type == "modify":
+            selected_branch = branch_list.get_specific_branch(Branch)
+            self.new_name = input("Enter new name : ")
+            self.new_time = input("Enter new time : ")
+            self.new_location = input("Enter new location : ")
+            self.new_tel = input("Enter new tel : ")
+            self.new_line_id = input("Enter new line id : ")
+            self.new_facebook_id = input("Enter new facebook id : ")
+            self.new_product_in_stock = input("Enter new product in stock : ").split(" ")
+            modified = self.modify_branch(branch_list,selected_branch,self.new_name, self.new_time, self.new_location,self.new_tel,self.new_line_id,self.new_facebook_id,self.new_product_in_stock)
+            
     def add_branch(self, branch_list:BranchList, branch):
         if isinstance(branch, Branch):
             branch_list.list_of_branch.append(branch)
-    def modify_branch(branch_name, open_time, location, tel, line_id, facebook_id, gps, product_in_stock):
-        pass
+            
+    def modify_branch(self,branch_list:BranchList,branch:Branch,new_name, new_time, new_location, new_tel, new_line_id, new_facebook_id, new_product_in_stock):
+        if new_name != "":
+            branch.branch_name = new_name
+        if new_location != None:
+            branch.location = new_location
+        if new_time != None:
+            branch.open_time = new_time
+        if new_tel != None:
+            branch.tel = new_tel
+        if new_line_id != None:
+            branch.line_id = new_line_id
+        if new_facebook_id != None:
+            branch.facebook_id = new_facebook_id
+        if new_product_in_stock != None:
+            branch.product_in_stock = new_product_in_stock
+        return branch
+            
     def modify_delete_book(type,Book):
         pass
     def modify_book( product_id, cover, brief, creator, name, book_info, book_ISBN_id, book_publisher, book_preview, critic_review, table_of_content, summary, genre, date_created, rating, price, event_discount):
