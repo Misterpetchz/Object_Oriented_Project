@@ -50,7 +50,7 @@ class Customer(UserAccount):
         self.__basket.add_book(catalog, book)
     def make_order(self, coupon=0):
         if coupon != 0:
-            
+            pass
         if len(self.__basket.book_item) > 0:
             self.__order_list.append(Order(self.__basket,
                                         self.__order_id,
@@ -90,7 +90,7 @@ class Admin(UserAccount):
     def add_rating(rating):
         pass
     def add_book(self, book,catalog:Catalog):
-        if book == BookItem:
+        if isinstance(book, BookItem):
             catalog.list_of_book.append(book)
     def add_event(event_name, event_start, event_end, discounted_book, discounted_price, book_item):
         pass
