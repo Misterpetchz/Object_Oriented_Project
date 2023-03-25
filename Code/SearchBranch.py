@@ -93,4 +93,5 @@ moon_branch = Branch('Moon',
                      ,[pookantong_book1])
 
 all_branch = BranchList([bangkok,nonthaburi1,moon_branch,rangsit])
-print(pookaneiei.search_available_branch(pookantong_book1,all_branch))
+pookaneiei.search_available_branch(pookantong_book1,all_branch)
+print(all_branch.list_of_branch)
