@@ -5,6 +5,7 @@ from Modules.Branch import Branch
 from Modules.BranchList import BranchList
 from Modules.Rating import Rating
 from Modules.EventDiscount import EventDiscount
+from Modules.CreditCard import CreditCard
 
 class UserAccount:
     def __init__(self, email, password, full_name, gender, tel , shipping):
@@ -41,8 +42,10 @@ class Customer(UserAccount):
         pass
     def info_verification(email, password, full_name, gender, tel, shipping, address, email_notification, sms_notification):
         pass
-    def modify_credit_card_info(card_num,exp_date,cvc):
-        pass
+    def modify_credit_card_info(self, credit_card:CreditCard, new_card_num, new_expire_date, new_cvc):
+        credit_card.card_num = new_card_num
+        credit_card.expire_date = new_expire_date
+        credit_card.cvc = new_cvc
     def add_credit_card_info(card_info):
         pass
     def add_book_to_basket(self, catalog,  book):
