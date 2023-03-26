@@ -81,7 +81,7 @@ rangsit = Branch('rangsit',
                        '0983868365',
                        'bookshop.rangsit',
                        'rangsit_bookshop',
-                       [pookantong_book2,book1])
+                       [pookantong_book2])
 moon_branch = Branch('Moon',
                      '23:00 - 23:59',
                      'Moon',
@@ -90,5 +90,7 @@ moon_branch = Branch('Moon',
                      'moon_bookshop'
                      ,[pookantong_book1])
 
-pookan_admin555.modify_branch(rangsit, 'rangsit university','10:00-24:00', 'rangsit university','0920923597','bookshop.rangsitUni','bookshop rangsitUni',[pookantong_book1,pookantong_book2])
-print(rangsit._branch_name)
+pookan_admin555.modify_branch(rangsit, 'rangsit university','10:00-24:00', None, '0920923597','bookshop.rangsitUni','bookshop rangsitUni',[pookantong_book1,book1,pookantong_book2],[])
+
+print(rangsit._product_in_stock[0]._product_id)
+print(rangsit._location)
