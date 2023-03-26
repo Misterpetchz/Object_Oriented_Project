@@ -96,6 +96,9 @@ class Admin(UserAccount):
         if isinstance(list_delete_book, list):
             for book in list_delete_book:
                 branch._product_in_stock.remove(book)
+
+    def delete_branch(self,branch_list:BranchList , branch:Branch):
+        branch_list.list_of_branch.remove(branch)
         
     def modify_delete_book(type,Book):
         pass
