@@ -43,9 +43,12 @@ class Customer(UserAccount):
     def info_verification(email, password, full_name, gender, tel, shipping, address, email_notification, sms_notification):
         pass
     def modify_credit_card_info(self, credit_card:CreditCard, new_card_num, new_expire_date, new_cvc):
-        credit_card.card_num = new_card_num
-        credit_card.expire_date = new_expire_date
-        credit_card.cvc = new_cvc
+        if isinstance(new_card_num, str):
+            credit_card.card_num = new_card_num
+        if isinstance(new_expire_date, str):
+            credit_card.expire_date = new_expire_date
+        if isinstance(new_cvc, str):
+            credit_card.cvc = new_cvc
     def add_credit_card_info(card_info):
         pass
     def add_book_to_basket(self, catalog,  book):
