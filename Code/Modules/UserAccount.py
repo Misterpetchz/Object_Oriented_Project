@@ -75,8 +75,20 @@ class Admin(UserAccount):
     def add_branch(self, branch_list:BranchList, branch):
         if isinstance(branch, Branch):
             branch_list.list_of_branch.append(branch)
-    def modify_branch(branch_name, open_time, location, tel, line_id, facebook_id, gps, product_in_stock):
-        pass
+    def modify_branch(self, branch:Branch, new_branch_name, new_open_time, new_location, new_tel, new_line_id, new_facebook_id, new_product_in_stock):
+        if isinstance(new_branch_name, str):
+            branch._branch_name = new_branch_name
+        if isinstance(new_open_time, str):
+            branch._open_time = new_open_time
+        if isinstance(new_location, str):
+            branch._location = new_location
+        if isinstance(new_tel, str):
+            branch._tel = new_tel
+        if isinstance(new_line_id, str):
+            branch._line_id = new_line_id
+        if isinstance(new_facebook_id, str):
+            branch._facebook_id = new_facebook_id
+        
     def modify_delete_book(type,Book):
         pass
     def modify_book( product_id, cover, brief, creator, name, book_info, book_ISBN_id, book_publisher, book_preview, critic_review, table_of_content, summary, genre, date_created, rating, price, event_discount):
