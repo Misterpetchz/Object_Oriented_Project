@@ -62,7 +62,7 @@ class Admin(UserAccount):
         
     def modify_delete_branch(self,type,branch_list:BranchList,Branch):
         if type == "modify":
-            selected_branch = branch_list.get_specific_branch(Branch)
+            self.selected_branch = branch_list.get_specific_branch(Branch)
             self.new_name = input("Enter new name : ")
             self.new_time = input("Enter new time : ")
             self.new_location = input("Enter new location : ")
@@ -70,8 +70,10 @@ class Admin(UserAccount):
             self.new_line_id = input("Enter new line id : ")
             self.new_facebook_id = input("Enter new facebook id : ")
             self.new_product_in_stock = input("Enter new product in stock : ").split(" ")
-            modified = self.modify_branch(branch_list,selected_branch,self.new_name, self.new_time, self.new_location,self.new_tel,self.new_line_id,self.new_facebook_id,self.new_product_in_stock)
-            
+            modified = self.modify_branch(branch_list,self.selected_branch,self.new_name, self.new_time, self.new_location,self.new_tel,self.new_line_id,self.new_facebook_id,self.new_product_in_stock)
+        elif type == "delete":
+            self.selected_branch = branch_list.remove_branch(Branch)
+        
     def add_branch(self, branch_list:BranchList, branch):
         if isinstance(branch, Branch):
             branch_list.list_of_branch.append(branch)

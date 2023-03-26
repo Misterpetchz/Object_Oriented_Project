@@ -63,5 +63,6 @@ class Branch():
     @product_in_stock.setter
     def product_in_stock(self,a):
         self._product_in_stock = a
-    
+        
+
 

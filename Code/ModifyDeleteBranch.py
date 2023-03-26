@@ -92,5 +92,4 @@ moon_branch = Branch('Moon',
                      ,[pookantong_book1])
 
 all_branch = BranchList([moon_branch,rangsit,bangkok])
-pookan_admin555.modify_delete_branch("modify",all_branch,"rangsit")
-print(rangsit.branch_name)
+pookan_admin555.modify_delete_branch("delete",all_branch,"rangsit")
