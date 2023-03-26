@@ -92,7 +92,7 @@ class Admin(UserAccount):
         if isinstance(list_add_book, list):
             for book in list_add_book:
                 if book not in branch._product_in_stock:
-                    branch._product_in_stock.append(list_add_book)
+                    branch._product_in_stock.append(book)
         if isinstance(list_delete_book, list):
             for book in list_delete_book:
                 branch._product_in_stock.remove(book)
