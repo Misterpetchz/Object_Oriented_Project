@@ -89,8 +89,8 @@ moon_branch = Branch('Moon',
                      'bookshop.moon',
                      'moon_bookshop'
                      ,[pookantong_book1])
+branch_list = BranchList([bangkok, nonthaburi1, rangsit, moon_branch])
 
-pookan_admin555.modify_branch(rangsit, 'rangsit university','10:00-24:00', None, '0920923597','bookshop.rangsitUni','bookshop rangsitUni',[pookantong_book1,book1,pookantong_book2],[])
+rangsit.modify_branch('rangsit university','10:00-24:00', 'rangsit future park', '0920923597','bookshop.rangsitUni','bookshop rangsitUni',[pookantong_book1,book1,pookantong_book2],[])
 
-print(rangsit._product_in_stock[0]._product_id)
 print(rangsit._location)

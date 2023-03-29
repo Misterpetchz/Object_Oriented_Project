@@ -46,8 +46,6 @@ class Customer(UserAccount):
         pass
     def add_book_to_basket(self, catalog,  book):
         self.__basket.add_book(catalog, book)
-    def add_rating(self, book:BookItem, rating:Rating):
-        book._rating.append(rating)
     def make_order(Basket, Coupon):
         pass
     def make_payment(payment_type):
@@ -68,30 +66,6 @@ class Admin(UserAccount):
     def add_branch(self, branch_list:BranchList, branch):
         if isinstance(branch, Branch):
             branch_list.list_of_branch.append(branch)
-
-    def modify_branch(self, branch:Branch, new_branch_name, new_open_time, new_location, new_tel, new_line_id, new_facebook_id, list_add_book, list_delete_book):
-        if isinstance(new_branch_name, str):
-            branch._branch_name = new_branch_name
-        if isinstance(new_open_time, str):
-            branch._open_time = new_open_time
-        if isinstance(new_location, str):
-            branch._location = new_location
-        if isinstance(new_tel, str):
-            branch._tel = new_tel
-        if isinstance(new_line_id, str):
-            branch._line_id = new_line_id
-        if isinstance(new_facebook_id, str):
-            branch._facebook_id = new_facebook_id
-        if isinstance(list_add_book, list):
-            for book in list_add_book:
-                if book not in branch._product_in_stock:
-                    branch._product_in_stock.append(book)
-        if isinstance(list_delete_book, list):
-            for book in list_delete_book:
-                branch._product_in_stock.remove(book)
-
-    def delete_branch(self,branch_list:BranchList , branch:Branch):
-        branch_list.list_of_branch.remove(branch)
         
     def modify_delete_book(type,Book):
         pass
