@@ -1,7 +1,7 @@
-from Modules.Book import BookItem
+from Modules.Book import Book
 class Catalog():
-    def __init__(self, list_of_book):
-        self.__all_list_of_book = list_of_book
+    def __init__(self):
+        self.__all_list_of_book = []
 
     def get_book_info(search_string):
         pass
@@ -13,9 +13,6 @@ class Catalog():
         pass
     def add_to_basket(Book):
         pass
-    def add_book(self, book):
-        if isinstance(book, BookItem):
-            self.__all_list_of_book.append(book)
     def search_book(self, search_string):
         self.__list_of_book = []
         for element in self.__all_list_of_book:

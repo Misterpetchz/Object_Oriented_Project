@@ -1,7 +1,7 @@
 from Modules.Branch import Branch
 class BranchList():
-    def __init__(self, list_of_branch):
-        self.__list_of_branch = list_of_branch
+    def __init__(self):
+        self.__list_of_branch = []
         self.__available = []
     def remove_branch(Branch):
         pass
@@ -9,7 +9,7 @@ class BranchList():
         pass
     def add_branch(self, branch):
         if isinstance(branch, Branch):
-            self.list_of_branch.append(branch)
+            self.__list_of_branch.append(branch)
     def search_available_branch(self, book):
         self.__available = []
         for element in self.__list_of_branch:

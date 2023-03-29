@@ -12,13 +12,13 @@ pookaneiei = Customer('pookantong.p@gmail.com',
                  '29/7 หมู่2 ตำบลบั้นเด้า อำเภอรถแห่ จังหวัดสก๊อย ประเทศหิวข้าว ดาวSun',
                  True,
                  True)
-pookantong_book1 = BookItem(2547,
+pookantong_book1 = Book(
                        'random.png',
                        'ในคืนที่โหดร้ายพระเอกตายแต่.....',
                        'Pookantong',
                        'Pookantong1',
                        '250 หน้า ปกแข็ง',
-                       '8472ae0Kjd7',
+                       
                        'BanDao',
                        'yamete!',
                        'critic review',
@@ -29,13 +29,13 @@ pookantong_book1 = BookItem(2547,
                        9,
                        999,
                        9)
-pookantong_book2 = BookItem(9875,
+pookantong_book2 = Book(
                        'random2.png',
                        'ในคืนที่โหดร้ายนางเอกตายแต่.....',
                        'Pookantong',
                        'Pookantong2',
                        '999 หน้า ปกแข็ง',
-                       '8572az0Kjd9',
+                       
                        'BanDao',
                        'yamete kudasai!',
                        'critic review',
@@ -46,13 +46,13 @@ pookantong_book2 = BookItem(9875,
                        9,
                        999,
                        9)
-book1 = BookItem(4090,
+book1 = Book(
                  'Element_Online_Phase4_1.png',
                  'online game',
                  'MASALAN',
                  'Element Online Phase 4.1',
                  'Hard cover with 388 page and 8 game card',
-                 '978-616-00-2417-9',
+                 
                  'satapornbooks',
                  '1.....',
                  'Good Novel',

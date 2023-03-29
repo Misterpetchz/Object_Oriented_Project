@@ -1,13 +1,12 @@
 from Modules.UserAccount import Customer
-from Modules.Book import BookItem
+from Modules.Book import *
 from Modules.Catalog import Catalog
-pookantong_book1 = BookItem(2547,
+pookantong_book1 = Book(
                        'random.png',
                        'ในคืนที่โหดร้ายพระเอกตายแต่.....',
                        'Pookantong',
                        'Pookantong1',
                        '250 หน้า ปกแข็ง',
-                       '8472ae0Kjd7',
                        'BanDao',
                        'yamete!',
                        'critic review',
@@ -17,15 +16,15 @@ pookantong_book1 = BookItem(2547,
                        '18/12/29999',
                        9,
                        999,
-                       9)
+                       9
+                       )
 
-pookantong_book2 = BookItem(9875,
+pookantong_book2 = Book(
                        'random2.png',
                        'ในคืนที่โหดร้ายนางเอกตายแต่.....',
                        'Pookantong',
                        'Pookantong2',
                        '999 หน้า ปกแข็ง',
-                       '8572az0Kjd9',
                        'BanDao',
                        'yamete kudasai!',
                        'critic review',
@@ -35,7 +34,8 @@ pookantong_book2 = BookItem(9875,
                        ,'18/12/29999',
                        9,
                        999,
-                       9)
+                       9
+                       )
 
 pookaneiei = Customer('pookantong.p@gmail.com',
                  'PomyukmeFan555',
@@ -47,7 +47,7 @@ pookaneiei = Customer('pookantong.p@gmail.com',
                  True,
                  True
 )
-batalog = Catalog([pookantong_book1, pookantong_book2])
-pookaneiei.add_book_to_basket(batalog, pookantong_book1)
-pookaneiei.add_book_to_basket(batalog, pookantong_book2)
-print(pookaneiei.basket.book_item)
+pookaneiei.add_book_to_basket(pookantong_book1)
+pookaneiei.add_book_to_basket(pookantong_book2)
+test = pookaneiei.basket.book_item
+print(pookantong_book1._amount_in_stock)
