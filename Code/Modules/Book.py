@@ -15,7 +15,7 @@ class Book :
         self._date_created = date_created
         self._rating = rating
         self._price = price
-        self._amount_in_stock = amount
+        self._book_item_in_stock = []
 class BookItem(Book):
     def __init__(self, cover, brief, creator, name, book_info, book_publisher, book_preview, critic_review, table_of_content, summary, genre, date_created, rating, price, book_ISBN_id):
         super().__init__(cover, brief, creator, name, book_info, book_publisher, book_preview, critic_review, table_of_content, summary, genre, date_created, rating, price, 'unvalue')

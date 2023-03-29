@@ -63,6 +63,9 @@ book1 = Book(
                  9,
                  10,
                  9)
-batalog = Catalog([pookantong_book1, pookantong_book2, book1])
+batalog = Catalog()
+batalog.add_book(book1)
+batalog.add_book(pookantong_book1)
+batalog.add_book(pookantong_book2)
 batalog.search_book(input())
 print(batalog.list_of_book)

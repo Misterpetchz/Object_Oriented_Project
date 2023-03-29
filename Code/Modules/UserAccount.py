@@ -22,7 +22,7 @@ class Customer(UserAccount):
         self._address = address
         self.__email_notification = email_notification
         self.__sms_notification = sms_notification
-        self.__basket = Basket([])
+        self.__basket = Basket()
         self.__order_id = 1
         self.__order_list = []
     def request_edit():
@@ -33,26 +33,8 @@ class Customer(UserAccount):
         pass
     def add_credit_card_info(card_info):
         pass
-    def add_book_to_basket(self, book:Book):
-        if book._amount_in_stock > 0:
-            self.__basket.add_book(BookItem(
-                book._cover,
-                book._brief,
-                book._creator,
-                book._name,
-                book._book_info,
-                book._book_publisher,
-                book._book_preview,
-                book._critic_review,
-                book._table_of_content,
-                book._summary,
-                book._genre,
-                book._date_created,
-                book._rating,
-                book._price,
-                0
-            ))
-            book._amount_in_stock -= 1
+    def add_book_to_basket(self, book_item):
+        self.__basket.add_book(book_item)
     def make_order(self, coupon=0):
         if coupon != 0:
             pass

@@ -69,29 +69,34 @@ bangkok = Branch("Bangkok",
                  "0864615559",
                  "bookshop.bangkok",
                  "bangkok_bookshop",
-                 [pookantong_book1,pookantong_book2,book1])
+                 )
 nonthaburi1 = Branch("Nonthaburi",
                      "8:30-22:00",
                      "Nonthaburi",
                      "0811111111",
                      "seed_nonthaburi01",
                      "NonthaburiSE-ED",
-                     [pookantong_book1,pookantong_book2])
+                     )
 rangsit = Branch('rangsit',
                        '9:00-23:00',
                        'future park rangsit',
                        '0983868365',
                        'bookshop.rangsit',
                        'rangsit_bookshop',
-                       [pookantong_book2,book1])
+                       )
 moon_branch = Branch('Moon',
                      '23:00 - 23:59',
                      'Moon',
                      '0995471568',
                      'bookshop.moon',
                      'moon_bookshop'
-                     ,[pookantong_book1])
+                     )
 
-all_branch = BranchList([bangkok,nonthaburi1,moon_branch,rangsit])
+all_branch = BranchList()
+nonthaburi1.add_product(book1)
+all_branch.add_branch(nonthaburi1)
+all_branch.add_branch(rangsit)
+all_branch.add_branch(moon_branch)
+all_branch.add_branch(bangkok)
 all_branch.search_available_branch(book1)
 print(all_branch.available_branch)
