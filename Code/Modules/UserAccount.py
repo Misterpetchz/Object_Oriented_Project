@@ -25,19 +25,6 @@ class Customer(UserAccount):
         self.__basket = Basket([])
         self.__order_id = 1
         self.__order_list = []
-    def search_book(self, search_string, catalog:Catalog):
-        lists=[]
-        for element in catalog.list_of_book:
-            if search_string in element._name:
-                lists.append(element)
-        return lists
-    def search_available_branch(self, book, all_branch):
-        lists = []
-        for element in all_branch.list_of_branch:
-            for elements in element._product_in_stock:
-                if elements == book:
-                    lists.append(element)
-        return lists
     def request_edit():
         pass
     def info_verification(email, password, full_name, gender, tel, shipping, address, email_notification, sms_notification):
@@ -74,9 +61,6 @@ class Admin(UserAccount):
         
     def modify_delete_branch(type,Branch):
         pass
-    def add_branch(self, branch_list:BranchList, branch):
-        if isinstance(branch, Branch):
-            branch_list.list_of_branch.append(branch)
     def modify_branch(branch_name, open_time, location, tel, line_id, facebook_id, gps, product_in_stock):
         pass
     def modify_delete_book(type,Book):

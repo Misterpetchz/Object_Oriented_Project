@@ -61,5 +61,5 @@ book1 = BookItem(4090,
                  10,
                  9)
 batalog = Catalog([pookantong_book1, pookantong_book2])
-pookan_admin555.add_book(book1, batalog)
+batalog.add_book(book1)
 print(batalog.list_of_book)

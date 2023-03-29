@@ -64,4 +64,5 @@ book1 = BookItem(4090,
                  10,
                  9)
 batalog = Catalog([pookantong_book1, pookantong_book2, book1])
-print(pookaneiei.search_book(input(),batalog))
+batalog.search_book(input())
+print(batalog.list_of_book)
