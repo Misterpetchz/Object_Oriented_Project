@@ -35,6 +35,6 @@ pookaneiei = Customer('pookantong.p@gmail.com',
 pookantong_rating1 = Rating(pookantong_book1, 10, "Bad ending, I don't like it")
 pookantong_rating2 = Rating(pookantong_book1, 9, "So Cool!")
 
-pookaneiei.add_rating(pookantong_book1,pookantong_rating1)
-pookaneiei.add_rating(pookantong_book1,pookantong_rating2)
-print(pookantong_book1._rating[1]._book_rating)
+pookantong_book1.add_rating(pookantong_rating1)
+pookantong_book1.add_rating(pookantong_rating2)
+print(pookantong_book1._rating[0]._book_rating)
