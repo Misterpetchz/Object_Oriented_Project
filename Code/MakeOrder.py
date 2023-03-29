@@ -1,14 +1,6 @@
+from Modules.UserAccount import Customer
 from Modules.Book import BookItem
-from Modules.UserAccount import Admin
 from Modules.Catalog import Catalog
-
-pookan_admin555 = Admin('65010895@kmitl.ac.th',
-                 'PomyukmeFan55',
-                 'Yotsapat',
-                 'Male',
-                 '0980231172',
-                 [],
-                 True)
 pookantong_book1 = BookItem(2547,
                        'random.png',
                        'ในคืนที่โหดร้ายพระเอกตายแต่.....',
@@ -26,6 +18,7 @@ pookantong_book1 = BookItem(2547,
                        9,
                        999,
                        9)
+
 pookantong_book2 = BookItem(9875,
                        'random2.png',
                        'ในคืนที่โหดร้ายนางเอกตายแต่.....',
@@ -43,23 +36,19 @@ pookantong_book2 = BookItem(9875,
                        9,
                        999,
                        9)
-book1 = BookItem(4090,
-                 'Element_Online_Phase4_1.png',
-                 'online game',
-                 'MASALAN',
-                 'Element Online Phase 4.1',
-                 'Hard cover with 388 page and 8 game card',
-                 '978-616-00-2417-9',
-                 'satapornbooks',
-                 '1.....',
-                 'Good Novel',
+
+pookaneiei = Customer('pookantong.p@gmail.com',
+                 'PomyukmeFan555',
+                 'PookanNaja',
+                 'Male',
+                 '0980231173',
                  [],
-                 'เกม EO อัปเดตแพตช์ที่มาพร้อมเมืองใหม่ นั้นคือ เกาะลอยฟ้า',
-                 ['fantasy'],
-                 '18-Mar-2016',
-                 9,
-                 10,
-                 9)
+                 '29/7 หมู่2 ตำบลบั้นเด้า อำเภอรถแห่ จังหวัดสก๊อย ประเทศหิวข้าว ดาวSun',
+                 True,
+                 True,   
+)
 batalog = Catalog([pookantong_book1, pookantong_book2])
-batalog.add_book(book1)
-print(batalog.list_of_book)
+pookaneiei.add_book_to_basket(batalog, pookantong_book1)
+pookaneiei.add_book_to_basket(batalog, pookantong_book2)
+pookaneiei.make_order()
+print(pookaneiei._order_list)

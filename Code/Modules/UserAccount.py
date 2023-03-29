@@ -3,6 +3,7 @@ from Modules.Catalog import Catalog
 from Modules.Book import BookItem
 from Modules.Branch import Branch
 from Modules.BranchList import BranchList
+from Modules.Order import Order
 
 class UserAccount:
     def __init__(self, email, password, full_name, gender, tel , shipping):
@@ -22,19 +23,8 @@ class Customer(UserAccount):
         self.__email_notification = email_notification
         self.__sms_notification = sms_notification
         self.__basket = Basket([])
-    def search_book(self, search_string, catalog:Catalog):
-        lists=[]
-        for element in catalog.list_of_book:
-            if search_string in element._name:
-                lists.append(element)
-        return lists
-    def search_available_branch(self, book, all_branch):
-        lists = []
-        for element in all_branch.list_of_branch:
-            for elements in element._product_in_stock:
-                if elements == book:
-                    lists.append(element)
-        return lists
+        self.__order_id = 1
+        self.__order_list = []
     def request_edit():
         pass
     def info_verification(email, password, full_name, gender, tel, shipping, address, email_notification, sms_notification):
@@ -45,8 +35,17 @@ class Customer(UserAccount):
         pass
     def add_book_to_basket(self, catalog,  book):
         self.__basket.add_book(catalog, book)
-    def make_order(Basket, Coupon):
-        pass
+    def make_order(self, coupon=0):
+        if coupon != 0:
+            pass
+        if len(self.__basket.book_item) > 0:
+            self.__order_list.append(Order(self.__basket,
+                                        self.__order_id,
+                                        False,
+                                        False,
+                                        self
+                                        ))
+            self.__order_id+=1
     def make_payment(payment_type):
         pass
     def get_basket(self):
@@ -62,9 +61,6 @@ class Admin(UserAccount):
         
     def modify_delete_branch(type,Branch):
         pass
-    def add_branch(self, branch_list:BranchList, branch):
-        if isinstance(branch, Branch):
-            branch_list.list_of_branch.append(branch)
     def modify_branch(branch_name, open_time, location, tel, line_id, facebook_id, gps, product_in_stock):
         pass
     def modify_delete_book(type,Book):
@@ -78,7 +74,7 @@ class Admin(UserAccount):
     def add_rating(rating):
         pass
     def add_book(self, book,catalog:Catalog):
-        if book == BookItem:
+        if isinstance(book, BookItem):
             catalog.list_of_book.append(book)
     def add_event(event_name, event_start, event_end, discounted_book, discounted_price, book_item):
         pass
