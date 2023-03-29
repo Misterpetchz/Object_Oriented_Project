@@ -22,6 +22,14 @@ class CreditCard:
     def set_cvc(self, new_cvc):
         self.__cvc = new_cvc
 
+    def modify_credit_card_info(self, new_card_num, new_expire_date, new_cvc):
+        if isinstance(new_card_num, str):
+            self.card_num = new_card_num
+        if isinstance(new_expire_date, str):
+            self.expire_date = new_expire_date
+        if isinstance(new_cvc, str):
+            self.cvc = new_cvc
+
     card_num = property(get_card_num, set_card_num)
     expire_date = property(get_expire_date, set_expire_date)
     cvc = property(get_cvc, set_cvc)

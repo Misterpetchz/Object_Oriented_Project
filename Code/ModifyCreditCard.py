@@ -15,6 +15,7 @@ pookaneiei = Customer('pookantong.p@gmail.com',
 pookanCard = CreditCard('02131284',
                         '12-02-23',
                         '0212')
-
-pookaneiei.modify_credit_card_info(pookanCard, "123456789", '12-02-23','0121')
+pookanCard.modify_credit_card_info("012321",
+                                   "12-02-25",
+                                   '01232')
 print(pookanCard.cvc)
