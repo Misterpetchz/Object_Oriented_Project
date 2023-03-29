@@ -91,5 +91,5 @@ moon_branch = Branch('Moon',
                      ,[pookantong_book1])
 
 all_branch = BranchList([moon_branch,rangsit,bangkok])
-pookan_admin555.add_branch(all_branch, nonthaburi1)
+all_branch.add_branch(nonthaburi1)
 print(all_branch.list_of_branch)
