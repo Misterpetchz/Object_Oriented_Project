@@ -1,13 +1,40 @@
+from Modules.Book import Book
 class EventDiscount():
-    def __init__(self, event_name, event_start, event_end, discounted_book, discounted_price, book_item):
+    def __init__(self, event_name, event_start, event_end, discounted_percentage):
         self.__event_name = event_name
         self.__event_start = event_start
         self.__event_end = event_end
-        self.__discounted_book = discounted_book
-        self.__discounted_price = discounted_price
-        self.__book_item = book_item
+        self.__discounted_percentage = discounted_percentage
+        self.__list_of_book = []
         
     def get_event_name(self):
         return self.__event_name
-    
+    def get_event_start(self):
+        return self.__event_start
+    def get_event_end(self):
+        return self.__event_end
+    def get_event_percentage(self):
+        return self.__event_start
+    def get_list_of_book(self):
+        return self.__list_of_book
+    def add_book_to_event(self, book:Book):
+        self.__list_of_book.append(book)
+    def modify_event(self, new_name, new_start, new_end, new_percentage):
+        if isinstance(new_name, str):
+            self.__event_name = new_name
+        if isinstance(new_start, str):
+            self.__event_start = new_start
+        if isinstance(new_end, str):
+            self.__event_end = new_end
+        if isinstance(new_percentage, float):
+            self.__discounted_percentage = new_percentage
+    def remove_book(self, book:Book):
+        for i in self.__list_of_book:
+            if i == book:
+                self.__list_of_book.remove(book)
+
     event_name = property(get_event_name)
+    event_start = property(get_event_start)
+    event_end = property(get_event_end)
+    discounted_percentage = property(get_event_percentage)
+    list_of_book = property(get_list_of_book)
