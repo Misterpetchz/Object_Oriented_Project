@@ -62,8 +62,8 @@ pookaneiei.add_book_to_basket(BookItem(
             pookantong_book1._date_created,
             pookantong_book1._rating,
             pookantong_book1._price,
-            0
-        ))
+            ),
+            pookantong_book1)
 pookaneiei.add_book_to_basket(BookItem(
             pookantong_book2._cover,
             pookantong_book2._brief,
@@ -80,5 +80,6 @@ pookaneiei.add_book_to_basket(BookItem(
             pookantong_book2._rating,
             pookantong_book2._price,
             0
-        ))
-print(pookaneiei.basket.book_item)
+            ),
+            pookantong_book2)
+

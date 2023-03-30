@@ -33,18 +33,15 @@ class Customer(UserAccount):
         pass
     def add_credit_card_info(card_info):
         pass
-    def add_book_to_basket(self, book_item):
+    def add_book_to_basket(self, book_item, book:Book):
         self.__basket.add_book(book_item)
-    def make_order(self, coupon=0):
-        if coupon != 0:
-            pass
+        book._amount_in_stock -= 1
+    def remove_book_from_basket(self, book_item, book:Book):
+        self.__basket.remove_book(book_item)
+        book._amount_in_stock += 1
+    def make_order(self, order):
         if len(self.__basket.book_item) > 0:
-            self.__order_list.append(Order(self.__basket,
-                                        self.__order_id,
-                                        False,
-                                        False,
-                                        self
-                                        ))
+            self.__order_list.append(order)
             self.__order_id+=1
     def make_payment(payment_type):
         pass
@@ -52,8 +49,11 @@ class Customer(UserAccount):
         return self.__basket
     def get_order_list(self):
         return self.__order_list
+    def get_order_id(self):
+        return self.__order_id
     order_list = property(get_order_list)
     basket = property(get_basket)
+    order_id = property(get_order_id)
     
     
 class Admin(UserAccount):

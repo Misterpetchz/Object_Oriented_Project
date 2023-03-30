@@ -15,10 +15,9 @@ class Book :
         self._date_created = date_created
         self._rating = rating
         self._price = price
-        self._book_item_in_stock = []
+        self._amount_in_stock = amount
 class BookItem(Book):
-    def __init__(self, cover, brief, creator, name, book_info, book_publisher, book_preview, critic_review, table_of_content, summary, genre, date_created, rating, price, book_ISBN_id):
+    def __init__(self, cover, brief, creator, name, book_info, book_publisher, book_preview, critic_review, table_of_content, summary, genre, date_created, rating, price):
         super().__init__(cover, brief, creator, name, book_info, book_publisher, book_preview, critic_review, table_of_content, summary, genre, date_created, rating, price, 'unvalue')
-        self._book_ISBN_id = book_ISBN_id
     def get_branch_with_book(Book):
         pass

@@ -13,5 +13,4 @@ nonthaburi1 = Branch("Nonthaburi",
 
 all_branch = BranchList()
 all_branch.add_branch(nonthaburi1)
-catalog = all_branch.list_of_branch
-print(catalog)
+print(all_branch.list_of_branch)

@@ -6,5 +6,5 @@ class Order:
         self._payment = payment
         self._user = user
 
-    def get_list_of_book_item (Basket):
+    def get_list_of_book_item (self, Basket):
         pass
