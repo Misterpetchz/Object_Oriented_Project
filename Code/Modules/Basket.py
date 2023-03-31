@@ -12,13 +12,9 @@ class Basket:
         return self.__book_item
     def get_price(self):
         return self.__price
-    def calculate_price(self, event):
-        self.__price = 0
-        for book_element in self.__book_item:
-            for book_event in event.list_of_book:
-                if  book_element._name==book_event._name:
-                    self.__price += book_element._price * event.discounted_percentage
+    def set_price(self, new_price):
+        self.__price = new_price
 
     
-    price = property(get_price)
+    price = property(get_price, set_price)
     book_item = property(get_book)

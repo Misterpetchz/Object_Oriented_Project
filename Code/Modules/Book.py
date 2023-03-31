@@ -16,8 +16,14 @@ class Book :
         self._rating = rating
         self._price = price
         self._amount_in_stock = amount
+        self._new_price = price
 class BookItem(Book):
     def __init__(self, cover, brief, creator, name, book_info, book_publisher, book_preview, critic_review, table_of_content, summary, genre, date_created, rating, price):
         super().__init__(cover, brief, creator, name, book_info, book_publisher, book_preview, critic_review, table_of_content, summary, genre, date_created, rating, price, 'unvalue')
     def get_branch_with_book(Book):
         pass
+'''  
+class test(Book):
+    def __init__(self, book):
+        super().__init__(diction['cover'], brief, creator, name, book_info, book_publisher, book_preview, critic_review, table_of_content, summary, genre, date_created, rating, book., amount)
+'''

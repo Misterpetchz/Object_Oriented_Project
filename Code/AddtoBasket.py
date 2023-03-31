@@ -61,25 +61,8 @@ pookaneiei.add_book_to_basket(BookItem(
             pookantong_book1._genre,
             pookantong_book1._date_created,
             pookantong_book1._rating,
-            pookantong_book1._price,
+            pookantong_book1._new_price,
             ),
             pookantong_book1)
-pookaneiei.add_book_to_basket(BookItem(
-            pookantong_book2._cover,
-            pookantong_book2._brief,
-            pookantong_book2._creator,
-            pookantong_book2._name,
-            pookantong_book2._book_info,
-            pookantong_book2._book_publisher,
-            pookantong_book2._book_preview,
-            pookantong_book2._critic_review,
-            pookantong_book2._table_of_content,
-            pookantong_book2._summary,
-            pookantong_book2._genre,
-            pookantong_book2._date_created,
-            pookantong_book2._rating,
-            pookantong_book2._price,
-            0
-            ),
-            pookantong_book2)
 
+print(pookantong_book1.__dict__)

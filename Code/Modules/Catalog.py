@@ -1,4 +1,5 @@
 from Modules.Book import Book
+from Modules.EventDiscount import EventDiscount
 class Catalog():
     def __init__(self):
         self.__all_list_of_book = []
@@ -28,5 +29,6 @@ class Catalog():
     def get_list(self):
         return self.__list_of_book
     
+                
     list_all_of_book = property(get_all_list, set_all_list)
     list_of_book = property(get_list)
