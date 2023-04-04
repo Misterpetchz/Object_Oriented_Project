@@ -1,9 +1,16 @@
-my_list = ["apple", "banana", "orange", "pear", "grape"]
+from fastapi import FastAPI
+from typing import Optional
 
-# Ask user for input
-search_str = input("Enter a search string: ").lower()
+app = FastAPI()
 
-# Iterate over list and check if each element contains the search string (case-insensitive)
-for element in my_list:
-    if search_str in element.lower():
-        print(f"Found element: {element}")
+@app.get("/")
+def read_root():
+    return {"Hello world!"}
+@app.get("/hi")
+async def hi(name:str, reply: Optional[str] = None):
+    return {"Hello":name, "reply = " : reply}
+
+# @app.post('/book/')
+# async def add_rating(rating : Ratings):
+#     pookantong_book1.add_rating(rating.book_rating, rating.book_comment)
+#     return pookantong_book1._rating.__dict_

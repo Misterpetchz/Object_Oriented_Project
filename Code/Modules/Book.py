@@ -18,6 +18,9 @@ class Book :
         self._date_created = date_created
         self._rating = rating
         self._price = price
+    def add_rating(self, rating:Rating):
+        self._rating.append(rating)
+
 class BookItem(Book):
     def __init__(self, product_id, cover, brief, creator, name, book_info, book_ISBN_id, book_publisher, book_preview, critic_review, table_of_content, summary, genre, date_created, rating, price, event_discount):
         super().__init__(product_id, cover, brief, creator, name, book_info, book_ISBN_id, book_publisher, book_preview, critic_review, table_of_content, summary, genre, date_created, rating, price)
@@ -32,7 +35,6 @@ class BookItem(Book):
     def set_event_discount(self, new_event_discount):
         self.__event_discount = new_event_discount
 
-    def add_rating(self, rating:Rating):
-        self._rating.append(rating)
+ 
 
     event_discount = property(get_event_discount,set_event_discount)
