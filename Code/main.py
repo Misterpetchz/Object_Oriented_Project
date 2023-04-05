@@ -83,8 +83,7 @@ rangsit = Branch('rangsit',
                        'future park rangsit',
                        '0983868365',
                        'bookshop.rangsit',
-                       'rangsit_bookshop',
-                       [])
+                       'rangsit_bookshop')
 
 batalog.add_book(pookantong_book1)
 event = EventDiscount("dan",datetime.date(2023, 3, 31), datetime.date(2023, 4, 30), 0.9)

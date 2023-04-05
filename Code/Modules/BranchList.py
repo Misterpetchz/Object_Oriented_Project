@@ -1,6 +1,6 @@
 from Modules.Branch import Branch
 class BranchList():
-    def __init__(self, list_of_branch):
+    def __init__(self):
         self.__list_of_branch = []
         self.__available = []
         
