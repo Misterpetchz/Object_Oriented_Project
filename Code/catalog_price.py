@@ -1,17 +1,6 @@
-from Modules.UserAccount import*
-from Modules.Branch import Branch
-from Modules.Book import BookItem
-from Modules.BranchList import BranchList
-
-pookaneiei = Customer('pookantong.p@gmail.com',
-                 'PomyukmeFan555',
-                 'PookanNaja',
-                 'Male',
-                 '0980231173',
-                 [],
-                 '29/7 หมู่2 ตำบลบั้นเด้า อำเภอรถแห่ จังหวัดสก๊อย ประเทศหิวข้าว ดาวSun',
-                 True,
-                 True)
+from Modules.Book import*
+from Modules.Catalog import*
+from Modules.EventDiscount import*
 pookantong_book1 = Book(
                        'random.png',
                        'ในคืนที่โหดร้ายพระเอกตายแต่.....',
@@ -63,40 +52,13 @@ book1 = Book(
                  9,
                  10,
                  9)
-bangkok = Branch("Bangkok",
-                 "6.00 - 22.00",
-                 "Bangkok",
-                 "0864615559",
-                 "bookshop.bangkok",
-                 "bangkok_bookshop",
-                 )
-nonthaburi1 = Branch("Nonthaburi",
-                     "8:30-22:00",
-                     "Nonthaburi",
-                     "0811111111",
-                     "seed_nonthaburi01",
-                     "NonthaburiSE-ED",
-                     )
-rangsit = Branch('rangsit',
-                       '9:00-23:00',
-                       'future park rangsit',
-                       '0983868365',
-                       'bookshop.rangsit',
-                       'rangsit_bookshop',
-                       )
-moon_branch = Branch('Moon',
-                     '23:00 - 23:59',
-                     'Moon',
-                     '0995471568',
-                     'bookshop.moon',
-                     'moon_bookshop'
-                     )
-
-all_branch = BranchList()
-nonthaburi1.add_product(book1)
-all_branch.add_branch(nonthaburi1)
-all_branch.add_branch(rangsit)
-all_branch.add_branch(moon_branch)
-all_branch.add_branch(bangkok)
-all_branch.search_available_branch(book1)
-print(all_branch.available_branch)
+batalog = Catalog()
+batalog.add_book(book1)
+batalog.add_book(pookantong_book1)
+batalog.add_book(pookantong_book2)
+event = EventDiscount("dan",1,1,0.9)
+event.add_book_to_event(pookantong_book2)
+for i in batalog.list_all_of_book:
+    if i._name in [x._name for x in event.list_of_book]:
+        event.apply_discount(i)
+print(batalog.list_all_of_book[2]._new_price)
