@@ -1,14 +1,20 @@
 from Modules.Catalog import *
 class Basket:
-    def __init__(self, book_item):
-        self.__book_item = book_item
+    def __init__(self):
+        self.__book_item = []
+        self.__price = 0
         
-    def get_book(self, catalog:Catalog, book):
-        self.__index = catalog.list_of_book.index(book)
-        return catalog.list_of_book.pop(self.__index)
-    def add_book(self, catalog, book):
-        self.__book_item.append(self.get_book(catalog,book))
-    def get_books(self):
+    def add_book(self, book):
+        self.__book_item.append(book)
+    def remove_book(self, book):
+        self.__book_item.pop(1)
+    def get_book(self):
         return self.__book_item
+    def get_price(self):
+        return self.__price
+    def set_price(self, new_price):
+        self.__price = new_price
+
     
-    book_item = property(get_books)
+    price = property(get_price, set_price)
+    book_item = property(get_book)

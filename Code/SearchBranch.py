@@ -12,13 +12,13 @@ pookaneiei = Customer('pookantong.p@gmail.com',
                  '29/7 หมู่2 ตำบลบั้นเด้า อำเภอรถแห่ จังหวัดสก๊อย ประเทศหิวข้าว ดาวSun',
                  True,
                  True)
-pookantong_book1 = BookItem(2547,
+pookantong_book1 = Book(
                        'random.png',
                        'ในคืนที่โหดร้ายพระเอกตายแต่.....',
                        'Pookantong',
                        'Pookantong1',
                        '250 หน้า ปกแข็ง',
-                       '8472ae0Kjd7',
+                       
                        'BanDao',
                        'yamete!',
                        'critic review',
@@ -29,13 +29,13 @@ pookantong_book1 = BookItem(2547,
                        9,
                        999,
                        9)
-pookantong_book2 = BookItem(9875,
+pookantong_book2 = Book(
                        'random2.png',
                        'ในคืนที่โหดร้ายนางเอกตายแต่.....',
                        'Pookantong',
                        'Pookantong2',
                        '999 หน้า ปกแข็ง',
-                       '8572az0Kjd9',
+                       
                        'BanDao',
                        'yamete kudasai!',
                        'critic review',
@@ -46,13 +46,13 @@ pookantong_book2 = BookItem(9875,
                        9,
                        999,
                        9)
-book1 = BookItem(4090,
+book1 = Book(
                  'Element_Online_Phase4_1.png',
                  'online game',
                  'MASALAN',
                  'Element Online Phase 4.1',
                  'Hard cover with 388 page and 8 game card',
-                 '978-616-00-2417-9',
+                 
                  'satapornbooks',
                  '1.....',
                  'Good Novel',
@@ -69,29 +69,34 @@ bangkok = Branch("Bangkok",
                  "0864615559",
                  "bookshop.bangkok",
                  "bangkok_bookshop",
-                 [pookantong_book1,pookantong_book2,book1])
+                 )
 nonthaburi1 = Branch("Nonthaburi",
                      "8:30-22:00",
                      "Nonthaburi",
                      "0811111111",
                      "seed_nonthaburi01",
                      "NonthaburiSE-ED",
-                     [pookantong_book1,pookantong_book2])
+                     )
 rangsit = Branch('rangsit',
                        '9:00-23:00',
                        'future park rangsit',
                        '0983868365',
                        'bookshop.rangsit',
                        'rangsit_bookshop',
-                       [pookantong_book2,book1])
+                       )
 moon_branch = Branch('Moon',
                      '23:00 - 23:59',
                      'Moon',
                      '0995471568',
                      'bookshop.moon',
                      'moon_bookshop'
-                     ,[pookantong_book1])
+                     )
 
-all_branch = BranchList([bangkok,nonthaburi1,moon_branch,rangsit])
+all_branch = BranchList()
+nonthaburi1.add_product(book1)
+all_branch.add_branch(nonthaburi1)
+all_branch.add_branch(rangsit)
+all_branch.add_branch(moon_branch)
+all_branch.add_branch(bangkok)
 all_branch.search_available_branch(book1)
 print(all_branch.available_branch)
