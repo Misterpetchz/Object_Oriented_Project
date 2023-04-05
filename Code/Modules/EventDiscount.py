@@ -35,10 +35,7 @@ class EventDiscount():
             if i == book:
                 self.__list_of_book.remove(book)
     def apply_discount(self, book):
-        if self.__event_start <= datetime.datetime.now().date() and datetime.datetime.now().date() <= self.event_end:
-            book._new_price = book._price * self.__discounted_percentage
-        else:
-            book._new_price = book._price
+        book._new_price = book._price * self.__discounted_percentage
     event_name = property(get_event_name)
     event_start = property(get_event_start)
     event_end = property(get_event_end)
