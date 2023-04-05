@@ -1,16 +1,4 @@
-from fastapi import FastAPI
-from typing import Optional
+from Modules.Payment import ViaQrCode
 
-app = FastAPI()
-
-@app.get("/")
-def read_root():
-    return {"Hello world!"}
-@app.get("/hi")
-async def hi(name:str, reply: Optional[str] = None):
-    return {"Hello":name, "reply = " : reply}
-
-# @app.post('/book/')
-# async def add_rating(rating : Ratings):
-#     pookantong_book1.add_rating(rating.book_rating, rating.book_comment)
-#     return pookantong_book1._rating.__dict_
+pay = ViaQrCode(1000,"15-07-2004","Not-paid")
+print(pay.process())

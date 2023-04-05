@@ -14,6 +14,14 @@ class ModifyBranchDTO(BaseModel):
     line_id : str
     facebook_id : str
 
+class AddBranchDTO(BaseModel):
+    branch_name : str
+    open_time : str
+    location : str
+    tel : str
+    line_id : str
+    facebook_id : str
+
 class EventDTO(BaseModel):
     event_name : str
     event_start : str

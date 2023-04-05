@@ -12,7 +12,7 @@ from pydantic import BaseModel
 
 list_credit_card = []
 list_event = []
-list_branch = BranchList()
+all_branch = BranchList()
 
 app = FastAPI()
 pookan_card = CreditCard("121231232",
@@ -51,30 +51,54 @@ rangsit = Branch('rangsit',
                        'rangsit_bookshop',
                        [])
 
+bangkok = Branch("Bangkok",
+                 "6.00 - 22.00",
+                 "Bangkok",
+                 "0864615559",
+                 "bookshop.bangkok",
+                 "bangkok_bookshop",
+                 [])
+all_branch.add_branch(rangsit)
+
+def find_branch_list(name):
+    for i in all_branch.list_of_branch:
+        if name == i._branch_name:
+            return i
+
 pookantong_rating1 = Rating(pookantong_book1, 10, "Bad ending, I don't like it")
 
 @app.get("/")
 async def home():
     return {"Welcome to BookShop"}
 
-@app.post("/CreditCard/")
+@app.post("/addCreditCard/")
 async def add_credit_card(credit_card : CreditCardDTO):
     list_credit_card.append(CreditCard(credit_card.card_num, credit_card.expire_date, credit_card.cvc))
     return list_credit_card
 
 # loop to get credit card object
-@app.put("/creditCard/")
+@app.put("/modifyCreditCard/")
 async def modify_credit_card(credit_card : CreditCardDTO):
     pookan_card.modify_credit_card_info(credit_card.card_num, credit_card.expire_date, credit_card.cvc)
     return pookan_card
 
-@app.put("/branch/")
-# loop to get branch object
-async def modify_branch(branch : ModifyBranchDTO):
-    rangsit.modify_branch(branch.branch_name, branch.open_time, branch.location, branch.tel, branch.line_id, branch.facebook_id,[],[])
-    return rangsit
+@app.post("/addbranch")
+async def add_branch(data:AddBranchDTO):
+    all_branch.add_branch(Branch(data.branch_name,
+                data.open_time,
+                data.location,
+                data.tel,
+                data.line_id,
+                data.facebook_id))
+    return all_branch.list_of_branch
 
-@app.post("/event/")
+@app.put("/branch/{branch_name}")
+async def modify_branch(branch : ModifyBranchDTO, branch_name):
+    find_branch = find_branch_list(branch_name)
+    find_branch.modify_branch(branch.branch_name, branch.open_time, branch.location, branch.tel, branch.line_id, branch.facebook_id,[],[])
+    return find_branch
+
+@app.post("/addEvent/")
 async def add_event(data : EventDTO):
     list_event.append(EventDiscount(data.event_name, data.event_start, data.event_end, data.discounted_percentage))
     return list_event
