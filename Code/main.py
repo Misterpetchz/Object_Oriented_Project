@@ -10,6 +10,7 @@ from Modules.CreditCard import CreditCard
 from Modules.Rating import Rating
 from Modules.UserAccount import *
 from Modules.dto import *
+from Modules.settings import *
 from CLassDTO import *
 from datetime import datetime
 import datetime
@@ -192,3 +193,55 @@ async def modify_branch(branch : dict):
     facebook_id = branch["facebook_id"]
     rangsit.modify_branch(branch_name, open_time, location, tel, line_id, facebook_id,[],[])
     return rangsit
+
+@app.put("/book/")
+async def modify_book(book:BookModel,book_name):
+    find_book = find_book_in_catalog(book_name)
+    find_book.modify_book(book.cover,book.brief,book.creator,book.name,book.book_info,book.book_publisher,book.book_preview,book.critic_review,
+                          book.table_of_content,book.summary,book.genre,book.date_created,book.price,book.amount_in_stock,)
+    return find_book
+
+async def get_current_active_user(current_user : Customer = Depends(Customer.get_current_user)) :
+	# print(current_user.__dict__)
+	if current_user._disabled :
+		raise HTTPException(status_code=400, detail="Inactive User")
+	return current_user
+
+@app.put("/users/edit")
+async def info_verification(email : Optional[str] = None, password : Optional[str] = None, full_name : Optional[str] = None, gender : Optional[str] = None, tel : Optional[str] = None, address : Optional[str] = None,
+				email_noti : Optional[bool] = None, sms_noti : Optional[bool] = None, id : Customer = Depends(Customer.get_current_user)) :
+	if (id == None) :
+		return {"Error-101" : "Didn't find any account with this id"}
+	id._email = email or id._email
+	id._password = password or id._password
+	id._full_name = full_name or id._full_name
+	id._gender = gender or id._gender
+	id._tel = tel or id._tel
+	id._address = address or id._address
+	# id._email_notification = email_noti if email_noti != None else id._email_notification
+	# id._sms_notification = sms_noti if sms_noti != None else id._sms_notification
+	if email_noti != None :
+		id.email_notification = email_noti
+	if email_noti != None :
+		id.sms_notification = sms_noti
+
+@app.post("/token", response_model=Token)
+async def login(form_data : OAuth2PasswordRequestForm = Depends()) :
+	user = Customer.authenticate_user(form_data.username, form_data.password)
+	if not user :
+		raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect Username or Password", headers={"WWW-Authenticate" : "Bearer"})
+	access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTE)
+	access_token = Customer.creat_access_token(data={"sub" : user._email}, expires_delta=access_token_expires)
+	return {"access_token" : access_token, "token_type" : "bearer"}
+
+@app.get("/users/me")
+async def view_info(userid : Customer = Depends(get_current_active_user)):
+	# id = InstanceFinder(Customer, "_email", userid)
+	# if (id == None) :
+	# 	return {"Error-101" : "Didn't find any account with this id"}
+	# else :
+		return (userid)
+
+# print(get_password_hash("Lament"))
+# print(get_password_hash("Bruh"))
+# print(get_password_hash("Why"))
