@@ -5,7 +5,7 @@ class AddBooktoBasketDTO(BaseModel):
     password:str
 
 class AddBookDTO(BaseModel):
-    cover:str
+    cover:str 
     brief:str
     creator:str
     name:str
