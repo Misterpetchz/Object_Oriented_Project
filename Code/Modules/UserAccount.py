@@ -145,8 +145,8 @@ class Customer(UserAccount):
 
 async def get_current_active_user(current_user : Customer = Depends(Customer.get_current_user)) :
 	# print(current_user.__dict__)
-	# if current_user._disabled :
-	# 	raise HTTPException(status_code=400, detail="Inactive User")
+	if current_user._disabled :
+		raise HTTPException(status_code=400, detail="Inactive User")
 	return current_user
 
 @app.put("/users/edit")
