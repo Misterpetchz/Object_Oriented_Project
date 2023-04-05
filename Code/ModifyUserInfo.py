@@ -49,7 +49,7 @@ customer33 = Customer(customer3)
 dct = {}
 lst = ClassInstancePacker(Customer)
 for obj in lst :
-	dct[obj._email] = obj.toJSON()
+	dct[obj._email] = obj.__dict__
 
 with open('data.json', 'w') as f :
-	f.write(json.dumps(dct))
+	f.write(str(dct))

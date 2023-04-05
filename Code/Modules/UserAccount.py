@@ -53,6 +53,7 @@ class Customer(UserAccount):
 		self.__sms_notification = data_dict["__sms_notification"]
 		self.__basket = Basket([])
 		self._disabled = False
+
 	def search_book(self, search_string, catalog:Catalog):
 		lists=[]
 		for element in catalog.list_of_book:

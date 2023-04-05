@@ -3,6 +3,8 @@ from Modules.settings import *
 from Modules.UserAccount import UserAccount, Customer
 
 app = FastAPI()
+
+User_DB = []
 # db = {
 # 	"Medkit101@gmail.com" : {
 # 		"email" : "Medkit101@gmail.com",
@@ -134,6 +136,21 @@ async def info_verification(email : Optional[str] = None, password : Optional[st
 		id.email_notification = email_noti
 	if email_noti != None :
 		id.sms_notification = sms_noti
+
+@app.put("/users/registration")
+async def registration(email : str , password : str, full_name : str, gender : str, tel : str, address : str,
+				email_noti : bool, sms_noti : bool) :
+	input_dict = {}
+	input_dict['_email'] = email
+	input_dict['_password'] = Customer.get_password_hash(password)
+	input_dict['_full_name'] = full_name
+	input_dict['_gender'] = gender
+	input_dict['_tel'] = tel
+	input_dict['_address'] = address
+	input_dict['__email_notification'] = email_noti
+	input_dict['__sms_notification'] = sms_noti
+
+	User_DB.append(Customer(input_dict))
 
 @app.post("/token", response_model=Token)
 async def login(form_data : OAuth2PasswordRequestForm = Depends()) :
