@@ -30,4 +30,11 @@ class AddBranchDTO(BaseModel):
     facebook_id:str
     
 class MakeOrderDto(BaseModel):
-    status:bool
+    test:str
+    
+class RemoveBookDTO(BaseModel):
+    index:int
+    book_name:str
+
+class SearchBookDTO(BaseModel):
+    string:str
