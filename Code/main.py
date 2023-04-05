@@ -3,6 +3,7 @@ from Modules.Catalog import Catalog
 from Modules.EventDiscount import EventDiscount
 from Modules.Book import *
 from Modules.UserAccount import *
+from Modules.settings import *
 from Modules.BranchList import BranchList
 from Modules.Branch import Branch
 from Modules.Order import Order
@@ -19,6 +20,7 @@ app = FastAPI()
 
 list_credit_card = []
 list_branch = BranchList()
+User_DB = []
 
 class Branchs(BaseModel):
     branch_name : str
@@ -42,15 +44,16 @@ nonthaburi1 = Branch("Nonthaburi",
 
 all_branch = BranchList()
 all_branch.add_branch(nonthaburi1)
-pookaneiei = Customer('pookantong.p@gmail.com',
-                 'PomyukmeFan555',
-                 'PookanNaja',
-                 'Male',
-                 '0980231173',
-                 [],
-                 '29/7 หมู่2 ตำบลบั้นเด้า อำเภอรถแห่ จังหวัดสก๊อย ประเทศหิวข้าว ดาวSun',
-                 True,
-                 True)
+pookaneiei = Customer("pookan@gmail.com", "Test1", "pookan", "Male", "0000000000", True, False, "LLL")
+# pookaneiei = Customer('pookantong.p@gmail.com',
+#                  'PomyukmeFan555',
+#                  'PookanNaja',
+#                  'Male',
+#                  '0980231173',
+#                  [],
+#                  '29/7 หมู่2 ตำบลบั้นเด้า อำเภอรถแห่ จังหวัดสก๊อย ประเทศหิวข้าว ดาวSun',
+#                  True,
+#                  True)
 
 batalog = Catalog()
 
@@ -71,13 +74,7 @@ pookantong_book1 = Book(
                        999,
                        9)
 
-pookan_admin555 = Admin('65010895@kmitl.ac.th',
-                 'PomyukmeFan55',
-                 'Yotsapat',
-                 'Male',
-                 '0980231172',
-                 [],
-                 True)
+pookan_admin555 = Admin("Pookan@gmail.com", "La", "Pookan", "Male", "488188561", [])
 
 rangsit = Branch('rangsit',
                        '9:00-23:00',
@@ -194,12 +191,6 @@ async def modify_branch(branch : dict):
     rangsit.modify_branch(branch_name, open_time, location, tel, line_id, facebook_id,[],[])
     return rangsit
 
-@app.put("/book/")
-async def modify_book(book:BookModel,book_name):
-    find_book = find_book_in_catalog(book_name)
-    find_book.modify_book(book.cover,book.brief,book.creator,book.name,book.book_info,book.book_publisher,book.book_preview,book.critic_review,
-                          book.table_of_content,book.summary,book.genre,book.date_created,book.price,book.amount_in_stock,)
-    return find_book
 
 async def get_current_active_user(current_user : Customer = Depends(Customer.get_current_user)) :
 	# print(current_user.__dict__)
@@ -236,12 +227,21 @@ async def login(form_data : OAuth2PasswordRequestForm = Depends()) :
 
 @app.get("/users/me")
 async def view_info(userid : Customer = Depends(get_current_active_user)):
-	# id = InstanceFinder(Customer, "_email", userid)
-	# if (id == None) :
-	# 	return {"Error-101" : "Didn't find any account with this id"}
-	# else :
 		return (userid)
 
-# print(get_password_hash("Lament"))
-# print(get_password_hash("Bruh"))
-# print(get_password_hash("Why"))
+
+@app.put("/users/registration")
+async def registration(email : str , password : str, full_name : str, gender : str, tel : str, address : str,
+				email_noti : bool, sms_noti : bool) :
+	input_dict = {}
+	input_dict['_email'] = email
+	input_dict['_password'] = Customer.get_password_hash(password)
+	input_dict['_full_name'] = full_name
+	input_dict['_gender'] = gender
+	input_dict['_tel'] = tel
+	input_dict['_address'] = address
+	input_dict['__email_notification'] = email_noti
+	input_dict['__sms_notification'] = sms_noti
+
+	User_DB.append(Customer(input_dict["_email"], input_dict["_password"], input_dict["_full_name"], input_dict["_gender"], input_dict["_tel"], input_dict["__email_notification"], input_dict["__sms_notification"], input_dict["_address"]))
+

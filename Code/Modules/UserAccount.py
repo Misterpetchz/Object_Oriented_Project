@@ -23,8 +23,8 @@ class UserAccount:
 
 
 class Admin(UserAccount):
-    def __init__(self, email, password, full_name, gender, tel, shipping, permission):
-        super().__init__(email, password, full_name, gender, tel, shipping)
+    def __init__(self, email, password, full_name, gender, tel, permission):
+        super().__init__(email, password, full_name, gender, tel)
         self.__permission = permission
 
     def modify_delete_branch(type, Branch):
@@ -55,22 +55,21 @@ class Admin(UserAccount):
 
 
 class Customer(UserAccount):
-    def __init__(self, data_dict: dict):
-        super().__init__(data_dict["_email"], data_dict["_password"],
-              data_dict["_full_name"], data_dict["_gender"], data_dict["_tel"])
-        self._address = data_dict["_address"]
-        self.__email_notification = data_dict["__email_notification"]
-        self.__sms_notification = data_dict["__sms_notification"]
-        self.__basket = Basket([])
+    def __init__(self, email, password, fullname, gender, tel, email_noti, sms_noti, address):
+        super().__init__(email, password, fullname, gender, tel)
+        self._address = address
+        self.__email_notification = email_noti
+        self.__sms_notification = sms_noti
+        self.__basket = Basket()
         self._disabled = False
-        
+
     def search_book(self, search_string, catalog:Catalog):
         lists=[]
         for element in catalog.list_of_book:
             if search_string in element._name:
                 lists.append(element)
                 return lists
-            
+
     def search_available_branch(self, book, all_branch):
         lists = []
         for element in all_branch.list_of_branch:
@@ -80,7 +79,7 @@ class Customer(UserAccount):
                     return lists
     def request_edit():
         pass
-    
+
     def modify_credit_card_info(card_num,exp_date,cvc):
         pass
     def info_verification(email, password, full_name, gender, tel, shipping, address, email_notification, sms_notification):
@@ -118,7 +117,7 @@ class Customer(UserAccount):
     order_list = property(get_order_list)
     basket = property(get_basket)
     order_id = property(get_order_id)
-    
+
     email_notification = property(get_email_noti, set_email_noti)
     sms_notification = property(get_sms_noti, set_sms_noti)
     def toJSON(self) :
