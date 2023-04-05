@@ -4,6 +4,9 @@ from Modules.Book import *
 from Modules.Branch import Branch
 from Modules.BranchList import BranchList
 from Modules.Order import Order
+from Modules.Rating import Rating
+from Modules.EventDiscount import EventDiscount
+from Modules.CreditCard import CreditCard
 
 class UserAccount:
     def __init__(self, email, password, full_name, gender, tel , shipping):
@@ -28,8 +31,6 @@ class Customer(UserAccount):
     def request_edit():
         pass
     def info_verification(email, password, full_name, gender, tel, shipping, address, email_notification, sms_notification):
-        pass
-    def modify_credit_card_info(card_num,exp_date,cvc):
         pass
     def add_credit_card_info(card_info):
         pass
@@ -67,13 +68,8 @@ class Admin(UserAccount):
         pass
         
     def add_branch(self, branch_list:BranchList, branch:Branch):
-            branch_list.list_of_branch.append(branch)
-            
-    def modify_branch(branch_name, open_time, location, tel, line_id, facebook_id, gps, product_in_stock):
-        pass
-    
-    def modify_branch(branch_name, open_time, location, tel, line_id, facebook_id, gps, product_in_stock):
-        pass
+        branch_list.list_of_branch.append(branch)
+
     def modify_delete_book(type,Book):
         pass
     def modify_book( product_id, cover, brief, creator, name, book_info, book_ISBN_id, book_publisher, book_preview, critic_review, table_of_content, summary, genre, date_created, rating, price, event_discount):
@@ -82,10 +78,9 @@ class Admin(UserAccount):
         pass
     def apply_event_modification(event_name, event_start, event_end, discounted_book, discounted_price, book_item):
         pass
-    def add_rating(rating):
-        pass
     def add_book(self, book,catalog:Catalog):
         if isinstance(book, BookItem):
             catalog.list_of_book.append(book)
-    def add_event(event_name, event_start, event_end, discounted_book, discounted_price, book_item):
-        pass
+    def add_event(self, book:BookItem, event_discount:EventDiscount):
+        if isinstance(event_discount, EventDiscount):
+            book.event_discount.append(event_discount)

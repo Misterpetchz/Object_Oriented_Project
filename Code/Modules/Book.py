@@ -1,3 +1,4 @@
+from Modules.Rating import Rating
 class Book : 
     def __init__(self, cover, brief, creator, name, book_info, book_publisher, book_preview, 
                  critic_review, table_of_content, summary, genre, date_created, rating, price, amount):
@@ -18,22 +19,26 @@ class Book :
         self._amount_in_stock = amount
         self._new_price = price
         
-#class BookItem():
-   # def __init__(self, cover, creator, name, book_info, genre, date_created, price):
+    def add_rating(self, rating:Rating):
+        self._rating.append(rating)
+         
+class BookItem(Book):
+    def __init__(self, product_id, cover, brief, creator, name, book_info, book_ISBN_id, book_publisher, book_preview, critic_review, table_of_content, summary, genre, date_created, rating, price, event_discount):
+        super().__init__(product_id, cover, brief, creator, name, book_info, book_ISBN_id, book_publisher, book_preview, critic_review, table_of_content, summary, genre, date_created, rating, price)
+        self.__event_discount = event_discount
         
+    def get_branch_with_book(Book):
+        pass
+    
+    def get_event_discount(self):
+        return self.__event_discount
+    
+    def set_event_discount(self, new_event_discount):
+        self.__event_discount = new_event_discount
 
-class BookItem():
-    def __init__(self, book):
-        self._cover = book._cover
-        self._creator = book._creator
-        self._name = book._name
-        self._book_info = book._book_info
-        self._genre = book._genre
-        self._date_created = book._date_created
-        self._price = book._new_price
+ 
+
+    event_discount = property(get_event_discount,set_event_discount)
    
-'''  
-class test(Book):
-    def __init__(self, book):
-        super().__init__(diction['cover'], brief, creator, name, book_info, book_publisher, book_preview, critic_review, table_of_content, summary, genre, date_created, rating, book., amount)
-'''
+
+

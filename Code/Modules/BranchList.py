@@ -7,12 +7,8 @@ class BranchList():
     def add_branch(self, branch:Branch):
         self.__list_of_branch.append(branch)
             
-    def remove_branch(self,Branch):
-        for element in self.__list_of_branch:
-            if Branch == element._branch_name:
-                index = self.__list_of_branch.index(element)
-                self.__list_of_branch.pop(index)
-                return element
+    def delete_branch(self, branch:Branch):
+        self.list_of_branch.remove(branch)
                 
     def get_specific_branch(self,Branch):
         for element in self.__list_of_branch:
