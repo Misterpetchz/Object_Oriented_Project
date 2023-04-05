@@ -16,8 +16,8 @@ customer1 = {
     "_gender" : "Unknown",
     "_tel" : "0000000",
     "_address" : "City 1",
-    "_email_notification" : True,
-    "_sms_notification" : False
+    "__email_notification" : True,
+    "__sms_notification" : False
 }
 
 customer2 = {
@@ -27,8 +27,8 @@ customer2 = {
     "_gender" : "Unknown",
     "_tel" : "0000000",
     "_address" : "City 1",
-    "_email_notification" : True,
-    "_sms_notification" : False
+    "__email_notification" : True,
+    "__sms_notification" : False
 }
 
 customer3 = {
@@ -38,15 +38,18 @@ customer3 = {
     "_gender" : "Unknown",
     "_tel" : "0000000",
     "_address" : "City 1",
-    "_email_notification" : True,
-    "_sms_notification" : False
+    "__email_notification" : True,
+    "__sms_notification" : False
 }
 
 customer11 = Customer(customer1)
 customer22 = Customer(customer2)
 customer33 = Customer(customer3)
 
+dct = {}
+lst = ClassInstancePacker(Customer)
+for obj in lst :
+	dct[obj._email] = obj.toJSON()
 
-print(Customer.get_password_hash("Test1"))
-print(Customer.get_password_hash("Test2"))
-print(Customer.get_password_hash("Test3"))
+with open('data.json', 'w') as f :
+	f.write(json.dumps(dct))

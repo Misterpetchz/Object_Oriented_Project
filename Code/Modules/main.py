@@ -1,63 +1,44 @@
 	#? External Lib
-from typing import Optional
-from fastapi import FastAPI, Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from pydantic import BaseModel
-from datetime import datetime, timedelta
-from jose import JWTError, jwt
-from passlib.context import CryptContext
-import gc
-from Modules.UserAccount import *
-
-SECRET_KEY = "0ecb3c3265b8073a4686a79606109099c6116152a390597514c9eff447fb1f94"
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTE = 30
-PWD_CONTEXT = CryptContext(schemes=["bcrypt"], deprecated="auto")
-OAUTH2_SCHEME = OAuth2PasswordBearer(tokenUrl="token")
+from Modules.settings import *
+from Modules.UserAccount import UserAccount, Customer
 
 app = FastAPI()
+# db = {
+# 	"Medkit101@gmail.com" : {
+# 		"email" : "Medkit101@gmail.com",
+# 		"full_name" : "Dante Durante",
+# 		"gender" : "Unknown",
+# 		"tel" : "101564",
+# 		"address" : "District 7",
+# 		"email_noti" : True,
+# 		"sms_noti" : True,
+# 		"disabled" : False,
+# 		"hashed_password" : "$2b$12$71C2.b9fJlp.3903g3klI.m8aIC4hRyurIX8ANpqoyWfA9QIAQ/82"
+# 	},
+# 	"Test101@gmail.com" : {
+# 		"email" : "Test101@gmail.com",
+# 		"full_name" : "Dante Durante",
+# 		"gender" : "Unknown",
+# 		"tel" : "101564",
+# 		"address" : "District 7",
+# 		"email_noti" : True,
+# 		"sms_noti" : True,
+# 		"disabled" : False,
+# 		"hashed_password" : "$2b$12$b4rMellphLAUtntHySUkbexQ/IqSNba1KDEATosuU/lOKpBofIb8G"
+# 	},
+# 	"Test202@gmail.com" : {
+# 		"email" : "Test202@gmail.com",
+# 		"full_name" : "Dante Durante",
+# 		"gender" : "Unknown",
+# 		"tel" : "101564",
+# 		"address" : "District 7",
+# 		"email_noti" : True,
+# 		"sms_noti" : True,
+# 		"disabled" : False,
+# 		"hashed_password" : "$2b$12$AqhPzCx2ELR29n5iVVsiSuz94XDAX.hkjQf6f4KoEjYYAXLJj/85W"
+# 	},
+# }
 
-db = {
-	"Medkit101@gmail.com" : {
-		"email" : "Medkit101@gmail.com",
-		"full_name" : "Dante Durante",
-		"gender" : "Unknown",
-		"tel" : "101564",
-		"address" : "District 7",
-		"email_noti" : True,
-		"sms_noti" : True,
-		"disabled" : False,
-		"hashed_password" : "$2b$12$71C2.b9fJlp.3903g3klI.m8aIC4hRyurIX8ANpqoyWfA9QIAQ/82"
-	},
-	"Test101@gmail.com" : {
-		"email" : "Test101@gmail.com",
-		"full_name" : "Dante Durante",
-		"gender" : "Unknown",
-		"tel" : "101564",
-		"address" : "District 7",
-		"email_noti" : True,
-		"sms_noti" : True,
-		"disabled" : False,
-		"hashed_password" : "$2b$12$b4rMellphLAUtntHySUkbexQ/IqSNba1KDEATosuU/lOKpBofIb8G"
-	},
-	"Test202@gmail.com" : {
-		"email" : "Test202@gmail.com",
-		"full_name" : "Dante Durante",
-		"gender" : "Unknown",
-		"tel" : "101564",
-		"address" : "District 7",
-		"email_noti" : True,
-		"sms_noti" : True,
-		"disabled" : False,
-		"hashed_password" : "$2b$12$AqhPzCx2ELR29n5iVVsiSuz94XDAX.hkjQf6f4KoEjYYAXLJj/85W"
-	},
-}
-
-class Token(BaseModel) :
-	access_token : str
-	token_type : str
-class TokenData(BaseModel) :
-	email : str or None = None
 # class User(BaseModel) :
 # 	email : str
 # 	full_name : str or None = None
@@ -130,13 +111,46 @@ class TokenData(BaseModel) :
 # 	access_token = creat_access_token(data={"sub" : user.email}, expires_delta=access_token_expires)
 # 	return {"access_token" : access_token, "token_type" : "bearer"}
 
-def	InstanceFinder(classType, attribute, Target) :
-    # return (obj for obj in gc.get_objects() if isinstance(obj, classType) and getattr(obj, attribute) == Target)
-	for obj in gc.get_objects() :
-		if isinstance(obj, classType) and getattr(obj, attribute) == Target :
-			return (obj)
-	return (None);
+async def get_current_active_user(current_user : Customer = Depends(Customer.get_current_user)) :
+	# print(current_user.__dict__)
+	if current_user._disabled :
+		raise HTTPException(status_code=400, detail="Inactive User")
+	return current_user
 
+@app.put("/users/edit")
+async def info_verification(email : Optional[str] = None, password : Optional[str] = None, full_name : Optional[str] = None, gender : Optional[str] = None, tel : Optional[str] = None, address : Optional[str] = None,
+				email_noti : Optional[bool] = None, sms_noti : Optional[bool] = None, id : Customer = Depends(Customer.get_current_user)) :
+	if (id == None) :
+		return {"Error-101" : "Didn't find any account with this id"}
+	id._email = email or id._email
+	id._password = password or id._password
+	id._full_name = full_name or id._full_name
+	id._gender = gender or id._gender
+	id._tel = tel or id._tel
+	id._address = address or id._address
+	# id._email_notification = email_noti if email_noti != None else id._email_notification
+	# id._sms_notification = sms_noti if sms_noti != None else id._sms_notification
+	if email_noti != None :
+		id.email_notification = email_noti
+	if email_noti != None :
+		id.sms_notification = sms_noti
+
+@app.post("/token", response_model=Token)
+async def login(form_data : OAuth2PasswordRequestForm = Depends()) :
+	user = Customer.authenticate_user(form_data.username, form_data.password)
+	if not user :
+		raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect Username or Password", headers={"WWW-Authenticate" : "Bearer"})
+	access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTE)
+	access_token = Customer.creat_access_token(data={"sub" : user._email}, expires_delta=access_token_expires)
+	return {"access_token" : access_token, "token_type" : "bearer"}
+
+@app.get("/users/me")
+async def view_info(userid : Customer = Depends(get_current_active_user)):
+	# id = InstanceFinder(Customer, "_email", userid)
+	# if (id == None) :
+	# 	return {"Error-101" : "Didn't find any account with this id"}
+	# else :
+		return (userid)
 
 # print(get_password_hash("Lament"))
 # print(get_password_hash("Bruh"))
