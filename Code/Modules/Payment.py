@@ -18,6 +18,10 @@ class ViaQrCode(Payment):
     def __init__(self, amount, date, status):
         super().__init__(amount, date, status)
     def process(self):
+        phone_number = "0890767442"
+        payload = qrcode.generate_payload(phone_number, self._amount)
+        img = qrcode.to_image(payload)
+        qrcode.to_file(payload, "../qrcode-0890767442.png")
         image = Image.open("../qrcode-0890767442.png")
         image.show()
         time.sleep(3)
