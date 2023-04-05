@@ -9,7 +9,7 @@ class CreditCards(BaseModel):
 
 class BranchModel(BaseModel):
         branch_name = str
-        open_time = datetime
+        open_time = str
         location = str
         tel = str
         line_id = str

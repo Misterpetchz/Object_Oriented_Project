@@ -64,8 +64,7 @@ class Admin(UserAccount):
     def modify_delete_branch(type,Branch):
         pass
     def add_branch(self, branch_list:BranchList, branch):
-        if isinstance(branch, Branch):
-            branch_list.list_of_branch.append(branch)
+        branch_list.list_of_branch.append(branch)
         
     def modify_delete_book(type,Book):
         pass

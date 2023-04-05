@@ -90,6 +90,6 @@ moon_branch = Branch('Moon',
                      'moon_bookshop'
                      ,[pookantong_book1])
 
-all_branch = BranchList([moon_branch,rangsit,bangkok])
+all_branch = BranchList()
 pookan_admin555.add_branch(all_branch, nonthaburi1)
-print(all_branch.list_of_branch)
+print(all_branch.list_of_branch[0]._branch_name)

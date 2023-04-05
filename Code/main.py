@@ -3,27 +3,22 @@ from Modules.CreditCard import CreditCard
 from Modules.Rating import Rating
 from Modules.Book import Book
 from Modules.Branch import Branch
+from Modules.BranchList import BranchList
 from Modules.UserAccount import *
 from datetime import datetime
-from Modules.dto import CreditCards, BranchModel
-
-class BranchModel():
-        branch_name = str
-        open_time = datetime
-        location = str
-        tel = str
-        line_id = str
-        facebook_id = str
-        product_in_stock = str
-
-# class Ratings(BaseModel):
-#     book : Book
-#     book_rating : int
-#     book_comment : str
-# class Books(BaseModel):
+from Modules.dto import CreditCards
+from pydantic import BaseModel
 
 list_credit_card = []
-list_branch = []
+list_branch = BranchList()
+
+class Branchs(BaseModel):
+    branch_name : str
+    open_time : str
+    location : str
+    tel : str
+    line_id : str
+    facebook_id : str
 
 app = FastAPI()
 pookan_card = CreditCard("121231232",
@@ -73,13 +68,25 @@ async def add_credit_card(credit_card : CreditCards):
     list_credit_card.append(CreditCard(credit_card.card_num, credit_card.expire_date, credit_card.cvc))
     return list_credit_card
 
-# how to select object to modify itself
+# loop to get credit card object
 @app.put("/creditCard/")
 async def modify_credit_card(credit_card : CreditCards):
     pookan_card.modify_credit_card_info(credit_card.card_num, credit_card.expire_date, credit_card.cvc)
     return pookan_card.__dict__
 
-# @app.put("/branch/")
-# async def modify_branch(branch : BranchModel):
-#     rangsit.modify_branch(branch.branch_name, branch.open_time, branch.location, branch.tel, branch.line_id, branch.facebook_id)
+@app.post("/branch/")
+async def add_branch(branch : Branchs):
+    pookan_admin555.add_branch(list_branch, branch)
+    return list_branch.list_of_branch
 
+@app.put("/branch/")
+# loop to get branch object
+async def modify_branch(branch : dict):
+    branch_name = branch["branch_name"]
+    open_time = branch["open_time"]
+    location = branch["location"]
+    tel = branch["tel"]
+    line_id = branch["line_id"]
+    facebook_id = branch["facebook_id"]
+    rangsit.modify_branch(branch_name, open_time, location, tel, line_id, facebook_id,[],[])
+    return rangsit
