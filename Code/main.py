@@ -19,6 +19,7 @@ app = FastAPI()
 
 list_credit_card = []
 list_branch = BranchList()
+User_DB = []
 
 class Branchs(BaseModel):
     branch_name : str
@@ -226,3 +227,19 @@ async def login(form_data : OAuth2PasswordRequestForm = Depends()) :
 @app.get("/users/me")
 async def view_info(userid : Customer = Depends(get_current_active_user)):
 		return (userid)
+
+
+@app.put("/users/registration")
+async def registration(email : str , password : str, full_name : str, gender : str, tel : str, address : str,
+				email_noti : bool, sms_noti : bool) :
+	input_dict = {}
+	input_dict['_email'] = email
+	input_dict['_password'] = Customer.get_password_hash(password)
+	input_dict['_full_name'] = full_name
+	input_dict['_gender'] = gender
+	input_dict['_tel'] = tel
+	input_dict['_address'] = address
+	input_dict['__email_notification'] = email_noti
+	input_dict['__sms_notification'] = sms_noti
+
+	User_DB.append(Customer(input_dict["_email"], input_dict["_password"], input_dict["_full_name"], input_dict["_gender"], input_dict["_tel"], input_dict["__email_notification"], input_dict["__sms_notification"], input_dict["_address"]))
