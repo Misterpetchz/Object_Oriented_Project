@@ -1,16 +1,20 @@
 from fastapi import FastAPI
 from Modules.Catalog import Catalog
 from Modules.EventDiscount import EventDiscount
-from Modules.Book import Book,BookItem
-from Modules.UserAccount import Customer
-from Modules.Branch import Branch
+from Modules.Book import *
+from Modules.UserAccount import *
+from Modules.settings import *
 from Modules.BranchList import BranchList
+from Modules.Branch import Branch
 from Modules.Order import Order
+from Modules.CreditCard import CreditCard
 from Modules.Rating import Rating
+from Modules.UserAccount import *
+from Modules.dto import *
 from CLassDTO import *
+from datetime import datetime
 import datetime
-import sys
-sys.setrecursionlimit(1500)
+
 app = FastAPI()
 
 
@@ -67,6 +71,7 @@ pookaneiei = Customer('pookantong.p@gmail.com',
 
 
 batalog = Catalog()
+
 pookantong_book1 = Book(
                        'random.png',
                        'ในคืนที่โหดร้ายพระเอกตายแต่.....',
@@ -214,6 +219,93 @@ async def make_order(data:MakeOrderDto):
                                 ,pookaneiei.basket.price
                                 ,pookaneiei._full_name))
     return pookaneiei.order_list
+
+@app.get("/")
+async def home():
+    return {"Welcome to BookShop"}
+
+@app.post("/CreditCard/")
+async def add_credit_card(credit_card : CreditCards):
+    list_credit_card.append(CreditCard(credit_card.card_num, credit_card.expire_date, credit_card.cvc))
+    return list_credit_card
+
+# loop to get credit card object
+@app.put("/creditCard/")
+async def modify_credit_card(credit_card : CreditCards):
+    pookan_card.modify_credit_card_info(credit_card.card_num, credit_card.expire_date, credit_card.cvc)
+    return pookan_card.__dict__
+
+@app.post("/branch/")
+async def add_branch(branch : Branchs):
+    pookan_admin555.add_branch(list_branch, branch)
+    return list_branch.list_of_branch
+
+@app.put("/branch/")
+# loop to get branch object
+async def modify_branch(branch : dict):
+    branch_name = branch["branch_name"]
+    open_time = branch["open_time"]
+    location = branch["location"]
+    tel = branch["tel"]
+    line_id = branch["line_id"]
+    facebook_id = branch["facebook_id"]
+    rangsit.modify_branch(branch_name, open_time, location, tel, line_id, facebook_id,[],[])
+    return rangsit
+
+
+async def get_current_active_user(current_user : Customer = Depends(Customer.get_current_user)) :
+	# print(current_user.__dict__)
+	if current_user._disabled :
+		raise HTTPException(status_code=400, detail="Inactive User")
+	return current_user
+
+@app.put("/users/edit")
+async def info_verification(email : Optional[str] = None, password : Optional[str] = None, full_name : Optional[str] = None, gender : Optional[str] = None, tel : Optional[str] = None, address : Optional[str] = None,
+				email_noti : Optional[bool] = None, sms_noti : Optional[bool] = None, id : Customer = Depends(Customer.get_current_user)) :
+	if (id == None) :
+		return {"Error-101" : "Didn't find any account with this id"}
+	id._email = email or id._email
+	id._password = password or id._password
+	id._full_name = full_name or id._full_name
+	id._gender = gender or id._gender
+	id._tel = tel or id._tel
+	id._address = address or id._address
+	# id._email_notification = email_noti if email_noti != None else id._email_notification
+	# id._sms_notification = sms_noti if sms_noti != None else id._sms_notification
+	if email_noti != None :
+		id.email_notification = email_noti
+	if email_noti != None :
+		id.sms_notification = sms_noti
+
+@app.post("/token", response_model=Token)
+async def login(form_data : OAuth2PasswordRequestForm = Depends()) :
+	user = Customer.authenticate_user(form_data.username, form_data.password)
+	if not user :
+		raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect Username or Password", headers={"WWW-Authenticate" : "Bearer"})
+	access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTE)
+	access_token = Customer.creat_access_token(data={"sub" : user._email}, expires_delta=access_token_expires)
+	return {"access_token" : access_token, "token_type" : "bearer"}
+
+@app.get("/users/me")
+async def view_info(userid : Customer = Depends(get_current_active_user)):
+		return (userid)
+
+
+@app.put("/users/registration")
+async def registration(email : str , password : str, full_name : str, gender : str, tel : str, address : str,
+				email_noti : bool, sms_noti : bool) :
+	input_dict = {}
+	input_dict['_email'] = email
+	input_dict['_password'] = Customer.get_password_hash(password)
+	input_dict['_full_name'] = full_name
+	input_dict['_gender'] = gender
+	input_dict['_tel'] = tel
+	input_dict['_address'] = address
+	input_dict['__email_notification'] = email_noti
+	input_dict['__sms_notification'] = sms_noti
+
+	User_DB.append(Customer(input_dict["_email"], input_dict["_password"], input_dict["_full_name"], input_dict["_gender"], input_dict["_tel"], input_dict["__email_notification"], input_dict["__sms_notification"], input_dict["_address"]))
+
 
 @app.put("/basket")
 async def remove_from_basket(data:RemoveBookDTO):
