@@ -13,10 +13,13 @@ class Book :
         self._summary = summary
         self._genre = genre
         self._date_created = date_created
-        self._rating = rating
+        self._rating = []
         self._price = price
         self._amount_in_stock = amount
         self._new_price = price
+        
+    def add_rating(self, rating):
+        self._rating.append(rating)
         
 #class BookItem():
    # def __init__(self, cover, creator, name, book_info, genre, date_created, price):

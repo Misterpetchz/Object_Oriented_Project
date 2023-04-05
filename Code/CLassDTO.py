@@ -38,3 +38,7 @@ class RemoveBookDTO(BaseModel):
 
 class SearchBookDTO(BaseModel):
     string:str
+    
+class AddRatingDTO(BaseModel):
+    comment:str
+    score:int

@@ -6,6 +6,7 @@ from Modules.UserAccount import Customer
 from Modules.Branch import Branch
 from Modules.BranchList import BranchList
 from Modules.Order import Order
+from Modules.Rating import Rating
 from CLassDTO import *
 import datetime
 import sys
@@ -116,8 +117,15 @@ event.add_book_to_event(pookantong_book1)
 
 
 
+
+pookantong_book1.add_rating(Rating(10, "Bad ending, I don't like it"))
+
+
+
+
 pookaneiei.add_book_to_basket(BookItem(pookantong_book1),pookantong_book1)
 pookaneiei.add_book_to_basket(BookItem(pookantong_book2),pookantong_book2)
+
 
 
 
@@ -130,7 +138,6 @@ def find_book_in_catalog(name):
     for i in batalog.list_all_of_book:
         if name == i._name:
             return i
-
 
 
 
@@ -154,6 +161,18 @@ async def add_book_to_basket(book:AddBooktoBasketDTO):
     book_item = find_book_in_catalog(book.name)
     pookaneiei.add_book_to_basket(BookItem(book_item),book_item)
     return pookaneiei.basket.book_item
+
+@app.get("/books/{name}/rating")
+async def show_book_rating(name):
+    book = find_book_in_catalog(name)
+    return book._rating
+
+@app.post("/books/{name}/rating")
+async def show_book_rating(name, data:AddRatingDTO):
+    book:Book = find_book_in_catalog(name)
+    book.add_rating(Rating(data.score, data.comment))
+    return book
+
 
 @app.post("/addbook")
 async def add_book(data:AddBookDTO):
@@ -210,6 +229,8 @@ async def search_book(data:SearchBookDTO):
     event_dis()
     batalog.search_book(data.string)
     return batalog.list_of_book
+
+
 
 
     
