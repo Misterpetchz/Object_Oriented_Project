@@ -5,20 +5,14 @@ from Modules.Book import Book
 from Modules.Branch import Branch
 from Modules.BranchList import BranchList
 from Modules.UserAccount import *
+from Modules.EventDiscount import EventDiscount
 from datetime import datetime
-from Modules.dto import CreditCards
+from Modules.dto import *
 from pydantic import BaseModel
 
 list_credit_card = []
+list_event = []
 list_branch = BranchList()
-
-class Branchs(BaseModel):
-    branch_name : str
-    open_time : str
-    location : str
-    tel : str
-    line_id : str
-    facebook_id : str
 
 app = FastAPI()
 pookan_card = CreditCard("121231232",
@@ -64,29 +58,24 @@ async def home():
     return {"Welcome to BookShop"}
 
 @app.post("/CreditCard/")
-async def add_credit_card(credit_card : CreditCards):
+async def add_credit_card(credit_card : CreditCardDTO):
     list_credit_card.append(CreditCard(credit_card.card_num, credit_card.expire_date, credit_card.cvc))
     return list_credit_card
 
 # loop to get credit card object
 @app.put("/creditCard/")
-async def modify_credit_card(credit_card : CreditCards):
+async def modify_credit_card(credit_card : CreditCardDTO):
     pookan_card.modify_credit_card_info(credit_card.card_num, credit_card.expire_date, credit_card.cvc)
-    return pookan_card.__dict__
-
-@app.post("/branch/")
-async def add_branch(branch : Branchs):
-    pookan_admin555.add_branch(list_branch, branch)
-    return list_branch.list_of_branch
+    return pookan_card
 
 @app.put("/branch/")
 # loop to get branch object
-async def modify_branch(branch : dict):
-    branch_name = branch["branch_name"]
-    open_time = branch["open_time"]
-    location = branch["location"]
-    tel = branch["tel"]
-    line_id = branch["line_id"]
-    facebook_id = branch["facebook_id"]
-    rangsit.modify_branch(branch_name, open_time, location, tel, line_id, facebook_id,[],[])
+async def modify_branch(branch : ModifyBranchDTO):
+    rangsit.modify_branch(branch.branch_name, branch.open_time, branch.location, branch.tel, branch.line_id, branch.facebook_id,[],[])
     return rangsit
+
+@app.post("/event/")
+async def add_event(data : EventDTO):
+    list_event.append(EventDiscount(data.event_name, data.event_start, data.event_end, data.discounted_percentage))
+    return list_event
+

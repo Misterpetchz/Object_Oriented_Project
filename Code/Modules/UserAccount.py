@@ -78,5 +78,4 @@ class Admin(UserAccount):
         if book == BookItem:
             catalog.list_of_book.append(book)
     def add_event(self, book:BookItem, event_discount:EventDiscount):
-        if isinstance(event_discount, EventDiscount):
-            book.event_discount.append(event_discount)
+        book.event_discount.append(event_discount)
