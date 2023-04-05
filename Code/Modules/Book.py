@@ -17,11 +17,21 @@ class Book :
         self._price = price
         self._amount_in_stock = amount
         self._new_price = price
-class BookItem(Book):
+        
+#class BookItem():
+   # def __init__(self, cover, creator, name, book_info, genre, date_created, price):
+        
+
+class BookItem():
     def __init__(self, book):
-        super().__init__(book._cover, book._brief, book._creator, book._name, book._book_info, book._book_publisher, book._book._book_preview, book._critic_review, book._table_of_content, book._summary, book._genre, book._date_created, book._rating, book._price)
-    def get_branch_with_book(Book):
-        pass
+        self._cover = book._cover
+        self._creator = book._creator
+        self._name = book._name
+        self._book_info = book._book_info
+        self._genre = book._genre
+        self._date_created = book._date_created
+        self._price = book._new_price
+   
 '''  
 class test(Book):
     def __init__(self, book):
