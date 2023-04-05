@@ -1,6 +1,6 @@
 class Book : 
     def __init__(self, cover, brief, creator, name, book_info, book_publisher, book_preview, 
-                 critic_review, table_of_content, summary, genre, date_created, rating, price, amount):
+                 critic_review, table_of_content, summary, genre, date_created, price, amount):
         self._cover = cover
         self._brief = brief
         self._creator = creator

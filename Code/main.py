@@ -80,7 +80,6 @@ pookantong_book1 = Book(
                        'พระเอกตาย',
                        ['comedy','adult','intense','violent','drama','romantic','Yuri','Yaoi','School life'],
                        '18/12/29999',
-                       9,
                        999,
                        9)
 pookantong_book2 = Book(
@@ -96,7 +95,6 @@ pookantong_book2 = Book(
                        'นางเอกตาย',
                        ['Comedy','Adult','Intense','Violent','Drama','Romantic','Yuri','Yaoi','School life','Shounen']
                        ,'18/12/29999',
-                       9,
                        999,
                        9
                        )
@@ -189,7 +187,6 @@ async def add_book(data:AddBookDTO):
             data.summary,
             data.genre,
             data.date_created,
-            data.rating,
             data.price,
             data.amount)
     )
