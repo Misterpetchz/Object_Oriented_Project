@@ -3,6 +3,7 @@ from Modules.Catalog import Catalog
 from Modules.EventDiscount import EventDiscount
 from Modules.Book import *
 from Modules.UserAccount import *
+from Modules.settings import *
 from Modules.BranchList import BranchList
 from Modules.Branch import Branch
 from Modules.Order import Order
@@ -41,15 +42,16 @@ nonthaburi1 = Branch("Nonthaburi",
 
 all_branch = BranchList()
 all_branch.add_branch(nonthaburi1)
-pookaneiei = Customer('pookantong.p@gmail.com',
-                 'PomyukmeFan555',
-                 'PookanNaja',
-                 'Male',
-                 '0980231173',
-                 [],
-                 '29/7 หมู่2 ตำบลบั้นเด้า อำเภอรถแห่ จังหวัดสก๊อย ประเทศหิวข้าว ดาวSun',
-                 True,
-                 True)
+pookaneiei = Customer("pookan@gmail.com", "Test1", "pookan", "Male", "0000000000", True, False, "LLL")
+# pookaneiei = Customer('pookantong.p@gmail.com',
+#                  'PomyukmeFan555',
+#                  'PookanNaja',
+#                  'Male',
+#                  '0980231173',
+#                  [],
+#                  '29/7 หมู่2 ตำบลบั้นเด้า อำเภอรถแห่ จังหวัดสก๊อย ประเทศหิวข้าว ดาวSun',
+#                  True,
+#                  True)
 
 batalog = Catalog()
 
@@ -70,13 +72,7 @@ pookantong_book1 = Book(
                        999,
                        9)
 
-pookan_admin555 = Admin('65010895@kmitl.ac.th',
-                 'PomyukmeFan55',
-                 'Yotsapat',
-                 'Male',
-                 '0980231172',
-                 [],
-                 True)
+pookan_admin555 = Admin("Pookan@gmail.com", "La", "Pookan", "Male", "488188561", [])
 
 rangsit = Branch('rangsit',
                        '9:00-23:00',
@@ -192,3 +188,41 @@ async def modify_branch(branch : dict):
     facebook_id = branch["facebook_id"]
     rangsit.modify_branch(branch_name, open_time, location, tel, line_id, facebook_id,[],[])
     return rangsit
+
+
+async def get_current_active_user(current_user : Customer = Depends(Customer.get_current_user)) :
+	# print(current_user.__dict__)
+	if current_user._disabled :
+		raise HTTPException(status_code=400, detail="Inactive User")
+	return current_user
+
+@app.put("/users/edit")
+async def info_verification(email : Optional[str] = None, password : Optional[str] = None, full_name : Optional[str] = None, gender : Optional[str] = None, tel : Optional[str] = None, address : Optional[str] = None,
+				email_noti : Optional[bool] = None, sms_noti : Optional[bool] = None, id : Customer = Depends(Customer.get_current_user)) :
+	if (id == None) :
+		return {"Error-101" : "Didn't find any account with this id"}
+	id._email = email or id._email
+	id._password = password or id._password
+	id._full_name = full_name or id._full_name
+	id._gender = gender or id._gender
+	id._tel = tel or id._tel
+	id._address = address or id._address
+	# id._email_notification = email_noti if email_noti != None else id._email_notification
+	# id._sms_notification = sms_noti if sms_noti != None else id._sms_notification
+	if email_noti != None :
+		id.email_notification = email_noti
+	if email_noti != None :
+		id.sms_notification = sms_noti
+
+@app.post("/token", response_model=Token)
+async def login(form_data : OAuth2PasswordRequestForm = Depends()) :
+	user = Customer.authenticate_user(form_data.username, form_data.password)
+	if not user :
+		raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect Username or Password", headers={"WWW-Authenticate" : "Bearer"})
+	access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTE)
+	access_token = Customer.creat_access_token(data={"sub" : user._email}, expires_delta=access_token_expires)
+	return {"access_token" : access_token, "token_type" : "bearer"}
+
+@app.get("/users/me")
+async def view_info(userid : Customer = Depends(get_current_active_user)):
+		return (userid)
