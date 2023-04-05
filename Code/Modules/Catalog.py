@@ -16,6 +16,10 @@ class Catalog():
         pass
     def add_book(self, book):
         self.__all_list_of_book.append(book)
+    def find_book_by_name(self, name):
+        for i in self.list_all_of_book:
+            if name == i._name:
+                return i
     def search_book(self, search_string):
         self.__list_of_book = []
         for element in self.__all_list_of_book:

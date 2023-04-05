@@ -2,7 +2,6 @@ from pydantic import BaseModel
 class AddBooktoBasketDTO(BaseModel):
     name:str
     confirm:bool
-    password:str
 
 class AddBookDTO(BaseModel):
     cover:str 
@@ -30,7 +29,7 @@ class AddBranchDTO(BaseModel):
     facebook_id:str
     
 class MakeOrderDto(BaseModel):
-    test:str
+    status : bool
     
 class RemoveBookDTO(BaseModel):
     index:int
@@ -42,3 +41,11 @@ class SearchBookDTO(BaseModel):
 class AddRatingDTO(BaseModel):
     comment:str
     score:int
+    
+class Branchs(BaseModel):
+    branch_name : str
+    open_time : str
+    location : str
+    tel : str
+    line_id : str
+    facebook_id : str

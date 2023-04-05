@@ -17,7 +17,14 @@ import datetime
 
 app = FastAPI()
 
+list_credit_card = []
+list_branch = BranchList()
+User_DB = []
 
+
+pookan_card = CreditCard("121231232",
+                         "15-07-22",
+                         "123")
 
 all_branch = BranchList()
 bangkok = Branch("Bangkok",
@@ -55,16 +62,15 @@ all_branch.add_branch(moon_branch)
 
 
 
-
+pookaneiei1 = Customer("pookan@gmail.com", "Test1", "pookan", "Male", "0000000000", True, False, "LLL")
 pookaneiei = Customer('pookantong.p@gmail.com',
                  'PomyukmeFan555',
                  'PookanNaja',
                  'Male',
                  '0980231173',
-                 [],
-                 '29/7 หมู่2 ตำบลบั้นเด้า อำเภอรถแห่ จังหวัดสก๊อย ประเทศหิวข้าว ดาวSun',
                  True,
-                 True)
+                 True,
+                 '29/7 หมู่2 ตำบลบั้นเด้า อำเภอรถแห่ จังหวัดสก๊อย ประเทศหิวข้าว ดาวSun')
 
 
 
@@ -132,53 +138,50 @@ pookaneiei.add_book_to_basket(BookItem(pookantong_book2),pookantong_book2)
 
 
 
-def event_dis():
-    for i in batalog.list_all_of_book:
-        if i._name in [x._name for x in event.list_of_book]:
-            event.apply_discount(i)
 
-def find_book_in_catalog(name):
-    for i in batalog.list_all_of_book:
-        if name == i._name:
-            return i
+async def get_current_active_user(current_user : Customer = Depends(Customer.get_current_user)) :
+	# print(current_user.__dict__)
+	if current_user._disabled :
+		raise HTTPException(status_code=400, detail="Inactive User")
+	return current_user
+
 
 
 
 
 @app.get("/")
 async def home():
-    event_dis()
+    event.event_dis(batalog)
     return batalog
 
-@app.get("/books/{name}")
-async def show_book(name:str,branch_available:bool | None = None):
-    event_dis()
+@app.get("/{bookname}")
+async def show_book(bookname:str,branch_available:bool | None = None):
+    event.event_dis(batalog)
     if branch_available == True:
-        all_branch.search_available_branch(find_book_in_catalog(name))
+        all_branch.search_available_branch(batalog.find_book_by_name(bookname))
         return all_branch.available_branch
-    return find_book_in_catalog(name)
+    return batalog.find_book_by_name(bookname)
 
-@app.post("/books/{name}")
-async def add_book_to_basket(book:AddBooktoBasketDTO):
-    event_dis()
-    book_item = find_book_in_catalog(book.name)
-    pookaneiei.add_book_to_basket(BookItem(book_item),book_item)
-    return pookaneiei.basket.book_item
+@app.post("/{book_name}/add_book_to_basket")
+async def add_book_to_basket(book_name:AddBooktoBasketDTO, current_user : Customer = Depends(Customer.get_current_user)):
+    event.event_dis(batalog)
+    book_item = batalog.find_book_by_name(book_name)
+    current_user.add_book_to_basket(BookItem(book_item),book_item)
+    return current_user.basket.book_item
 
-@app.get("/books/{name}/rating")
-async def show_book_rating(name):
-    book = find_book_in_catalog(name)
+@app.get("{bookname}/rating")
+async def show_book_rating(bookname):
+    book = batalog.find_book_by_name(bookname)
     return book._rating
 
-@app.post("/books/{name}/rating")
-async def show_book_rating(name, data:AddRatingDTO):
-    book:Book = find_book_in_catalog(name)
+@app.post("{bookname}/addrating")
+async def add_rating(bookname, data:AddRatingDTO):
+    book:Book = batalog.find_book_by_name(bookname)
     book.add_rating(Rating(data.score, data.comment))
     return book
 
-
 @app.post("/addbook")
-async def add_book(data:AddBookDTO):
+async def add_book_to_catalog(data:AddBookDTO):
     batalog.add_book(Book(
             data.cover,
             data.brief,
@@ -198,7 +201,7 @@ async def add_book(data:AddBookDTO):
     return batalog.list_all_of_book
 
 @app.post("/addbranch")
-async def add_branch(data:AddBranchDTO):
+async def add_branch_to_branch_list(data:AddBranchDTO):
     all_branch.add_branch(Branch(data.branch_name,
                 data.open_time,
                 data.location,
@@ -208,37 +211,28 @@ async def add_branch(data:AddBranchDTO):
     return all_branch.list_of_branch
 
 @app.get("/basket")
-async def basket():
+async def show_basket():
     return pookaneiei.basket.book_item
 
-@app.post("/basket")
+@app.post("/make_order")
 async def make_order(data:MakeOrderDto):
     pookaneiei.make_order(Order(pookaneiei.basket.book_item,
                                 pookaneiei.order_id,
-                                False
+                                data.status
                                 ,pookaneiei.basket.price
                                 ,pookaneiei._full_name))
     return pookaneiei.order_list
 
-@app.get("/")
-async def home():
-    return {"Welcome to BookShop"}
-
-@app.post("/CreditCard/")
+@app.post("/creditcard/")
 async def add_credit_card(credit_card : CreditCards):
     list_credit_card.append(CreditCard(credit_card.card_num, credit_card.expire_date, credit_card.cvc))
     return list_credit_card
 
 # loop to get credit card object
-@app.put("/creditCard/")
+@app.put("/creditcard/")
 async def modify_credit_card(credit_card : CreditCards):
     pookan_card.modify_credit_card_info(credit_card.card_num, credit_card.expire_date, credit_card.cvc)
     return pookan_card.__dict__
-
-@app.post("/branch/")
-async def add_branch(branch : Branchs):
-    pookan_admin555.add_branch(list_branch, branch)
-    return list_branch.list_of_branch
 
 @app.put("/branch/")
 # loop to get branch object
@@ -251,13 +245,6 @@ async def modify_branch(branch : dict):
     facebook_id = branch["facebook_id"]
     rangsit.modify_branch(branch_name, open_time, location, tel, line_id, facebook_id,[],[])
     return rangsit
-
-
-async def get_current_active_user(current_user : Customer = Depends(Customer.get_current_user)) :
-	# print(current_user.__dict__)
-	if current_user._disabled :
-		raise HTTPException(status_code=400, detail="Inactive User")
-	return current_user
 
 @app.put("/users/edit")
 async def info_verification(email : Optional[str] = None, password : Optional[str] = None, full_name : Optional[str] = None, gender : Optional[str] = None, tel : Optional[str] = None, address : Optional[str] = None,
@@ -309,13 +296,13 @@ async def registration(email : str , password : str, full_name : str, gender : s
 
 @app.put("/basket")
 async def remove_from_basket(data:RemoveBookDTO):
-    book = find_book_in_catalog(data.book_name)
+    book = batalog.find_book_by_name(data.book_name)
     pookaneiei.remove_book_from_basket(data.index,book)
     return pookaneiei.basket.book_item
 
 @app.post("/search")
 async def search_book(data:SearchBookDTO):
-    event_dis()
+    event.event_dis(batalog)
     batalog.search_book(data.string)
     return batalog.list_of_book
 

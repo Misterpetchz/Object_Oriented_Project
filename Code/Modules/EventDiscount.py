@@ -34,7 +34,10 @@ class EventDiscount():
         for i in self.__list_of_book:
             if i == book:
                 self.__list_of_book.remove(book)
-
+    def event_dis(self, catalog):
+        for i in catalog.list_all_of_book:
+            if i._name in [x._name for x in self.list_of_book]:
+                self.apply_discount(i)
     def apply_discount(self, book):
         book._new_price = book._price * self.__discounted_percentage
 
