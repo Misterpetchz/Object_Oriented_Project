@@ -97,7 +97,7 @@ def find_book_in_catalog(name):
     for i in batalog.list_all_of_book:
         if name == i._name:
             return i
-
+        
 @app.get("/")
 async def home():
     event_dis()
@@ -191,6 +191,14 @@ async def modify_branch(branch : dict):
     rangsit.modify_branch(branch_name, open_time, location, tel, line_id, facebook_id,[],[])
     return rangsit
 
+@app.put("/book/{old_name}")
+async def modify_book(old_name,book:ModifyBookDTO):
+    for i in batalog.list_all_of_book:
+        if old_name == i._name:
+            select_book = i
+    select_book.modify_book(book.cover,book.brief,book.creator,book.name,book.book_info,book.book_publisher,book.book_preview,book.critic_review,
+                          book.table_of_content,book.summary,book.genre,book.date_created,book.price,book.amount_in_stock,)
+    return select_book
 
 async def get_current_active_user(current_user : Customer = Depends(Customer.get_current_user)) :
 	# print(current_user.__dict__)
