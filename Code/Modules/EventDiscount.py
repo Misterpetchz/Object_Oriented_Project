@@ -1,4 +1,6 @@
 from Modules.Book import Book
+from datetime import datetime
+import datetime
 class EventDiscount():
     def __init__(self, event_name, event_start, event_end, discounted_percentage):
         self.__event_name = event_name
@@ -32,6 +34,9 @@ class EventDiscount():
         for i in self.__list_of_book:
             if i == book:
                 self.__list_of_book.remove(book)
+
+    def apply_discount(self, book):
+        book._new_price = book._price * self.__discounted_percentage
 
     event_name = property(get_event_name)
     event_start = property(get_event_start)
