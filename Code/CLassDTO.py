@@ -1,7 +1,6 @@
 from pydantic import BaseModel
 class AddBooktoBasketDTO(BaseModel):
-    name:str
-    confirm:bool
+    amount:int
 
 class AddBookDTO(BaseModel):
     cover:str 

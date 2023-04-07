@@ -18,9 +18,13 @@ class Book :
         self._price = price
         self._amount_in_stock = amount
         self._new_price = price
+        self._rating_score = 0
         
     def add_rating(self, rating:Rating):
         self._rating.append(rating)
+        self._rating_score = sum([x._book_rating for x in self._rating])/len(self._rating)
+        
+    
         
 #class BookItem():
    # def __init__(self, cover, creator, name, book_info, genre, date_created, price):

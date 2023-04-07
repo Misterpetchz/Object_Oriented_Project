@@ -92,7 +92,7 @@ pookantong_book1 = Book(
                        ['comedy','adult','intense','violent','drama','romantic','Yuri','Yaoi','School life'],
                        '18/12/29999',
                        999,
-                       9)
+                       10)
 pookantong_book2 = Book(
                        'random2.png',
                        'ในคืนที่โหดร้ายนางเอกตายแต่.....',
@@ -128,7 +128,7 @@ event.add_book_to_event(pookantong_book1)
 
 
 pookantong_book1.add_rating(Rating(10, "Bad ending, I don't like it"))
-
+pookantong_book1.add_rating(Rating(5, "OK, I don't like it"))
 
 
 
@@ -149,38 +149,67 @@ async def get_current_active_user(current_user : Customer = Depends(Customer.get
 
 
 
-@app.get("/")
+@app.get("/books", tags=["books"])
 async def home():
     event.event_dis(batalog)
-    return batalog
+    return {"catalog":[{"cover":x._cover,
+                        "name":x._name,
+                        "old_price":x._price,
+                        "new_price":x._new_price,
+                        "genre":x._genre,
+                        "score":x._rating_score,
+                        "brief":x._brief}
+                       for x in batalog.list_all_of_book if x._amount_in_stock != 0]}
 
-@app.get("/{bookname}")
+@app.get("/books/{bookname}", tags=["books"])
 async def show_book(bookname:str,branch_available:bool | None = None):
     event.event_dis(batalog)
+    book = batalog.find_book_by_name(bookname)
+    if book == None:
+        raise HTTPException(status_code=404, detail="Book not found")
     if branch_available == True:
         all_branch.search_available_branch(batalog.find_book_by_name(bookname))
         return all_branch.available_branch
-    return batalog.find_book_by_name(bookname)
+    return {"cover":book._cover,
+            "name":book._name,
+            "creator":book._creator,
+            "info":book._book_info,
+            "publisher":book._book_publisher,
+            "preview":book._book_preview,
+            "critic_review":book._critic_review,
+            "table_of_content":book._table_of_content,
+            "summary":book._summary,
+            "date_created":book._date_created,
+            "old_price":book._price,
+            "new_price":book._new_price,
+            "genre":book._genre,
+            "score":book._rating_score,
+            "brief":book._brief}
 
-@app.post("/{book_name}/add_book_to_basket")
-async def add_book_to_basket(book_name:AddBooktoBasketDTO, current_user : Customer = Depends(Customer.get_current_user)):
+@app.post("/books/{bookname}/add_book_to_basket", tags=["user"])
+async def add_book_to_basket(bookname:str, data:AddBooktoBasketDTO):
     event.event_dis(batalog)
-    book_item = batalog.find_book_by_name(book_name)
-    current_user.add_book_to_basket(BookItem(book_item),book_item)
-    return current_user.basket.book_item
+    book = batalog.find_book_by_name(bookname)
+    if book == None:
+        raise HTTPException(status_code=404, detail="Book not found")
+    for i in range(data.amount):
+        pookaneiei.add_book_to_basket(BookItem(book),book)
+    return {"status":"Success"}
 
-@app.get("{bookname}/rating")
+@app.get("/books/{bookname}/rating", tags=["books"])
 async def show_book_rating(bookname):
     book = batalog.find_book_by_name(bookname)
-    return book._rating
+    return {"rating_score":book._rating_score,
+            "rating":[{"score_each_rating":x._book_rating,
+                       "comment":x._book_comment} for x in book._rating]}
 
-@app.post("{bookname}/addrating")
+@app.post("/books/{bookname}/addrating", tags=["books"])
 async def add_rating(bookname, data:AddRatingDTO):
     book:Book = batalog.find_book_by_name(bookname)
     book.add_rating(Rating(data.score, data.comment))
-    return book
+    return {"status":"Success"}
 
-@app.post("/addbook")
+@app.post("/addbook", tags=["books"])
 async def add_book_to_catalog(data:AddBookDTO):
     batalog.add_book(Book(
             data.cover,
@@ -198,9 +227,9 @@ async def add_book_to_catalog(data:AddBookDTO):
             data.price,
             data.amount)
     )
-    return batalog.list_all_of_book
+    return {"status":"Success"}
 
-@app.post("/addbranch")
+@app.post("/addbranch", tags=["branch"])
 async def add_branch_to_branch_list(data:AddBranchDTO):
     all_branch.add_branch(Branch(data.branch_name,
                 data.open_time,
@@ -208,33 +237,37 @@ async def add_branch_to_branch_list(data:AddBranchDTO):
                 data.tel,
                 data.line_id,
                 data.facebook_id))
-    return all_branch.list_of_branch
+    return {"status":"Success"}
 
-@app.get("/basket")
+@app.get("/basket", tags=["user"])
 async def show_basket():
-    return pookaneiei.basket.book_item
-
-@app.post("/make_order")
+    return {"basket":[{"cover":x._cover,
+                        "name":x._name,
+                        "price":x._price,
+                        "genre":x._genre
+                        }
+                       for x in pookaneiei.basket.book_item]}
+@app.post("/make_order", tags=["user"])
 async def make_order(data:MakeOrderDto):
     pookaneiei.make_order(Order(pookaneiei.basket.book_item,
                                 pookaneiei.order_id,
                                 data.status
                                 ,pookaneiei.basket.price
                                 ,pookaneiei._full_name))
-    return pookaneiei.order_list
+    return {"status":"Success"}
 
-@app.post("/creditcard/")
+@app.post("/creditcard/", tags=["user"])
 async def add_credit_card(credit_card : CreditCards):
     list_credit_card.append(CreditCard(credit_card.card_num, credit_card.expire_date, credit_card.cvc))
     return list_credit_card
 
 # loop to get credit card object
-@app.put("/creditcard/")
+@app.put("/creditcard/", tags=["user"])
 async def modify_credit_card(credit_card : CreditCards):
     pookan_card.modify_credit_card_info(credit_card.card_num, credit_card.expire_date, credit_card.cvc)
     return pookan_card.__dict__
 
-@app.put("/branch/")
+@app.put("/branch/", tags=["branch"])
 # loop to get branch object
 async def modify_branch(branch : dict):
     branch_name = branch["branch_name"]
@@ -246,7 +279,7 @@ async def modify_branch(branch : dict):
     rangsit.modify_branch(branch_name, open_time, location, tel, line_id, facebook_id,[],[])
     return rangsit
 
-@app.put("/users/edit")
+@app.put("/users/edit", tags=["user"])
 async def info_verification(email : Optional[str] = None, password : Optional[str] = None, full_name : Optional[str] = None, gender : Optional[str] = None, tel : Optional[str] = None, address : Optional[str] = None,
 				email_noti : Optional[bool] = None, sms_noti : Optional[bool] = None, id : Customer = Depends(Customer.get_current_user)) :
 	if (id == None) :
@@ -294,18 +327,24 @@ async def registration(email : str , password : str, full_name : str, gender : s
 	User_DB.append(Customer(input_dict["_email"], input_dict["_password"], input_dict["_full_name"], input_dict["_gender"], input_dict["_tel"], input_dict["__email_notification"], input_dict["__sms_notification"], input_dict["_address"]))
 
 
-@app.put("/basket")
+@app.put("/basket", tags=["user"])
 async def remove_from_basket(data:RemoveBookDTO):
     book = batalog.find_book_by_name(data.book_name)
     pookaneiei.remove_book_from_basket(data.index,book)
-    return pookaneiei.basket.book_item
+    return {"status":"Success"}
 
-@app.post("/search")
+@app.post("/search", tags=["books"])
 async def search_book(data:SearchBookDTO):
     event.event_dis(batalog)
     batalog.search_book(data.string)
-    return batalog.list_of_book
-
+    return {"searchlist":[{"cover":x._cover,
+                        "name":x._name,
+                        "old_price":x._price,
+                        "new_price":x._new_price,
+                        "genre":x._genre,
+                        "score":x._rating_score,
+                        "brief":x._brief}
+                       for x in batalog.list_of_book if x._amount_in_stock != 0]}
 
 
 
