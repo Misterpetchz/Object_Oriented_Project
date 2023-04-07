@@ -10,6 +10,12 @@ class BranchList():
     def delete_branch(self, branch:Branch):
         self.list_of_branch.remove(branch)
 
+    def select_branch(self, branch_name):
+        for i in self.__list_of_branch:
+            if branch_name == i._branch_name:
+                select_branch = i
+        return select_branch
+
     def get_list(self):
         return self.__list_of_branch
     def set_list(self,new_branch):

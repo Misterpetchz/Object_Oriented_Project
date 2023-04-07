@@ -13,6 +13,8 @@ class ModifyBranchDTO(BaseModel):
     tel : str
     line_id : str
     facebook_id : str
+    add_book : list
+    remove_book : list
 
 class AddBranchDTO(BaseModel):
     branch_name : str
@@ -27,3 +29,13 @@ class EventDTO(BaseModel):
     event_start : str
     event_end : str
     discounted_percentage : int
+
+class ModifyEventDTO(BaseModel):
+    event_name : str
+    event_start : str
+    event_end : str
+    discounted_percentage : int
+
+class QrCodeDTO(BaseModel):
+    amount : int
+    date : str
