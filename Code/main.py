@@ -1,4 +1,5 @@
-from fastapi import FastAPI
+from fastapi import BackgroundTasks, FastAPI
+from fastapi.responses import FileResponse, HTMLResponse
 from Modules.Catalog import Catalog
 from Modules.EventDiscount import EventDiscount
 from Modules.Book import *
@@ -10,10 +11,12 @@ from Modules.Order import Order
 from Modules.CreditCard import CreditCard
 from Modules.Rating import Rating
 from Modules.UserAccount import *
+from Modules.Payment import *
 from Modules.dto import *
 from CLassDTO import *
 from datetime import datetime
 import datetime
+import asyncio
 
 app = FastAPI()
 
@@ -251,9 +254,10 @@ async def show_basket():
 async def make_order(data:MakeOrderDto):
     pookaneiei.make_order(Order(pookaneiei.basket.book_item,
                                 pookaneiei.order_id,
-                                data.status
-                                ,pookaneiei.basket.price
-                                ,pookaneiei._full_name))
+                                data.status,
+                                pookaneiei.basket.price,
+                                pookaneiei._full_name))
+    pookaneiei.basket.book_item = []
     return {"status":"Success"}
 
 @app.post("/creditcard/", tags=["user"])
@@ -346,3 +350,4 @@ async def search_book(data:SearchBookDTO):
                         "score":x._rating_score,
                         "brief":x._brief}
                        for x in batalog.list_of_book if x._amount_in_stock != 0]}
+
