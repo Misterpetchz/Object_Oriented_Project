@@ -31,3 +31,19 @@ class AddBranchDTO(BaseModel):
     
 class MakeOrderDto(BaseModel):
     status:bool
+
+class ModifyBookDTO(BaseModel):
+        cover :str
+        brief : str
+        creator : str
+        name : str
+        book_info :str
+        book_publisher : str
+        book_preview : str
+        critic_review : str
+        table_of_content : str
+        summary : str
+        genre : str
+        date_created : str
+        price : str
+        amount_in_stock : str

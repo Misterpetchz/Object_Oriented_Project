@@ -8,8 +8,6 @@ class Catalog():
         pass
     def remove_book(book):
         pass
-    def modify_book(book):
-        pass
     def find_book(Book):
         pass
     def add_to_basket(Book):
