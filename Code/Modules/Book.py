@@ -19,6 +19,9 @@ class Book :
         self._amount_in_stock = amount
         self._new_price = price
         self._rating_score = 0
+    
+    def __repr__(self) -> str:
+        return self._name
         
     def add_rating(self, rating:Rating):
         self._rating.append(rating)

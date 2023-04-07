@@ -89,7 +89,7 @@ pookantong_book1 = Book(
                        'critic review',
                        [],
                        'พระเอกตาย',
-                       ['comedy','adult','intense','violent','drama','romantic','Yuri','Yaoi','School life'],
+                       ['Comedy','Adult','Intense','Violent','Drama','Romantic','Yuri','Yaoi','School life'],
                        '18/12/29999',
                        999,
                        10)
@@ -121,8 +121,7 @@ rangsit.add_product(pookantong_book2)
 
 
 
-event = EventDiscount("dan",datetime.date(2023, 3, 31), datetime.date(2023, 4, 30), 0.9)
-event.add_book_to_event(pookantong_book1)
+event = EventDiscount("dan",datetime.date(2023, 3, 31), datetime.date(2023, 4, 30), 0.9, 'Shounen')
 
 
 
@@ -154,6 +153,7 @@ async def home():
     event.event_dis(batalog)
     return {"catalog":[{"cover":x._cover,
                         "name":x._name,
+                        "creator":x._creator,
                         "old_price":x._price,
                         "new_price":x._new_price,
                         "genre":x._genre,
@@ -339,13 +339,10 @@ async def search_book(data:SearchBookDTO):
     batalog.search_book(data.string)
     return {"searchlist":[{"cover":x._cover,
                         "name":x._name,
+                        "creator":x._creator,
                         "old_price":x._price,
                         "new_price":x._new_price,
                         "genre":x._genre,
                         "score":x._rating_score,
                         "brief":x._brief}
                        for x in batalog.list_of_book if x._amount_in_stock != 0]}
-
-
-
-    

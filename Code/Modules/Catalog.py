@@ -25,7 +25,6 @@ class Catalog():
         for element in self.__all_list_of_book:
             if search_string in element._name:
                 self.__list_of_book.append(element)
-        self.__list_of_book
     def get_all_list(self):
         return self.__all_list_of_book
     def set_all_list(self, new_list):
