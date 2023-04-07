@@ -148,14 +148,16 @@ async def modify_event(data : ModifyEventDTO, event_name):
                               data.discounted_percentage)
     return {"Modify Success"}
 
-@app.get("/QrPayment")
-async def check_payment():
-    time.sleep(3)
-    return {"Transaction Complete!"}
+@app.post("/QrPayment")
+async def check_payment(status : str):
+    if status == "success":
+        return {"Transaction Complete!"}
+    else :
+        return {"Transaction Rejected "}
 
 @app.post("/QrPayment/")
-async def generate_qr(data : QrCodeDTO, background_tasks : BackgroundTasks):
-    transactions = ViaQrCode(data.amount, data.date)
+async def generate_qr(background_tasks : BackgroundTasks):
+    transactions = ViaQrCode(200, "พ่อมึงตาย")
     transactions.generate_qr_code()
     background_tasks.add_task(check_payment)
     return FileResponse("../qrcode-0890767442.png")
