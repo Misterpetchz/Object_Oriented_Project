@@ -10,14 +10,11 @@ class Payment:
 class ViaCreditCard(Payment):
     def __init__(self, amount, date):
         super().__init__(amount, date)
-    # def process(self):
-    #     self._status = "paid"
-    #     return self._status
 
 class ViaQrCode(Payment):
     def __init__(self, amount, date):
         super().__init__(amount, date)
-        self._payment_intent_id = None
+
     def generate_qr_code(self):
         promptpay_number = "0890767442"
         payload = qrcode.generate_payload(promptpay_number, self._amount)

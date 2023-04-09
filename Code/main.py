@@ -17,7 +17,7 @@ from Modules.EventDiscount import EventDiscount
 from Modules.Payment import *
 from datetime import datetime
 from Modules.dto import *
-from fastapi.responses import FileResponse, HTMLResponse
+from fastapi.responses import FileResponse, RedirectResponse
 import time
 import datetime
 
@@ -98,16 +98,14 @@ bangkok = Branch("Bangkok",
                  "Bangkok",
                  "0864615559",
                  "bookshop.bangkok",
-                 "bangkok_bookshop",
-                 [])
+                 "bangkok_bookshop")
 
 moon_branch = Branch('Moon',
                      '23:00 - 23:59',
                      'Moon',
                      '0995471568',
                      'bookshop.moon',
-                     'moon_bookshop'
-                     ,[])
+                     'moon_bookshop')
 
 # all_branch.add_branch(rangsit)
 # pookantong_rating1 = Rating(pookantong_book1, 10, "Bad ending, I don't like it")
@@ -259,19 +257,20 @@ async def modify_event(data : ModifyEventDTO, event_name):
                               data.discounted_percentage)
     return {"Modify Success"}
 
-@app.post("/QrPayment")
+@app.get("/Payment/Check")
 async def check_payment(status : str):
-    if status == "success":
-        return {"Transaction Complete!"}
-    else :
-        return {"Transaction Rejected "}
+    if status.lower() == "success":
+        return {"success"}
+    else:
+        return {"reject"}
 
-@app.post("/QrPayment/")
-async def generate_qr(background_tasks : BackgroundTasks):
-    transactions = ViaQrCode(200, "พ่อมึงตาย")
+@app.get("/QrPayment/Generate/")
+async def generate_qr():
+    transactions = ViaQrCode(pookaneiei.basket.price, "04-07-2023")
     transactions.generate_qr_code()
-    background_tasks.add_task(check_payment)
+    del transactions
     return FileResponse("../qrcode-0890767442.png")
+    # redirect to check payment
 
 @app.put("/book/{old_name}")
 async def modify_book(old_name,book:ModifyBookDTO):
