@@ -12,6 +12,7 @@ from Modules.CreditCard import CreditCard
 from Modules.Rating import Rating
 from Modules.UserAccount import *
 from Modules.dto import *
+from Modules.settings import *
 from CLassDTO import *
 from datetime import datetime
 import datetime
@@ -190,6 +191,14 @@ async def modify_branch(branch : dict):
     rangsit.modify_branch(branch_name, open_time, location, tel, line_id, facebook_id,[],[])
     return rangsit
 
+@app.put("/book/{old_name}")
+async def modify_book(old_name,book:ModifyBookDTO):
+    for i in batalog.list_all_of_book:
+        if old_name == i._name:
+            select_book = i
+    select_book.modify_book(book.cover,book.brief,book.creator,book.name,book.book_info,book.book_publisher,book.book_preview,book.critic_review,
+                          book.table_of_content,book.summary,book.genre,book.date_created,book.price,book.amount_in_stock,)
+    return select_book
 
 async def get_current_active_user(current_user : Customer = Depends(Sys.get_current_user)) :
 	# print(current_user.__dict__)
@@ -244,3 +253,4 @@ async def registration(email : str , password : str, full_name : str, gender : s
 
 	# Sys.User_DB.append(pookaneiei)
 	Sys.User_DB.append(Customer(input_dict["_email"], input_dict["_password"], input_dict["_full_name"], input_dict["_gender"], input_dict["_tel"], input_dict["__email_notification"], input_dict["__sms_notification"], input_dict["_address"]))
+
