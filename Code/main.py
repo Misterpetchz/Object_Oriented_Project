@@ -190,12 +190,12 @@ async def show_book(bookname:str,branch_available:bool | None = None):
             "brief":book._brief}
 
 @app.post("/books/{bookname}/add_book_to_basket", tags=["user"])
-async def add_book_to_basket(bookname:str, data:AddBooktoBasketDTO):
+async def add_book_to_basket(bookname:str, amount:int):
     event.event_dis(batalog)
     book = batalog.find_book_by_name(bookname)
     if book == None:
         raise HTTPException(status_code=404, detail="Book not found")
-    for i in range(data.amount):
+    for i in range(amount):
         pookaneiei.add_book_to_basket(BookItem(book),book)
     return {"status":"Success"}
 
@@ -250,11 +250,11 @@ async def show_basket():
                         "genre":x._genre
                         }
                        for x in pookaneiei.basket.book_item]}
-@app.post("/make_order", tags=["user"])
-async def make_order(data:MakeOrderDto):
+@app.get("/make_order", tags=["user"])
+async def make_order():
     pookaneiei.make_order(Order(pookaneiei.basket.book_item,
                                 pookaneiei.order_id,
-                                data.status,
+                                True,
                                 pookaneiei.basket.price,
                                 pookaneiei._full_name))
     pookaneiei.basket.book_item = []
@@ -338,9 +338,9 @@ async def remove_from_basket(data:RemoveBookDTO):
     return {"status":"Success"}
 
 @app.post("/search", tags=["books"])
-async def search_book(data:SearchBookDTO):
+async def search_book(name:str):
     event.event_dis(batalog)
-    batalog.search_book(data.string)
+    batalog.search_book(name)
     return {"searchlist":[{"cover":x._cover,
                         "name":x._name,
                         "creator":x._creator,
@@ -350,4 +350,15 @@ async def search_book(data:SearchBookDTO):
                         "score":x._rating_score,
                         "brief":x._brief}
                        for x in batalog.list_of_book if x._amount_in_stock != 0]}
+    
+@app.put("/books/{bookname}", tags=["books"])
+async def modify_book_to_catalog(bookname, data:ModifyBookDTO):
+    book = batalog.find_book_by_name(bookname)
+    book.modify_book(data)
+    return {"status":"Success"}
 
+@app.delete("/books/{bookname}", tags=["books"])
+async def delete_book(bookname):
+    book = batalog.find_book_by_name(bookname)
+    batalog.remove_book(book)
+    return {"status":"Success"}
