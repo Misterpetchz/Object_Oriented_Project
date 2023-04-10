@@ -1,4 +1,8 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
+from pathlib import Path
 from Modules.Catalog import Catalog
 from Modules.EventDiscount import EventDiscount
 from Modules.Book import *
@@ -17,6 +21,11 @@ from datetime import datetime
 import datetime
 
 app = FastAPI()
+templates = Jinja2Templates(directory="templates")
+
+app.mount("/static",
+    StaticFiles(directory="static"),
+    name="static")
 
 list_credit_card = []
 list_branch = BranchList()
@@ -93,22 +102,39 @@ def event_dis():
         if i._name in [x._name for x in event.list_of_book]:
             event.apply_discount(i)
 
-def find_book_in_catalog(name):
-    for i in batalog.list_all_of_book:
-        if name == i._name:
-            return i
+def find_book_in_catalog(name:Optional[str] = ''):
+    searched = []
+    if name != '':
+        for i in batalog.list_all_of_book:
+            if name.lower() in i._name.lower():
+                searched.append(i)
+    return searched
+
+def get_book(name:Optional[str] = ''):
+    if name != '':
+        for i in batalog.list_all_of_book:
+            if name.lower() == i._name.lower():
+                return i
         
 @app.get("/")
-async def home():
+async def home(request:Request):
     event_dis()
-    return batalog
+    list_book = batalog.get_all_list()
+    return templates.TemplateResponse("index.html", {"request":request,"book_list":list_book})
 
-@app.get("/books/{name}")
-async def show_book(name:str):
+@app.get("/search/")
+async def show_book(request:Request,q: str):
     event_dis()
-    return find_book_in_catalog(name)
+    list_book = find_book_in_catalog(q)
+    return templates.TemplateResponse("index.html", {"request":request,"book_list":list_book})
 
-@app.post("/books/{name}")
+@app.get("/books/{book_name}")
+async def view_book(request:Request,book_name:str):
+    event_dis()
+    book = get_book(book_name)
+    return templates.TemplateResponse("bookdetail.html", {"request":request,"book":book})
+
+@app.post("/books/")
 async def add_book_to_basket(book:AddBooktoBasketDTO):
     event_dis()
     book_item = find_book_in_catalog(book.name)
