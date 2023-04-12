@@ -232,6 +232,12 @@ async def modify_branch(data : ModifyBranchDTO, branch_name):
                                 data.remove_book)
     return {"Modify Success"}
 
+@app.delete("/RemoveBranch/{branch_name}")
+async def remove_branch(branch_name):
+    select_branch = all_branch.select_branch(branch_name)
+    all_branch.delete_branch(select_branch)
+    return {"Remove Branch Success"}
+
 @app.get("/GetAllEvent/")
 async def get_event():
     return list_event
@@ -256,6 +262,14 @@ async def modify_event(data : ModifyEventDTO, event_name):
                               data.event_end,
                               data.discounted_percentage)
     return {"Modify Success"}
+
+@app.delete("/RemoveEvent/{event_name}")
+async def delete_event(event_name):
+    for i in list_event:
+        if event_name == i.event_name:
+            select_event = i
+    list_event.remove(select_event)
+    return {"Remove This Event Success"}
 
 @app.get("/Payment/Check")
 async def check_payment(status : str):
