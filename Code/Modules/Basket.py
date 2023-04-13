@@ -4,6 +4,20 @@ class Basket:
         self.__book_item = []
         self.__price = 0
         
+    def reduce_amount(self,book):
+        for item in self.__book_item:
+            if book == item.name:
+                item.amount = item.amount-1
+                self.__price -= item.price
+                if item.amount == 0:
+                    self.__book_item.remove(item)
+                    
+    def add_amount(self,book):
+        for item in self.__book_item:
+            if book == item.name:
+                item.amount = item.amount+1
+                self.__price += item.price
+                    
     def add_book(self, book):
         self.__book_item.append(book)
     def remove_book(self, book):

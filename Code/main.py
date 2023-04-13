@@ -1,5 +1,5 @@
-from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse
+from fastapi import FastAPI, Request ,Form,Response
+from fastapi.responses import HTMLResponse,RedirectResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from pathlib import Path
@@ -19,7 +19,9 @@ from Modules.dto import *
 from Modules.settings import *
 from CLassDTO import *
 from datetime import datetime
+import random
 import datetime
+import starlette.status as status
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
@@ -115,31 +117,53 @@ def get_book(name:Optional[str] = ''):
         for i in batalog.list_all_of_book:
             if name.lower() == i._name.lower():
                 return i
-        
+#################################  MAINPAGE  ####################################        
 @app.get("/")
 async def home(request:Request):
     event_dis()
-    list_book = batalog.get_all_list()
-    return templates.TemplateResponse("index.html", {"request":request,"book_list":list_book})
+    return templates.TemplateResponse("index.html", {"request":request,"book_list":batalog.get_all_list()})
 
 @app.get("/search/")
 async def show_book(request:Request,q: str):
     event_dis()
-    list_book = find_book_in_catalog(q)
-    return templates.TemplateResponse("index.html", {"request":request,"book_list":list_book})
+    return templates.TemplateResponse("index.html", {"request":request,"book_list":find_book_in_catalog(q)})
 
 @app.get("/books/{book_name}")
 async def view_book(request:Request,book_name:str):
     event_dis()
-    book = get_book(book_name)
-    return templates.TemplateResponse("bookdetail.html", {"request":request,"book":book})
+    return templates.TemplateResponse("bookdetail.html", {"request":request,"book":get_book(book_name)})
 
-@app.post("/books/")
-async def add_book_to_basket(book:AddBooktoBasketDTO):
+#################################  BASKETPAGE  ####################################  
+@app.get("/basket")
+async def basket(request:Request):
+    return templates.TemplateResponse("cart.html", {"request":request,"basket_list":pookaneiei.basket})
+
+@app.post("/add_basket")
+async def add_book_to_basket(book:str = Form(...)):
     event_dis()
-    book_item = find_book_in_catalog(book.name)
+    book_item = get_book(book)
     pookaneiei.add_book_to_basket(BookItem(book_item),book_item)
-    return pookaneiei.basket.book_item
+    return RedirectResponse(url="/books/"+book, status_code=status.HTTP_302_FOUND)
+@app.post("/add_amount")
+async def add_book_to_basket(book:str = Form(...)):
+    event_dis()
+    pookaneiei.basket.add_amount(book)
+    return RedirectResponse(url="/basket", status_code=status.HTTP_302_FOUND)
+@app.post("/reduce_amount")
+async def add_book_to_basket(book:str = Form(...)):
+    event_dis()
+    pookaneiei.basket.reduce_amount(book)
+    return RedirectResponse(url="/basket", status_code=status.HTTP_302_FOUND)
+
+#################################  ORDERPAGE  ####################################
+@app.get("/order")
+async def make_order(request:Request):
+    order = Order(pookaneiei.basket.book_item,
+                        random.randint(1000,9999),
+                        False,
+                        pookaneiei.basket.price,
+                        pookaneiei)
+    return templates.TemplateResponse("order.html", {"request":request,"order_list":order})
 
 @app.post("/addbook")
 async def add_book(data:AddBookDTO):
@@ -171,19 +195,6 @@ async def add_branch(data:AddBranchDTO):
                 data.line_id,
                 data.facebook_id))
     return all_branch.list_of_branch
-
-@app.get("/basket")
-async def basket():
-    return pookaneiei.basket.book_item
-
-@app.post("/basket")
-async def make_order(data:MakeOrderDto):
-    pookaneiei.make_order(Order(pookaneiei.basket.book_item,
-                        pookaneiei.order_id,
-                        data.status,
-                        pookaneiei.basket.price,
-                        pookaneiei))
-    return pookaneiei.order_list
 
 @app.get("/")
 async def home():

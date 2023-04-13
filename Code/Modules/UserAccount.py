@@ -62,6 +62,7 @@ class Customer(UserAccount):
         self.__sms_notification = sms_noti
         self.__basket = Basket()
         self._disabled = False
+        self.__order_list = []
 
     def search_book(self, search_string, catalog:Catalog):
         lists=[]
@@ -87,17 +88,25 @@ class Customer(UserAccount):
     def add_credit_card_info(card_info):
         pass
     def add_book_to_basket(self, book_item, book:Book):
-        self.__basket.add_book(book_item)
+        self.in_basket = False
+        for i in self.__basket.get_book():
+            if i.name.lower() == book_item.name.lower():
+                i.amount = i.amount + 1
+                self.in_basket = True
+        if self.in_basket == False:
+            self.__basket.add_book(book_item)
         book._amount_in_stock -= 1
         self.__basket.price += book_item._price
+        
     def remove_book_from_basket(self, book_item, book:Book):
         self.__basket.remove_book(book_item)
         book._amount_in_stock += 1
         self.__basket.price -= book_item._price
+        
     def make_order(self, order):
         if len(self.__basket.book_item) > 0:
             self.__order_list.append(order)
-            self.__order_id+=1
+            
     def make_payment(payment_type):
         pass
     def get_basket(self):

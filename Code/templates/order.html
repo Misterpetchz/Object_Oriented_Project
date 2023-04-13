@@ -8,30 +8,17 @@
 <body>
   <h1 class="body-head">This Page is working!</h1>
   <br>
-  <form id="search-form" action="/search" method="get">
-    <label class="body-search" for="search-input">Search for products:</label>
-    <input type="text" id="search-input" name='q' minlength="1" maxlength="50">
-    <button type="submit">Search</button>
-  </form>
-  <br>
   <br>
   <div class="body-item">
-    <img src={{book._cover}} alt="Book Cover"><br></p>
-    <p>{{book._name}}<br></p>
-    <p>{{book._brief}}<br></p>
-    <p>{{book._book_info}}<br></p>
-    <p>{{book._book_publisher}}<br></p>
-    <p>{{book._book_preview}}<br></p>
-    <p>{{book._critic_review}}<br></p>
-    <p>{{book._table_of_content}}<br></p>
-    <p>{{book._summary}}<br></p>
-    <p>{{book._genre}}<br></p>
-    <p>{{book._date_created}}<br></p>
-    <del>{{book._price}}<br></del>
-    <p>{{book._new_price}}<br></p>
-    <form method="post" action="/add_basket">
-      <input type="hidden" name="book" value={{book._name}}>
-      <button type="submit"><i class="fa fa-shopping-cart"></i></button>
+    {%for order in order_list.get_item%}
+        <p>{{order.name}} x {{order.amount}} : {{order.price*order.amount}}<br></p>
+    {%endfor%}
+    <br>
+    <p>TOTAL : {{order_list.total}}</p>
+    <br>
+    <form>
+      <input type="hidden" name="book">
+      <button type="submit">Make Payment</button>
     </form>
   </div>
   <nav>

@@ -10,27 +10,6 @@ body {
     background: #dfe9f5;
 }
 
-
-.body-head{
-    background-color:Violet;
-    position: relative;
-    left: 90px;
-}
-
-.body-item{
-    border: 2px solid black;
-    position:  relative;
-    left: 90px;
-    padding: 5px;
-}
-
-.body-search{
-    position:  relative;
-    left: 90px;
-    padding: 5px;
-    
-}
-
 nav {
     position: absolute;
     top: 0;
@@ -42,6 +21,7 @@ nav {
     overflow: hidden;
     transition:width 0.2s linear;
     box-shadow:0 20px rgba(0,0,0,0.1);
+    z-index: 1000;
 }
 
 .logo {
@@ -101,3 +81,26 @@ nav:hover {
     position:absolute;
     bottom:0;
 }
+
+
+.body-head{
+    background-color:violet;
+    position: relative;
+    left: 90px;
+}
+
+.body-item{
+    border: 2px solid black;
+    position:  relative;
+    left: 90px;
+    padding: 5px;
+    background: white;
+}
+
+.body-search{
+    position:  relative;
+    left: 90px;
+    padding: 5px;
+    z-index:1;
+}
+
