@@ -82,6 +82,8 @@ pookaneiei = Customer('pookantong.p@gmail.com',
                  True,
                  True,
                  '29/7 หมู่2 ตำบลบั้นเด้า อำเภอรถแห่ จังหวัดสก๊อย ประเทศหิวข้าว ดาวSun')
+Sys.register(pookaneiei)
+Sys.register(pookaneiei1)
 
 
 
@@ -149,12 +151,11 @@ pookaneiei.add_book_to_basket(BookItem(pookantong_book2),pookantong_book2)
 
 
 
-async def get_current_active_user(current_user : Customer = Depends(Customer.get_current_user)) :
+async def get_current_active_user(current_user : Customer = Depends(Sys.get_current_user)) :
 	# print(current_user.__dict__)
 	if current_user._disabled :
 		raise HTTPException(status_code=400, detail="Inactive User")
 	return current_user
-
 
 
 
@@ -198,13 +199,13 @@ async def show_book(bookname:str,branch_available:bool | None = None):
             "brief":book._brief}
 
 @app.post("/books/{bookname}/add_book_to_basket", tags=["user"])
-async def add_book_to_basket(bookname:str, amount:int):
+async def add_book_to_basket(bookname:str, amount:int, current_user : Customer = Depends(Sys.get_current_user)):
     event.event_dis(batalog)
     book = batalog.find_book_by_name(bookname)
     if book == None:
         raise HTTPException(status_code=404, detail="Book not found")
     for i in range(amount):
-        pookaneiei.add_book_to_basket(BookItem(book),book)
+        current_user.add_book_to_basket(BookItem(book),book)
     return {"status":"Success"}
 
 @app.get("/books/{bookname}/rating", tags=["books"])
@@ -251,21 +252,21 @@ async def add_branch_to_branch_list(data:AddBranchDTO):
     return {"status":"Success"}
 
 @app.get("/basket", tags=["user"])
-async def show_basket():
+async def show_basket(current_user : Customer = Depends(Sys.get_current_user)):
     return {"basket":[{"cover":x._cover,
                         "name":x._name,
                         "price":x._price,
                         "genre":x._genre
                         }
-                       for x in pookaneiei.basket.book_item]}
+                       for x in current_user.basket.book_item]}
 @app.get("/make_order", tags=["user"])
-async def make_order():
-    pookaneiei.make_order(Order(pookaneiei.basket.book_item,
-                                pookaneiei.order_id,
+async def make_order(current_user : Customer = Depends(Sys.get_current_user)):
+    current_user.make_order(Order(current_user.basket.book_item,
+                                current_user.order_id,
                                 True,
-                                pookaneiei.basket.price,
-                                pookaneiei._full_name))
-    pookaneiei.basket.book_item = []
+                                current_user.basket.price,
+                                current_user._full_name))
+    current_user.basket.book_item = []
     return {"status":"Success"}
 
 @app.post("/creditcard/", tags=["user"])
@@ -341,14 +342,13 @@ async def registration(email : str , password : str, full_name : str, gender : s
 	input_dict['_address'] = address
 	input_dict['__email_notification'] = email_noti
 	input_dict['__sms_notification'] = sms_noti
-
-	Sys.User_DB.append(Customer(input_dict["_email"], input_dict["_password"], input_dict["_full_name"], input_dict["_gender"], input_dict["_tel"], input_dict["__email_notification"], input_dict["__sms_notification"], input_dict["_address"]))
-
+	Sys.register(Customer(input_dict["_email"], input_dict["_password"], input_dict["_full_name"], input_dict["_gender"], input_dict["_tel"], input_dict["__email_notification"], input_dict["__sms_notification"], input_dict["_address"]))
+	return {"status":"Success"}
 
 @app.put("/basket", tags=["user"])
-async def remove_from_basket(data:RemoveBookDTO):
+async def remove_from_basket(data:RemoveBookDTO, current_user : Customer = Depends(Sys.get_current_user)):
     book = batalog.find_book_by_name(data.book_name)
-    pookaneiei.remove_book_from_basket(data.index,book)
+    current_user.remove_book_from_basket(data.index,book)
     return {"status":"Success"}
 
 @app.post("/search", tags=["books"])
