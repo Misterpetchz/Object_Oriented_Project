@@ -27,6 +27,9 @@ class AddBranchDTO(BaseModel):
     line_id:str
     facebook_id:str
     
+class MakeOrderDto(BaseModel):
+    status : bool
+    
 class RemoveBookDTO(BaseModel):
     index:int
     book_name:str

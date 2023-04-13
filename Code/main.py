@@ -291,22 +291,12 @@ async def modify_branch(branch : dict):
     rangsit.modify_branch(branch_name, open_time, location, tel, line_id, facebook_id,[],[])
     return rangsit
 
-@app.put("/book/{old_name}")
-async def modify_book(old_name,book:ModifyBookDTO):
-    for i in batalog.list_all_of_book:
-        if old_name == i._name:
-            select_book = i
-    select_book.modify_book(book.cover,book.brief,book.creator,book.name,book.book_info,book.book_publisher,book.book_preview,book.critic_review,
-                          book.table_of_content,book.summary,book.genre,book.date_created,book.price,book.amount_in_stock,)
-    return select_book
-
 async def get_current_active_user(current_user : Customer = Depends(Sys.get_current_user)) :
 	# print(current_user.__dict__)
 	if current_user._disabled :
 		raise HTTPException(status_code=400, detail="Inactive User")
 	return current_user
 
-@app.put("/users/edit")
 @app.put("/users/edit", tags=["user"])
 async def info_verification(email : Optional[str] = None, password : Optional[str] = None, full_name : Optional[str] = None, gender : Optional[str] = None, tel : Optional[str] = None, address : Optional[str] = None,
 				email_noti : Optional[bool] = None, sms_noti : Optional[bool] = None, id : Customer = Depends(Sys.get_current_user)) :
@@ -353,3 +343,36 @@ async def registration(email : str , password : str, full_name : str, gender : s
 	input_dict['__sms_notification'] = sms_noti
 
 	Sys.User_DB.append(Customer(input_dict["_email"], input_dict["_password"], input_dict["_full_name"], input_dict["_gender"], input_dict["_tel"], input_dict["__email_notification"], input_dict["__sms_notification"], input_dict["_address"]))
+
+
+@app.put("/basket", tags=["user"])
+async def remove_from_basket(data:RemoveBookDTO):
+    book = batalog.find_book_by_name(data.book_name)
+    pookaneiei.remove_book_from_basket(data.index,book)
+    return {"status":"Success"}
+
+@app.post("/search", tags=["books"])
+async def search_book(name:str):
+    event.event_dis(batalog)
+    batalog.search_book(name)
+    return {"searchlist":[{"cover":x._cover,
+                        "name":x._name,
+                        "creator":x._creator,
+                        "old_price":x._price,
+                        "new_price":x._new_price,
+                        "genre":x._genre,
+                        "score":x._rating_score,
+                        "brief":x._brief}
+                       for x in batalog.list_of_book if x._amount_in_stock != 0]}
+    
+@app.put("/books/{bookname}", tags=["books"])
+async def modify_book_to_catalog(bookname, data:ModifyBookDTO):
+    book = batalog.find_book_by_name(bookname)
+    book.modify_book(data)
+    return {"status":"Success"}
+
+@app.delete("/books/{bookname}", tags=["books"])
+async def delete_book(bookname):
+    book = batalog.find_book_by_name(bookname)
+    batalog.remove_book(book)
+    return {"status":"Success"}

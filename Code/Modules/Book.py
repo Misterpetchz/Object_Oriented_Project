@@ -20,46 +20,13 @@ class Book :
         self._amount_in_stock = amount
         self._new_price = price
         self._rating_score = 0
+    
+    def __repr__(self) -> str:
+        return self._name
         
     def add_rating(self, rating:Rating):
         self._rating.append(rating)
         self._rating_score = sum([x._book_rating for x in self._rating])/len(self._rating)
-    
-    def modify_book(self, data):
-        if data.cover != None:
-            self._cover = data.cover
-        if data.brief != None:
-            self._brief = data.brief
-        if data.creator != None:
-            self._creator = data.creator
-        if data.name != None:
-            self._name = data.name
-        if data.book_info != None:
-            self._book_info = data.book_info
-        if data.book_publisher != None:
-            self._book_publisher = data.book_publisher
-        if data.book_preview != None:
-            self._book_preview = data.book_preview
-        if data.critic_review != None:
-            self._critic_review = data.critic_review
-        if data.table_of_content != None:
-            self._table_of_content = data.table_of_content
-        if data.summary != None:
-            self._summary = data.summary
-        if data.genre != None:
-            self.delete_list = []
-            for i in range(len(data.genre)):
-                if data.genre[i] not in self._genre:
-                    if data.genre[i][0] != '-':
-                        self._genre.append(data.genre[i])
-                    if data.genre[i][1:] in self._genre:
-                        self._genre.remove(data.genre[i][1:])
-        if data.date_created != None:
-            self._date_created = data.date_created
-        if data.price != None:
-            self._price = data.price
-        if data.amount != None:
-            self._amount_in_stock = data.amount
         
     
         
