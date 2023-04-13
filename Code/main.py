@@ -1,8 +1,13 @@
-from fastapi import FastAPI, BackgroundTasks
+from fastapi import FastAPI, Request ,Form,Response
+from fastapi.responses import HTMLResponse,RedirectResponse
+from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
+from pathlib import Path
 from Modules.Catalog import Catalog
 from Modules.EventDiscount import EventDiscount
 from Modules.Book import *
 from Modules.UserAccount import *
+from Modules.System import *
 from Modules.settings import *
 from Modules.BranchList import BranchList
 from Modules.Branch import Branch
@@ -16,18 +21,27 @@ from CLassDTO import *
 from Modules.EventDiscount import EventDiscount
 from Modules.Payment import *
 from datetime import datetime
+import random
 from Modules.dto import *
 from Modules.BookShop import BookShop
 from fastapi.responses import FileResponse, RedirectResponse
 import time
 import datetime
+import starlette.status as status
 
 app = FastAPI()
+templates = Jinja2Templates(directory="templates")
+
+app.mount("/static",
+    StaticFiles(directory="static"),
+    name="static")
 
 shop = BookShop()
 User_DB = []
 list_credit_card = []
 
+list_branch = BranchList()
+Sys = System()
 class Branchs(BaseModel):
     branch_name : str
     open_time : str
@@ -60,6 +74,11 @@ pookaneiei = Customer("pookan@gmail.com", "Test1", "pookan", "Male", "0000000000
 #                  True)
 
 batalog = Catalog()
+
+# Sys.User_DB.append(Customer(input_dict["_email"], input_dict["_password"], input_dict["_full_name"], input_dict["_gender"], input_dict["_tel"], input_dict["__email_notification"], input_dict["__sms_notification"], input_dict["_address"]))
+# def __init__(self, email, password, full_name, gender, tel, permission):
+Sys.User_DB.append(Admin("test1", "$2b$12$.t3ijxAUbFl1QdYJ4qDAT.AeZ4AmLn78qnM963AI/nl3qsbLn5fxu", "L L", "What", "151515151", []))
+print(Sys.get_password_hash("test1"))
 
 pookantong_book1 = Book(
                        'random.png',
@@ -112,27 +131,66 @@ def event_dis():
         if i._name in [x._name for x in event.list_of_book]:
             event.apply_discount(i)
 
-def find_book_in_catalog(name):
-    for i in batalog.list_all_of_book:
-        if name == i._name:
-            return i
-        
+def find_book_in_catalog(name:Optional[str] = ''):
+    searched = []
+    if name != '':
+        for i in batalog.list_all_of_book:
+            if name.lower() in i._name.lower():
+                searched.append(i)
+    return searched
+
+def get_book(name:Optional[str] = ''):
+    if name != '':
+        for i in batalog.list_all_of_book:
+            if name.lower() == i._name.lower():
+                return i
+#################################  MAINPAGE  ####################################        
 @app.get("/")
-async def home():
+async def home(request:Request):
     event_dis()
-    return batalog
+    return templates.TemplateResponse("index.html", {"request":request,"book_list":batalog.get_all_list()})
 
-@app.get("/books/{name}")
-async def show_book(name:str):
+@app.get("/search/")
+async def show_book(request:Request,q: str):
     event_dis()
-    return find_book_in_catalog(name)
+    return templates.TemplateResponse("index.html", {"request":request,"book_list":find_book_in_catalog(q)})
 
-@app.post("/books/{name}")
-async def add_book_to_basket(book:AddBooktoBasketDTO):
+@app.get("/books/{book_name}")
+async def view_book(request:Request,book_name:str):
     event_dis()
-    book_item = find_book_in_catalog(book.name)
+    return templates.TemplateResponse("bookdetail.html", {"request":request,"book":get_book(book_name)})
+
+#################################  BASKETPAGE  ####################################  
+@app.get("/basket")
+async def basket(request:Request):
+    return templates.TemplateResponse("cart.html", {"request":request,"basket_list":pookaneiei.basket})
+
+@app.post("/add_basket")
+async def add_book_to_basket(book:str = Form(...)):
+    event_dis()
+    book_item = get_book(book)
     pookaneiei.add_book_to_basket(BookItem(book_item),book_item)
-    return pookaneiei.basket.book_item
+    return RedirectResponse(url="/books/"+book, status_code=status.HTTP_302_FOUND)
+@app.post("/add_amount")
+async def add_book_to_basket(book:str = Form(...)):
+    event_dis()
+    pookaneiei.basket.add_amount(book)
+    return RedirectResponse(url="/basket", status_code=status.HTTP_302_FOUND)
+@app.post("/reduce_amount")
+async def add_book_to_basket(book:str = Form(...)):
+    event_dis()
+    pookaneiei.basket.reduce_amount(book)
+    return RedirectResponse(url="/basket", status_code=status.HTTP_302_FOUND)
+
+#################################  ORDERPAGE  ####################################
+@app.get("/order")
+async def make_order(request:Request):
+    order = Order(pookaneiei.basket.book_item,
+                        random.randint(1000,9999),
+                        False,
+                        pookaneiei.basket.price,
+                        pookaneiei)
+    return templates.TemplateResponse("order.html", {"request":request,"order_list":order})
 
 @app.post("/addbook")
 async def add_book(data:AddBookDTO):
@@ -163,7 +221,7 @@ async def add_branch(data:AddBranchDTO):
                 data.tel,
                 data.line_id,
                 data.facebook_id))
-    return shop.list_of_branch
+    return all_branch.list_of_branch
 
 @app.get("/basket")
 async def basket():
@@ -286,7 +344,7 @@ async def modify_book(old_name,book:ModifyBookDTO):
                           book.table_of_content,book.summary,book.genre,book.date_created,book.price,book.amount_in_stock,)
     return select_book
 
-async def get_current_active_user(current_user : Customer = Depends(Customer.get_current_user)) :
+async def get_current_active_user(current_user = Depends(Sys.get_current_user)) :
 	# print(current_user.__dict__)
 	if current_user._disabled :
 		raise HTTPException(status_code=400, detail="Inactive User")
@@ -294,42 +352,49 @@ async def get_current_active_user(current_user : Customer = Depends(Customer.get
 
 @app.put("/users/edit")
 async def info_verification(email : Optional[str] = None, password : Optional[str] = None, full_name : Optional[str] = None, gender : Optional[str] = None, tel : Optional[str] = None, address : Optional[str] = None,
-				email_noti : Optional[bool] = None, sms_noti : Optional[bool] = None, id : Customer = Depends(Customer.get_current_user)) :
+				email_noti : Optional[bool] = None, sms_noti : Optional[bool] = None, id = Depends(Sys.get_current_user)) :
 	if (id == None) :
 		return {"Error-101" : "Didn't find any account with this id"}
-	id._email = email or id._email
-	id._password = password or id._password
-	id._full_name = full_name or id._full_name
-	id._gender = gender or id._gender
-	id._tel = tel or id._tel
-	id._address = address or id._address
-	# id._email_notification = email_noti if email_noti != None else id._email_notification
-	# id._sms_notification = sms_noti if sms_noti != None else id._sms_notification
-	if email_noti != None :
-		id.email_notification = email_noti
-	if email_noti != None :
-		id.sms_notification = sms_noti
+	elif (isinstance(id, Customer)) :
+		id._email = email or id._email
+		id._password = password or id._password
+		id._full_name = full_name or id._full_name
+		id._gender = gender or id._gender
+		id._tel = tel or id._tel
+		id._address = address or id._address
+		# id._email_notification = email_noti if email_noti != None else id._email_notification
+		# id._sms_notification = sms_noti if sms_noti != None else id._sms_notification
+		if email_noti != None :
+			id.email_notification = email_noti
+		if email_noti != None :
+			id.sms_notification = sms_noti
+	elif (isinstance(id, Admin)) :
+		id._email = email or id._email
+		id._password = password or id._password
+		id._full_name = full_name or id._full_name
+		id._gender = gender or id._gender
+		id._tel = tel or id._tel
 
 @app.post("/token", response_model=Token)
 async def login(form_data : OAuth2PasswordRequestForm = Depends()) :
-	user = Customer.authenticate_user(form_data.username, form_data.password)
+	user = Sys.authenticate_user(form_data.username, form_data.password)
 	if not user :
 		raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect Username or Password", headers={"WWW-Authenticate" : "Bearer"})
 	access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTE)
-	access_token = Customer.creat_access_token(data={"sub" : user._email}, expires_delta=access_token_expires)
+	access_token = Sys.creat_access_token(data={"sub" : user._email}, expires_delta=access_token_expires)
 	return {"access_token" : access_token, "token_type" : "bearer"}
 
 @app.get("/users/me")
-async def view_info(userid : Customer = Depends(get_current_active_user)):
+async def view_info(userid = Depends(get_current_active_user)):
 		return (userid)
 
 
-@app.put("/users/registration")
+@app.post("/users/registration")
 async def registration(email : str , password : str, full_name : str, gender : str, tel : str, address : str,
 				email_noti : bool, sms_noti : bool) :
 	input_dict = {}
 	input_dict['_email'] = email
-	input_dict['_password'] = Customer.get_password_hash(password)
+	input_dict['_password'] = Sys.get_password_hash(password)
 	input_dict['_full_name'] = full_name
 	input_dict['_gender'] = gender
 	input_dict['_tel'] = tel
@@ -337,5 +402,6 @@ async def registration(email : str , password : str, full_name : str, gender : s
 	input_dict['__email_notification'] = email_noti
 	input_dict['__sms_notification'] = sms_noti
 
-	User_DB.append(Customer(input_dict["_email"], input_dict["_password"], input_dict["_full_name"], input_dict["_gender"], input_dict["_tel"], input_dict["__email_notification"], input_dict["__sms_notification"], input_dict["_address"]))
+	# Sys.User_DB.append(pookaneiei)
+	Sys.User_DB.append(Customer(input_dict["_email"], input_dict["_password"], input_dict["_full_name"], input_dict["_gender"], input_dict["_tel"], input_dict["__email_notification"], input_dict["__sms_notification"], input_dict["_address"]))
 

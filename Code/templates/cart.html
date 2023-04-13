@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>OOP Project</title>
+  <link rel="stylesheet" href="{{ url_for('static', path='/css/style.css')}}">
+  <link rel="stylesheet" href="{{ url_for('static', path='/css/style_1.css')}}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+  <h1 class="body-head">This Page is working!</h1>
+  <br>
+  <form class="body-search" id="search-form" action="/search" method="get">
+    <label for="search-input">Search for products:</label>
+    <input type="text" id="search-input" name='q' minlength="1" maxlength="50">
+    <button type="submit">Search</button>
+  </form>
+  <br>
+  <br>
+  <p class="body-search">TOTAL : {{basket_list.price}}</p>
+  <br>
+  {%for book in basket_list.book_item%}
+    <div class="item">
+      <a href="/books/{{book.name}}">{{book.name}}<br></a>
+      <p>{{book._price * book.amount}}<br></p>
+      <p>{{book.amount}}<br></p>
+      <form method="post" action="/reduce_amount">
+        <input type="hidden" name="book" value={{book.name}}>
+        <button type="submit"><i class="fas fa-minus"></i></button>
+      </form>
+      <form method="post" action="/add_amount">
+        <input type="hidden" name="book" value={{book.name}}>
+        <button type="submit"><i class="fas fa-plus"></i></button>
+      </form>
+    </div>
+  {% endfor %}
+  <a style="left:100px" href="/order">Purchase</a>
+  <nav>
+    <ul>
+      <li>
+        <a href="/">
+          <i class="fas fa-home"></i>
+          <span class="nav-item">Home</span>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <i class="fas fa-user"></i>
+          <span class="nav-item">User</span>
+        </a>
+      </li>
+      <li>
+        <a href="/basket">
+          <i class="fas fa-cart-arrow-down"></i>
+          <span class="nav-item">Cart</span>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <i class="fas fa-sign-out-alt"></i>
+          <span class="nav-item">User</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+</body>    
+</html>
