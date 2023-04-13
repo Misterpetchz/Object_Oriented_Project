@@ -17,15 +17,16 @@ from Modules.EventDiscount import EventDiscount
 from Modules.Payment import *
 from datetime import datetime
 from Modules.dto import *
+from Modules.BookShop import BookShop
 from fastapi.responses import FileResponse, RedirectResponse
 import time
 import datetime
 
 app = FastAPI()
 
-list_credit_card = []
-list_branch = BranchList()
+shop = BookShop()
 User_DB = []
+list_credit_card = []
 
 class Branchs(BaseModel):
     branch_name : str
@@ -34,8 +35,6 @@ class Branchs(BaseModel):
     tel : str
     line_id : str
     facebook_id : str
-list_event = []
-all_branch = BranchList()
 
 pookan_card = CreditCard("121231232",
                          "15-07-22",
@@ -48,9 +47,7 @@ nonthaburi1 = Branch("Nonthaburi",
                      "seed_nonthaburi01",
                      "NonthaburiSE-ED",
                      )
-
-all_branch = BranchList()
-all_branch.add_branch(nonthaburi1)
+shop.add_branch(nonthaburi1)
 pookaneiei = Customer("pookan@gmail.com", "Test1", "pookan", "Male", "0000000000", True, False, "LLL")
 # pookaneiei = Customer('pookantong.p@gmail.com',
 #                  'PomyukmeFan555',
@@ -160,13 +157,13 @@ async def add_book(data:AddBookDTO):
 
 @app.post("/addbranch")
 async def add_branch(data:AddBranchDTO):
-    all_branch.add_branch(Branch(data.branch_name,
+    shop.add_branch(Branch(data.branch_name,
                 data.open_time,
                 data.location,
                 data.tel,
                 data.line_id,
                 data.facebook_id))
-    return all_branch.list_of_branch
+    return shop.list_of_branch
 
 @app.get("/basket")
 async def basket():
@@ -205,23 +202,21 @@ async def modify_credit_card(credit_card : CreditCardDTO):
 
 @app.get("/GetAllBranch/")
 async def get_branch():
-    return {all_branch}
+    return shop.list_of_branch
 
 @app.post("/AddBranch")
 async def add_branch(data:AddBranchDTO):
-    all_branch.add_branch(Branch(data.branch_name,
+    shop.add_branch(Branch(data.branch_name,
                 data.open_time,
                 data.location,
                 data.tel,
                 data.line_id,
-                data.facebook_id,
-                []))
-    #return all_branch.list_of_branch
+                data.facebook_id))
     return {"Add Branch Success"}
 
 @app.put("/ModifyBranch/{branch_name}")
 async def modify_branch(data : ModifyBranchDTO, branch_name):
-    select_branch = all_branch.select_branch(branch_name)
+    select_branch = shop.select_branch(branch_name)
     select_branch.modify_branch(data.branch_name, 
                                 data.open_time, 
                                 data.location, 
@@ -234,17 +229,17 @@ async def modify_branch(data : ModifyBranchDTO, branch_name):
 
 @app.delete("/RemoveBranch/{branch_name}")
 async def remove_branch(branch_name):
-    select_branch = all_branch.select_branch(branch_name)
-    all_branch.delete_branch(select_branch)
+    select_branch = shop.select_branch(branch_name)
+    shop.delete_branch(select_branch)
     return {"Remove Branch Success"}
 
 @app.get("/GetAllEvent/")
 async def get_event():
-    return list_event
+    return shop.list_of_event
 
 @app.post("/AddEvent/")
 async def add_event(data : EventDTO):
-    list_event.append(EventDiscount(data.event_name, 
+    shop.list_of_event(EventDiscount(data.event_name, 
                                     data.event_start, 
                                     data.event_end, 
                                     data.discounted_percentage))
@@ -254,9 +249,7 @@ async def add_event(data : EventDTO):
 @app.put("/ModifyEvent/{event_name}")
 async def modify_event(data : ModifyEventDTO, event_name):
     # loop check in bigger class
-    for i in list_event:
-        if event_name == i.event_name:
-            select_event = i
+    select_event = shop.select_event(event_name)
     select_event.modify_event(data.event_name,
                               data.event_start,
                               data.event_end,
@@ -265,10 +258,8 @@ async def modify_event(data : ModifyEventDTO, event_name):
 
 @app.delete("/RemoveEvent/{event_name}")
 async def delete_event(event_name):
-    for i in list_event:
-        if event_name == i.event_name:
-            select_event = i
-    list_event.remove(select_event)
+    select_event = shop.select_event(event_name)
+    shop.list_of_event.delete_event(select_event)
     return {"Remove This Event Success"}
 
 @app.get("/Payment/Check")
