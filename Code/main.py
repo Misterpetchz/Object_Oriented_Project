@@ -62,7 +62,8 @@ nonthaburi1 = Branch("Nonthaburi",
                      "NonthaburiSE-ED",
                      )
 shop.add_branch(nonthaburi1)
-pookaneiei = Customer("pookan@gmail.com", "Test1", "pookan", "Male", "0000000000", True, False, "LLL")
+pookaneiei = Customer("pookan@gmail.com", Sys.get_password_hash("test1"), "pookan", "Male", "0000000000", True, False, "LLL")
+Sys.User_DB.append(pookaneiei)
 # pookaneiei = Customer('pookantong.p@gmail.com',
 #                  'PomyukmeFan555',
 #                  'PookanNaja',
@@ -221,7 +222,7 @@ async def add_branch(data:AddBranchDTO):
                 data.tel,
                 data.line_id,
                 data.facebook_id))
-    return all_branch.list_of_branch
+    return shop.list_of_branch
 
 @app.get("/basket")
 async def basket():
@@ -242,21 +243,19 @@ async def home():
 
 
 @app.get("/GetCreditCard/")
-async def get_credit_card():
-    return list_credit_card
+async def get_credit_card(current_user = Depends(Sys.get_current_user)):
+    return current_user.credit_card
 
 @app.post("/AddCreditCard/")
-# user make this
-async def add_credit_card(credit_card : CreditCardDTO):
-    # use method in class
-    list_credit_card.append(CreditCard(credit_card.card_num, credit_card.expire_date, credit_card.cvc))
+async def add_credit_card(credit_card : CreditCardDTO, current_user = Depends(Sys.get_current_user)):
+    current_user.add_credit_card(CreditCard(credit_card.card_num, credit_card.expire_date, credit_card.cvc))
     return {"Add CreditCard Success"}
 
 # edit this
 @app.put("/ModifyCreditCard/")
-async def modify_credit_card(credit_card : CreditCardDTO):
-    pookan_card.modify_credit_card_info(credit_card.card_num, credit_card.expire_date, credit_card.cvc)
-    return pookan_card
+async def modify_credit_card(credit_card : CreditCardDTO, current_user = Depends(Sys.get_current_user)):
+    current_user.credit_card.modify_credit_card_info(credit_card.card_num, credit_card.expire_date, credit_card.cvc)
+    return {"Modify Success"}
 
 @app.get("/GetAllBranch/")
 async def get_branch():
@@ -328,8 +327,8 @@ async def check_payment(status : str):
         return {"reject"}
 
 @app.get("/QrPayment/Generate/")
-async def generate_qr():
-    transactions = ViaQrCode(pookaneiei.basket.price, "04-07-2023")
+async def generate_qr(current_user = Depends(Sys.get_current_user)):
+    transactions = ViaQrCode(current_user.basket.price, "04-07-2023")
     transactions.generate_qr_code()
     del transactions
     return FileResponse("../qrcode-0890767442.png")

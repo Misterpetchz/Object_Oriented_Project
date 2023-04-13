@@ -79,15 +79,15 @@ class Customer(UserAccount):
                 if elements == book:
                     lists.append(element)
                     return lists
+    
     def request_edit():
         pass
 
-    def modify_credit_card_info(card_num,exp_date,cvc):
-        pass
     def info_verification(email, password, full_name, gender, tel, shipping, address, email_notification, sms_notification):
         pass
-    def add_credit_card_info(card_info):
-        pass
+    def add_credit_card(self, credit_card:CreditCard):
+        self.__credit_card = credit_card
+
     def add_book_to_basket(self, book_item, book:Book):
         self.in_basket = False
         for i in self.__basket.get_book():
@@ -124,6 +124,10 @@ class Customer(UserAccount):
         self.__email_notification = value
     def set_sms_noti(self, value):
          self.__sms_notification = value
+    @property
+    def credit_card(self):
+        return self.__credit_card
+
     order_list = property(get_order_list)
     basket = property(get_basket)
     order_id = property(get_order_id)
@@ -134,7 +138,6 @@ class Customer(UserAccount):
         return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
         pass
     #! ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
     # def verify_password(plain_password, hashed_password) :
     #     return PWD_CONTEXT.verify(plain_password, hashed_password)
 
