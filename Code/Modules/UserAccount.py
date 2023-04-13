@@ -26,6 +26,7 @@ class Admin(UserAccount):
     def __init__(self, email, password, full_name, gender, tel, permission):
         super().__init__(email, password, full_name, gender, tel)
         self.__permission = permission
+        self._disabled = False
 
     def modify_delete_branch(type, Branch):
         pass
