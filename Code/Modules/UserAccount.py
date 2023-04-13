@@ -124,53 +124,53 @@ class Customer(UserAccount):
         pass
     #! ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-    def verify_password(plain_password, hashed_password) :
-        return PWD_CONTEXT.verify(plain_password, hashed_password)
+    # def verify_password(plain_password, hashed_password) :
+    #     return PWD_CONTEXT.verify(plain_password, hashed_password)
 
-    def get_password_hash(password) :
-        return PWD_CONTEXT.hash(password)
+    # def get_password_hash(password) :
+    #     return PWD_CONTEXT.hash(password)
 
-    def get_user(username : str) :
-        user = InstanceFinder(Customer, "_email", username)
-        if not user == None :
-            return user
-        # if username in db :
-        # 	user_data = db[username]
-        # 	return Customer(user_data)
-            # return UserInDB(**user_data)
+    # def get_user(username : str) :
+    #     user = InstanceFinder(Customer, "_email", username)
+    #     if not user == None :
+    #         return user
+    #     # if username in db :
+    #     # 	user_data = db[username]
+    #     # 	return Customer(user_data)
+    #         # return UserInDB(**user_data)
 
-    def authenticate_user(username : str, password : str) :
-        user = Customer.get_user(username)
-        if not user :
-            return False
-        if not Customer.verify_password(password, user._password) :
-            return False
-        return user
+    # def authenticate_user(username : str, password : str) :
+    #     user = Customer.get_user(username)
+    #     if not user :
+    #         return False
+    #     if not Customer.verify_password(password, user._password) :
+    #         return False
+    #     return user
 
-    def creat_access_token(data : dict, expires_delta : timedelta or None = None) :
-        encode = data.copy()
-        if expires_delta != None :
-            expires = datetime.utcnow() + expires_delta
-        else :
-            expires = datetime.utcnow() + timedelta(minutes=5)
-        encode.update({"exp" : expires})
-        encode_jwt = jwt.encode(encode, SECRET_KEY, algorithm=ALGORITHM)
-        return encode_jwt
+    # def creat_access_token(data : dict, expires_delta : timedelta or None = None) :
+    #     encode = data.copy()
+    #     if expires_delta != None :
+    #         expires = datetime.utcnow() + expires_delta
+    #     else :
+    #         expires = datetime.utcnow() + timedelta(minutes=5)
+    #     encode.update({"exp" : expires})
+    #     encode_jwt = jwt.encode(encode, SECRET_KEY, algorithm=ALGORITHM)
+    #     return encode_jwt
 
-    async def get_current_user(token : str = Depends(OAUTH2_SCHEME)) :
-        credential_exception = HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Could not validate your credentials", headers={"WWW-Authenticate" : "Bearer"})
-        try :
-            payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-            username : str = payload.get("sub")
-            if username is None :
-                raise credential_exception
-            token_data = TokenData(email = username)
-        except JWTError :
-            raise credential_exception
-        user = Customer.get_user(username= token_data.email)
-        if user is None :
-            raise credential_exception
-        return user
+    # async def get_current_user(token : str = Depends(OAUTH2_SCHEME)) :
+    #     credential_exception = HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Could not validate your credentials", headers={"WWW-Authenticate" : "Bearer"})
+    #     try :
+    #         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+    #         username : str = payload.get("sub")
+    #         if username is None :
+    #             raise credential_exception
+    #         token_data = TokenData(email = username)
+    #     except JWTError :
+    #         raise credential_exception
+    #     user = Customer.get_user(username= token_data.email)
+    #     if user is None :
+    #         raise credential_exception
+    #     return user
 
 
 

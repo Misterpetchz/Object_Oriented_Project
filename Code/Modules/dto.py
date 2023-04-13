@@ -15,3 +15,4 @@ class BranchModel(BaseModel):
         line_id = str
         facebook_id = str
         product_in_stock = str
+        

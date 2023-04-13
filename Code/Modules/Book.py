@@ -15,6 +15,7 @@ class Book :
         self._genre = genre
         self._date_created = date_created
         self._rating = []
+        self._rating = []
         self._price = price
         self._amount_in_stock = amount
         self._new_price = price

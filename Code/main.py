@@ -4,6 +4,7 @@ from Modules.Catalog import Catalog
 from Modules.EventDiscount import EventDiscount
 from Modules.Book import *
 from Modules.UserAccount import *
+from Modules.System import *
 from Modules.settings import *
 from Modules.BranchList import BranchList
 from Modules.Branch import Branch
@@ -13,6 +14,7 @@ from Modules.Rating import Rating
 from Modules.UserAccount import *
 from Modules.Payment import *
 from Modules.dto import *
+from Modules.settings import *
 from CLassDTO import *
 from datetime import datetime
 import datetime
@@ -22,8 +24,14 @@ app = FastAPI()
 
 list_credit_card = []
 list_branch = BranchList()
-User_DB = []
-
+Sys = System()
+class Branchs(BaseModel):
+    branch_name : str
+    open_time : str
+    location : str
+    tel : str
+    line_id : str
+    facebook_id : str
 
 pookan_card = CreditCard("121231232",
                          "15-07-22",
@@ -283,9 +291,25 @@ async def modify_branch(branch : dict):
     rangsit.modify_branch(branch_name, open_time, location, tel, line_id, facebook_id,[],[])
     return rangsit
 
+@app.put("/book/{old_name}")
+async def modify_book(old_name,book:ModifyBookDTO):
+    for i in batalog.list_all_of_book:
+        if old_name == i._name:
+            select_book = i
+    select_book.modify_book(book.cover,book.brief,book.creator,book.name,book.book_info,book.book_publisher,book.book_preview,book.critic_review,
+                          book.table_of_content,book.summary,book.genre,book.date_created,book.price,book.amount_in_stock,)
+    return select_book
+
+async def get_current_active_user(current_user : Customer = Depends(Sys.get_current_user)) :
+	# print(current_user.__dict__)
+	if current_user._disabled :
+		raise HTTPException(status_code=400, detail="Inactive User")
+	return current_user
+
+@app.put("/users/edit")
 @app.put("/users/edit", tags=["user"])
 async def info_verification(email : Optional[str] = None, password : Optional[str] = None, full_name : Optional[str] = None, gender : Optional[str] = None, tel : Optional[str] = None, address : Optional[str] = None,
-				email_noti : Optional[bool] = None, sms_noti : Optional[bool] = None, id : Customer = Depends(Customer.get_current_user)) :
+				email_noti : Optional[bool] = None, sms_noti : Optional[bool] = None, id : Customer = Depends(Sys.get_current_user)) :
 	if (id == None) :
 		return {"Error-101" : "Didn't find any account with this id"}
 	id._email = email or id._email
@@ -303,11 +327,11 @@ async def info_verification(email : Optional[str] = None, password : Optional[st
 
 @app.post("/token", response_model=Token)
 async def login(form_data : OAuth2PasswordRequestForm = Depends()) :
-	user = Customer.authenticate_user(form_data.username, form_data.password)
+	user = Sys.authenticate_user(form_data.username, form_data.password)
 	if not user :
 		raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect Username or Password", headers={"WWW-Authenticate" : "Bearer"})
 	access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTE)
-	access_token = Customer.creat_access_token(data={"sub" : user._email}, expires_delta=access_token_expires)
+	access_token = Sys.creat_access_token(data={"sub" : user._email}, expires_delta=access_token_expires)
 	return {"access_token" : access_token, "token_type" : "bearer"}
 
 @app.get("/users/me")
@@ -315,12 +339,12 @@ async def view_info(userid : Customer = Depends(get_current_active_user)):
 		return (userid)
 
 
-@app.put("/users/registration")
+@app.post("/users/registration")
 async def registration(email : str , password : str, full_name : str, gender : str, tel : str, address : str,
 				email_noti : bool, sms_noti : bool) :
 	input_dict = {}
 	input_dict['_email'] = email
-	input_dict['_password'] = Customer.get_password_hash(password)
+	input_dict['_password'] = Sys.get_password_hash(password)
 	input_dict['_full_name'] = full_name
 	input_dict['_gender'] = gender
 	input_dict['_tel'] = tel
@@ -328,37 +352,4 @@ async def registration(email : str , password : str, full_name : str, gender : s
 	input_dict['__email_notification'] = email_noti
 	input_dict['__sms_notification'] = sms_noti
 
-	User_DB.append(Customer(input_dict["_email"], input_dict["_password"], input_dict["_full_name"], input_dict["_gender"], input_dict["_tel"], input_dict["__email_notification"], input_dict["__sms_notification"], input_dict["_address"]))
-
-
-@app.put("/basket", tags=["user"])
-async def remove_from_basket(data:RemoveBookDTO):
-    book = batalog.find_book_by_name(data.book_name)
-    pookaneiei.remove_book_from_basket(data.index,book)
-    return {"status":"Success"}
-
-@app.post("/search", tags=["books"])
-async def search_book(name:str):
-    event.event_dis(batalog)
-    batalog.search_book(name)
-    return {"searchlist":[{"cover":x._cover,
-                        "name":x._name,
-                        "creator":x._creator,
-                        "old_price":x._price,
-                        "new_price":x._new_price,
-                        "genre":x._genre,
-                        "score":x._rating_score,
-                        "brief":x._brief}
-                       for x in batalog.list_of_book if x._amount_in_stock != 0]}
-    
-@app.put("/books/{bookname}", tags=["books"])
-async def modify_book_to_catalog(bookname, data:ModifyBookDTO):
-    book = batalog.find_book_by_name(bookname)
-    book.modify_book(data)
-    return {"status":"Success"}
-
-@app.delete("/books/{bookname}", tags=["books"])
-async def delete_book(bookname):
-    book = batalog.find_book_by_name(bookname)
-    batalog.remove_book(book)
-    return {"status":"Success"}
+	Sys.User_DB.append(Customer(input_dict["_email"], input_dict["_password"], input_dict["_full_name"], input_dict["_gender"], input_dict["_tel"], input_dict["__email_notification"], input_dict["__sms_notification"], input_dict["_address"]))
