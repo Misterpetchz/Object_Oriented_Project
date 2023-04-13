@@ -68,6 +68,11 @@ pookaneiei = Customer("pookan@gmail.com", "Test1", "pookan", "Male", "0000000000
 
 batalog = Catalog()
 
+# Sys.User_DB.append(Customer(input_dict["_email"], input_dict["_password"], input_dict["_full_name"], input_dict["_gender"], input_dict["_tel"], input_dict["__email_notification"], input_dict["__sms_notification"], input_dict["_address"]))
+# def __init__(self, email, password, full_name, gender, tel, permission):
+Sys.User_DB.append(Admin("test1", "$2b$12$.t3ijxAUbFl1QdYJ4qDAT.AeZ4AmLn78qnM963AI/nl3qsbLn5fxu", "L L", "What", "151515151", []))
+print(Sys.get_password_hash("test1"))
+
 pookantong_book1 = Book(
                        'random.png',
                        'ในคืนที่โหดร้ายพระเอกตายแต่.....',
@@ -237,7 +242,7 @@ async def modify_book(old_name,book:ModifyBookDTO):
                           book.table_of_content,book.summary,book.genre,book.date_created,book.price,book.amount_in_stock,)
     return select_book
 
-async def get_current_active_user(current_user : Customer = Depends(Sys.get_current_user)) :
+async def get_current_active_user(current_user = Depends(Sys.get_current_user)) :
 	# print(current_user.__dict__)
 	if current_user._disabled :
 		raise HTTPException(status_code=400, detail="Inactive User")
@@ -245,21 +250,28 @@ async def get_current_active_user(current_user : Customer = Depends(Sys.get_curr
 
 @app.put("/users/edit")
 async def info_verification(email : Optional[str] = None, password : Optional[str] = None, full_name : Optional[str] = None, gender : Optional[str] = None, tel : Optional[str] = None, address : Optional[str] = None,
-				email_noti : Optional[bool] = None, sms_noti : Optional[bool] = None, id : Customer = Depends(Sys.get_current_user)) :
+				email_noti : Optional[bool] = None, sms_noti : Optional[bool] = None, id = Depends(Sys.get_current_user)) :
 	if (id == None) :
 		return {"Error-101" : "Didn't find any account with this id"}
-	id._email = email or id._email
-	id._password = password or id._password
-	id._full_name = full_name or id._full_name
-	id._gender = gender or id._gender
-	id._tel = tel or id._tel
-	id._address = address or id._address
-	# id._email_notification = email_noti if email_noti != None else id._email_notification
-	# id._sms_notification = sms_noti if sms_noti != None else id._sms_notification
-	if email_noti != None :
-		id.email_notification = email_noti
-	if email_noti != None :
-		id.sms_notification = sms_noti
+	elif (isinstance(id, Customer)) :
+		id._email = email or id._email
+		id._password = password or id._password
+		id._full_name = full_name or id._full_name
+		id._gender = gender or id._gender
+		id._tel = tel or id._tel
+		id._address = address or id._address
+		# id._email_notification = email_noti if email_noti != None else id._email_notification
+		# id._sms_notification = sms_noti if sms_noti != None else id._sms_notification
+		if email_noti != None :
+			id.email_notification = email_noti
+		if email_noti != None :
+			id.sms_notification = sms_noti
+	elif (isinstance(id, Admin)) :
+		id._email = email or id._email
+		id._password = password or id._password
+		id._full_name = full_name or id._full_name
+		id._gender = gender or id._gender
+		id._tel = tel or id._tel
 
 @app.post("/token", response_model=Token)
 async def login(form_data : OAuth2PasswordRequestForm = Depends()) :
@@ -271,7 +283,7 @@ async def login(form_data : OAuth2PasswordRequestForm = Depends()) :
 	return {"access_token" : access_token, "token_type" : "bearer"}
 
 @app.get("/users/me")
-async def view_info(userid : Customer = Depends(get_current_active_user)):
+async def view_info(userid = Depends(get_current_active_user)):
 		return (userid)
 
 
