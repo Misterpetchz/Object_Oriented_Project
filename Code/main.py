@@ -73,9 +73,9 @@ all_branch.add_branch(moon_branch)
 
 
 
-pookaneiei1 = Customer("pookan@gmail.com", "Test1", "pookan", "Male", "0000000000", True, False, "LLL")
+pookaneiei1 = Customer("pookan@gmail.com", Sys.get_password_hash("test1"), "pookan", "Male", "0000000000", True, False, "LLL")
 pookaneiei = Customer('pookantong.p@gmail.com',
-                 'PomyukmeFan555',
+                 Sys.get_password_hash("test2"),
                  'PookanNaja',
                  'Male',
                  '0980231173',
