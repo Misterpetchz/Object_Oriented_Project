@@ -190,12 +190,12 @@ def get_book(name:Optional[str] = ''):
 #################################  MAINPAGE  ####################################        
 @app.get("/")
 async def home(request:Request):
-    event_dis()
+    event.event_dis(batalog)
     return templates.TemplateResponse("index.html", {"request":request,"book_list":batalog.get_all_list()})
 
 @app.get("/search/")
 async def show_book(request:Request,q: str):
-    event_dis()
+    event.event_dis(batalog)
     return templates.TemplateResponse("index.html", {"request":request,"book_list":find_book_in_catalog(q)})
 
 @app.get("/books", tags=["books"])
@@ -248,7 +248,7 @@ async def add_book_to_basket(bookname:str, amount:int, current_user : Customer =
 
 @app.get("/books/{book_name}")
 async def view_book(request:Request,book_name:str):
-    event_dis()
+    event.event_dis(batalog)
     return templates.TemplateResponse("bookdetail.html", {"request":request,"book":get_book(book_name)})
 
 #################################  BASKETPAGE  ####################################  
@@ -264,18 +264,18 @@ async def show_book_rating(bookname):
 
 @app.post("/add_basket")
 async def add_book_to_basket(book:str = Form(...)):
-    event_dis()
+    event.event_dis(batalog)
     book_item = get_book(book)
     pookaneiei.add_book_to_basket(BookItem(book_item),book_item)
     return RedirectResponse(url="/books/"+book, status_code=status.HTTP_302_FOUND)
 @app.post("/add_amount")
 async def add_book_to_basket(book:str = Form(...)):
-    event_dis()
+    event.event_dis(batalog)
     pookaneiei.basket.add_amount(book)
     return RedirectResponse(url="/basket", status_code=status.HTTP_302_FOUND)
 @app.post("/reduce_amount")
 async def add_book_to_basket(book:str = Form(...)):
-    event_dis()
+    event.event_dis(batalog)
     pookaneiei.basket.reduce_amount(book)
     return RedirectResponse(url="/basket", status_code=status.HTTP_302_FOUND)
 
