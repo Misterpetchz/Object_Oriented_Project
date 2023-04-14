@@ -98,12 +98,9 @@ class Customer(UserAccount):
             self.__basket.add_book(book_item)
         book._amount_in_stock -= 1
         self.__basket.price += book_item._price
-        
-    def remove_book_from_basket(self, book_item, book:Book):
-        self.__basket.remove_book(book_item)
+    def remove_book_from_basket(self, index, book:Book):
+        self.__basket.remove_book(index)
         book._amount_in_stock += 1
-        self.__basket.price -= book_item._price
-        
     def make_order(self, order):
         if len(self.__basket.book_item) > 0:
             self.__order_list.append(order)
