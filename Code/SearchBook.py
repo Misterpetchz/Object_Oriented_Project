@@ -7,7 +7,6 @@ pookaneiei = Customer('pookantong.p@gmail.com',
                  'PookanNaja',
                  'Male',
                  '0980231173',
-                 [],
                  '29/7 หมู่2 ตำบลบั้นเด้า อำเภอรถแห่ จังหวัดสก๊อย ประเทศหิวข้าว ดาวSun',
                  True,
                  True
@@ -26,7 +25,6 @@ pookantong_book1 = Book(
                        'พระเอกตาย',
                        ['comedy','adult','intense','violent','drama','romantic','Yuri','Yaoi','School life'],
                        '18/12/29999',
-                       9,
                        999,
                        9)
 pookantong_book2 = Book(
@@ -41,9 +39,8 @@ pookantong_book2 = Book(
                        'critic review',
                        [],
                        'นางเอกตาย',
-                       ['Comedy','Adult','Intense','Violent','Drama','Romantic','Yuri','Yaoi','School life','Shounen']
-                       ,'18/12/29999',
-                       9,
+                       ['Comedy','Adult','Intense','Violent','Drama','Romantic','Yuri','Yaoi','School life','Shounen'],
+                       '18/12/29999',
                        999,
                        9)
 book1 = Book(
@@ -60,7 +57,6 @@ book1 = Book(
                  'เกม EO อัปเดตแพตช์ที่มาพร้อมเมืองใหม่ นั้นคือ เกาะลอยฟ้า',
                  ['fantasy'],
                  '18-Mar-2016',
-                 9,
                  10,
                  9)
 batalog = Catalog()
