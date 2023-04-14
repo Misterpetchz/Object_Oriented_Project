@@ -42,7 +42,19 @@ class BookItem():
         self._book_info = book._book_info
         self._genre = book._genre
         self._date_created = book._date_created
+        self._amount = 1
         self._price = book._new_price
-   
+        
+    def get_amount(self):
+        return self._amount
+    def set_amount(self,new_amount):
+        self._amount = new_amount
+    def get_name(self):
+        return self._name
+    def get_price(self):
+        return self._price
 
+    amount = property(get_amount,set_amount)
+    name = property(get_name)
+    price = property(get_price)
 

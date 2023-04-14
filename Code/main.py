@@ -1,4 +1,8 @@
-from fastapi import BackgroundTasks, FastAPI
+from fastapi import BackgroundTasks, FastAPI, Request ,Form,Response
+from fastapi.responses import HTMLResponse,RedirectResponse
+from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
+from pathlib import Path
 from fastapi.responses import FileResponse, HTMLResponse
 from Modules.Catalog import Catalog
 from Modules.EventDiscount import EventDiscount
@@ -17,10 +21,16 @@ from Modules.dto import *
 from Modules.settings import *
 from CLassDTO import *
 from datetime import datetime
+import random
 import datetime
-import asyncio
+import starlette.status as status
 
 app = FastAPI()
+templates = Jinja2Templates(directory="templates")
+
+app.mount("/static",
+    StaticFiles(directory="static"),
+    name="static")
 
 list_credit_card = []
 list_branch = BranchList()
@@ -91,6 +101,11 @@ Sys.register(pookaneiei1)
 
 batalog = Catalog()
 
+# Sys.User_DB.append(Customer(input_dict["_email"], input_dict["_password"], input_dict["_full_name"], input_dict["_gender"], input_dict["_tel"], input_dict["__email_notification"], input_dict["__sms_notification"], input_dict["_address"]))
+# def __init__(self, email, password, full_name, gender, tel, permission):
+Sys.User_DB.append(Admin("test1", "$2b$12$.t3ijxAUbFl1QdYJ4qDAT.AeZ4AmLn78qnM963AI/nl3qsbLn5fxu", "L L", "What", "151515151", []))
+print(Sys.get_password_hash("test1"))
+
 pookantong_book1 = Book(
                        'random.png',
                        'ในคืนที่โหดร้ายพระเอกตายแต่.....',
@@ -159,6 +174,29 @@ async def get_current_active_user(current_user : Customer = Depends(Sys.get_curr
 
 
 
+def find_book_in_catalog(name:Optional[str] = ''):
+    searched = []
+    if name != '':
+        for i in batalog.list_all_of_book:
+            if name.lower() in i._name.lower():
+                searched.append(i)
+    return searched
+
+def get_book(name:Optional[str] = ''):
+    if name != '':
+        for i in batalog.list_all_of_book:
+            if name.lower() == i._name.lower():
+                return i
+#################################  MAINPAGE  ####################################        
+@app.get("/")
+async def home(request:Request):
+    event_dis()
+    return templates.TemplateResponse("index.html", {"request":request,"book_list":batalog.get_all_list()})
+
+@app.get("/search/")
+async def show_book(request:Request,q: str):
+    event_dis()
+    return templates.TemplateResponse("index.html", {"request":request,"book_list":find_book_in_catalog(q)})
 
 @app.get("/books", tags=["books"])
 async def home():
@@ -208,6 +246,15 @@ async def add_book_to_basket(bookname:str, amount:int, current_user : Customer =
         current_user.add_book_to_basket(BookItem(book),book)
     return {"status":"Success"}
 
+@app.get("/books/{book_name}")
+async def view_book(request:Request,book_name:str):
+    event_dis()
+    return templates.TemplateResponse("bookdetail.html", {"request":request,"book":get_book(book_name)})
+
+#################################  BASKETPAGE  ####################################  
+@app.get("/basket")
+async def basket(request:Request):
+    return templates.TemplateResponse("cart.html", {"request":request,"basket_list":pookaneiei.basket})
 @app.get("/books/{bookname}/rating", tags=["books"])
 async def show_book_rating(bookname):
     book = batalog.find_book_by_name(bookname)
@@ -215,6 +262,32 @@ async def show_book_rating(bookname):
             "rating":[{"score_each_rating":x._book_rating,
                        "comment":x._book_comment} for x in book._rating]}
 
+@app.post("/add_basket")
+async def add_book_to_basket(book:str = Form(...)):
+    event_dis()
+    book_item = get_book(book)
+    pookaneiei.add_book_to_basket(BookItem(book_item),book_item)
+    return RedirectResponse(url="/books/"+book, status_code=status.HTTP_302_FOUND)
+@app.post("/add_amount")
+async def add_book_to_basket(book:str = Form(...)):
+    event_dis()
+    pookaneiei.basket.add_amount(book)
+    return RedirectResponse(url="/basket", status_code=status.HTTP_302_FOUND)
+@app.post("/reduce_amount")
+async def add_book_to_basket(book:str = Form(...)):
+    event_dis()
+    pookaneiei.basket.reduce_amount(book)
+    return RedirectResponse(url="/basket", status_code=status.HTTP_302_FOUND)
+
+#################################  ORDERPAGE  ####################################
+@app.get("/order")
+async def make_order(request:Request):
+    order = Order(pookaneiei.basket.book_item,
+                        random.randint(1000,9999),
+                        False,
+                        pookaneiei.basket.price,
+                        pookaneiei)
+    return templates.TemplateResponse("order.html", {"request":request,"order_list":order})
 @app.post("/books/{bookname}/addrating", tags=["books"])
 async def add_rating(bookname, data:AddRatingDTO):
     book:Book = batalog.find_book_by_name(bookname)
@@ -251,25 +324,11 @@ async def add_branch_to_branch_list(data:AddBranchDTO):
                 data.facebook_id))
     return {"status":"Success"}
 
-@app.get("/basket", tags=["user"])
-async def show_basket(current_user : Customer = Depends(Sys.get_current_user)):
-    return {"basket":[{"cover":x._cover,
-                        "name":x._name,
-                        "price":x._price,
-                        "genre":x._genre
-                        }
-                       for x in current_user.basket.book_item]}
-@app.get("/make_order", tags=["user"])
-async def make_order(current_user : Customer = Depends(Sys.get_current_user)):
-    current_user.make_order(Order(current_user.basket.book_item,
-                                current_user.order_id,
-                                True,
-                                current_user.basket.price,
-                                current_user._full_name))
-    current_user.basket.book_item = []
-    return {"status":"Success"}
+@app.get("/")
+async def home():
+    return {"Welcome to BookShop"}
 
-@app.post("/creditcard/", tags=["user"])
+@app.post("/CreditCard/")
 async def add_credit_card(credit_card : CreditCards):
     list_credit_card.append(CreditCard(credit_card.card_num, credit_card.expire_date, credit_card.cvc))
     return list_credit_card
@@ -292,7 +351,7 @@ async def modify_branch(branch : dict):
     rangsit.modify_branch(branch_name, open_time, location, tel, line_id, facebook_id,[],[])
     return rangsit
 
-async def get_current_active_user(current_user : Customer = Depends(Sys.get_current_user)) :
+async def get_current_active_user(current_user = Depends(Sys.get_current_user)) :
 	# print(current_user.__dict__)
 	if current_user._disabled :
 		raise HTTPException(status_code=400, detail="Inactive User")
@@ -300,21 +359,28 @@ async def get_current_active_user(current_user : Customer = Depends(Sys.get_curr
 
 @app.put("/users/edit", tags=["user"])
 async def info_verification(email : Optional[str] = None, password : Optional[str] = None, full_name : Optional[str] = None, gender : Optional[str] = None, tel : Optional[str] = None, address : Optional[str] = None,
-				email_noti : Optional[bool] = None, sms_noti : Optional[bool] = None, id : Customer = Depends(Sys.get_current_user)) :
+				email_noti : Optional[bool] = None, sms_noti : Optional[bool] = None, id = Depends(Sys.get_current_user)) :
 	if (id == None) :
 		return {"Error-101" : "Didn't find any account with this id"}
-	id._email = email or id._email
-	id._password = password or id._password
-	id._full_name = full_name or id._full_name
-	id._gender = gender or id._gender
-	id._tel = tel or id._tel
-	id._address = address or id._address
-	# id._email_notification = email_noti if email_noti != None else id._email_notification
-	# id._sms_notification = sms_noti if sms_noti != None else id._sms_notification
-	if email_noti != None :
-		id.email_notification = email_noti
-	if email_noti != None :
-		id.sms_notification = sms_noti
+	elif (isinstance(id, Customer)) :
+		id._email = email or id._email
+		id._password = password or id._password
+		id._full_name = full_name or id._full_name
+		id._gender = gender or id._gender
+		id._tel = tel or id._tel
+		id._address = address or id._address
+		# id._email_notification = email_noti if email_noti != None else id._email_notification
+		# id._sms_notification = sms_noti if sms_noti != None else id._sms_notification
+		if email_noti != None :
+			id.email_notification = email_noti
+		if email_noti != None :
+			id.sms_notification = sms_noti
+	elif (isinstance(id, Admin)) :
+		id._email = email or id._email
+		id._password = password or id._password
+		id._full_name = full_name or id._full_name
+		id._gender = gender or id._gender
+		id._tel = tel or id._tel
 
 @app.post("/token", response_model=Token)
 async def login(form_data : OAuth2PasswordRequestForm = Depends()) :
@@ -326,7 +392,7 @@ async def login(form_data : OAuth2PasswordRequestForm = Depends()) :
 	return {"access_token" : access_token, "token_type" : "bearer"}
 
 @app.get("/users/me")
-async def view_info(userid : Customer = Depends(get_current_active_user)):
+async def view_info(userid = Depends(get_current_active_user)):
 		return (userid)
 
 
