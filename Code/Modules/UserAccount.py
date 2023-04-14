@@ -59,11 +59,12 @@ class Customer(UserAccount):
     def __init__(self, email, password, fullname, gender, tel, email_noti, sms_noti, address):
         super().__init__(email, password, fullname, gender, tel)
         self._address = address
-        self.__email_notification = email_noti
-        self.__sms_notification = sms_noti
+        self.__email_notification = email_noti #bool
+        self.__sms_notification = sms_noti #bool
         self.__basket = Basket()
         self._disabled = False
         self.__order_list = []
+        self.__credit_card = CreditCard()
 
     def search_book(self, search_string, catalog:Catalog):
         lists=[]
