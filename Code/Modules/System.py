@@ -43,8 +43,7 @@ class System :
 
     def register(self, customer):
         self.User_DB.append(customer)
-
-
+        
     async def get_current_user(self, token : str = Depends(OAUTH2_SCHEME)) :
         credential_exception = HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Could not validate your credentials", headers={"WWW-Authenticate" : "Bearer"})
         try :

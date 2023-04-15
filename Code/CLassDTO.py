@@ -3,7 +3,7 @@ class AddBooktoBasketDTO(BaseModel):
     amount:int
 
 class AddBookDTO(BaseModel):
-    cover:str 
+    cover:str
     brief:str
     creator:str
     name:str
@@ -30,6 +30,7 @@ class AddBranchDTO(BaseModel):
 class MakeOrderDto(BaseModel):
     status : bool
     
+    
 class RemoveBookDTO(BaseModel):
     index:int
     book_name:str
@@ -48,23 +49,7 @@ class Branchs(BaseModel):
     tel : str
     line_id : str
     facebook_id : str
-    
 
-class ModifyBookDTO(BaseModel):
-        cover :str
-        brief : str
-        creator : str
-        name : str
-        book_info :str
-        book_publisher : str
-        book_preview : str
-        critic_review : str
-        table_of_content : str
-        summary : str
-        genre : str
-        date_created : str
-        price : str
-        amount_in_stock : str
 class ModifyBookDTO(BaseModel):
     cover:str|None
     brief:str|None

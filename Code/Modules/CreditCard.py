@@ -1,5 +1,6 @@
+from typing import Optional
 class CreditCard:
-    def __init__(self, card_num, expire_date, cvc):
+    def __init__(self, card_num:int = None, expire_date:int = None, cvc:int = None):
         self.__card_num = card_num
         self.__expire_date = expire_date
         self.__cvc = cvc

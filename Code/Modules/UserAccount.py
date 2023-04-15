@@ -59,11 +59,12 @@ class Customer(UserAccount):
     def __init__(self, email, password, fullname, gender, tel, email_noti, sms_noti, address):
         super().__init__(email, password, fullname, gender, tel)
         self._address = address
-        self.__email_notification = email_noti
-        self.__sms_notification = sms_noti
+        self.__email_notification = email_noti #bool
+        self.__sms_notification = sms_noti #bool
         self.__basket = Basket()
         self._disabled = False
         self.__order_list = []
+        self.__credit_card = CreditCard()
 
     def search_book(self, search_string, catalog:Catalog):
         lists=[]
@@ -98,9 +99,29 @@ class Customer(UserAccount):
             self.__basket.add_book(book_item)
         book._amount_in_stock -= 1
         self.__basket.price += book_item._price
-    def remove_book_from_basket(self, index, book:Book):
-        self.__basket.remove_book(index)
+        
+    def reduce_amount(self,book_item,book:Book):
+        for item in self.basket.book_item:
+            if book_item == item.name:
+                item.amount = item.amount-1
+                book._amount_in_stock +=1
+                self.basket.price -= item.price
+                if item.amount == 0:
+                    self.basket.book_item.remove(item)
+                    
+    def add_amount(self,book_item,book:Book):
+        for item in self.basket.book_item:
+            if book_item == item.name:
+                item.amount = item.amount+1
+                book._amount_in_stock -=1
+                self.basket.price += item.price
+                    
+        
+    def remove_book_from_basket(self, book_item, book:Book):
+        self.__basket.remove_book(book_item)
         book._amount_in_stock += 1
+        self.__basket.price -= book_item._price
+        
     def make_order(self, order):
         if len(self.__basket.book_item) > 0:
             self.__order_list.append(order)

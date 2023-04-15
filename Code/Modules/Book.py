@@ -15,7 +15,6 @@ class Book :
         self._genre = genre
         self._date_created = date_created
         self._rating = []
-        self._rating = []
         self._price = price
         self._amount_in_stock = amount
         self._new_price = price
@@ -27,13 +26,37 @@ class Book :
     def add_rating(self, rating:Rating):
         self._rating.append(rating)
         self._rating_score = sum([x._book_rating for x in self._rating])/len(self._rating)
-        
-    
-        
-#class BookItem():
-   # def __init__(self, cover, creator, name, book_info, genre, date_created, price):
-        
-
+         
+    def modify_book(self,cover, brief, creator, name, book_info, book_publisher, book_preview, 
+                 critic_review, table_of_content, summary, genre, date_created, price, amount):
+        if isinstance(cover,str):
+            self._cover = cover
+        if isinstance(brief,str):
+            self._brief = brief
+        if isinstance(creator,str):
+            self._creator = creator
+        if isinstance(name,str):
+            self._name = name
+        if isinstance(book_info,str):
+            self._book_info = book_info
+        if isinstance(book_publisher,str):
+            self._book_publisher = book_publisher
+        if isinstance(book_preview,str):
+            self._book_preview = book_preview
+        if isinstance(critic_review,str):
+            self._critic_review = critic_review
+        if isinstance(table_of_content,str):
+            self._table_of_content = table_of_content
+        if isinstance(summary,str):
+            self._summary = summary
+        if isinstance(genre,str):
+            self._genre = genre
+        if isinstance(date_created,str):
+            self._date_created = date_created
+        if isinstance(price,int):
+            self._price = price
+        if isinstance(amount,int):
+            self.amount = amount
 class BookItem():
     def __init__(self, book):
         self._cover = book._cover
