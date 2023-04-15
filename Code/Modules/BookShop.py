@@ -32,8 +32,10 @@ class BookShop():
     def add_branch(self, branch:Branch):
         self.__list_of_branch.append(branch)
     
-    def delete_branch(self, branch:Branch):
-        self.__list_of_branch.remove(branch)
+    def delete_branch(self, branch_name:str):
+        for element in self.__list_of_branch:
+            if branch_name == element._branch_name:
+                self.__list_of_branch.remove(element)
 
     def select_branch(self, branch_name):
         for element in self.__list_of_branch:

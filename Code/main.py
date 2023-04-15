@@ -97,10 +97,9 @@ moon_branch = Branch('Moon',
                      'bookshop.moon',
                      'moon_bookshop'
                      )
-all_branch.add_branch(bangkok)
-all_branch.add_branch(nonthaburi1)
-all_branch.add_branch(rangsit)
-all_branch.add_branch(moon_branch)
+shop.add_branch(bangkok)
+shop.add_branch(rangsit)
+shop.add_branch(moon_branch)
 
 
 
@@ -162,7 +161,7 @@ batalog.add_book(pookantong_book1)
 batalog.add_book(pookantong_book2)
 nonthaburi1.add_product(pookantong_book1)
 nonthaburi1.add_product(pookantong_book2)
-bangkok.add_product(pookantong_book1)
+# bangkok.add_product(pookantong_book1)
 moon_branch.add_product(pookantong_book2)
 rangsit.add_product(pookantong_book1)
 rangsit.add_product(pookantong_book2)
@@ -193,8 +192,8 @@ async def get_current_active_user(current_user : Customer = Depends(Sys.get_curr
 		raise HTTPException(status_code=400, detail="Inactive User")
 	return current_user
 
-event = EventDiscount("dan",datetime.date(2023, 3, 31), datetime.date(2023, 4, 30), 0.9)
-event.add_book_to_event(pookantong_book1)
+# event = EventDiscount("dan",datetime.date(2023, 3, 31), datetime.date(2023, 4, 30), 0.9)
+# event.add_book_to_event(pookantong_book1)
 bangkok = Branch("Bangkok",
                  "6.00 - 22.00",
                  "Bangkok",
@@ -301,15 +300,52 @@ async def show_book_rating(bookname):
             "rating":[{"score_each_rating":x._book_rating,
                        "comment":x._book_comment} for x in book._rating]}
 
-#################################  BRANCH PAGE  #################################### 
+#################################  BRANCH PAGE  ####################################
+@app.get("/branch/")
+async def show_branch(request:Request):
+    return templates.TemplateResponse("search_branch.html", {"request": request, "branch_list": shop.list_of_branch})
+                       
 @app.get("/branch/search/")
 async def search_branch(request:Request, book_name:str):
-    return templates.TemplateResponse("branch.html", {"request": request, "branch_list": shop.search_available_branch(book_name)})
+    return templates.TemplateResponse("search_branch.html", {"request": request, "branch_list": shop.search_available_branch(book_name)})
 
-#################################  BRANCH PAGE  #################################### 
-@app.get("/branch/search/")
-async def search_branch(request:Request, book_name:str):
-    return templates.TemplateResponse("branch.html", {"request": request, "branch_list": shop.search_available_branch(book_name)})
+@app.get("/branches/")
+async def show_branch(request:Request):
+     return templates.TemplateResponse("branch.html", {"request": request, "branch_list": shop.list_of_branch})
+
+@app.post("/branches/add/")
+async def add_branch(branch_name: str = Form(...),
+                     open_time: str = Form(...),
+                     location: str = Form(...),
+                     tel: str = Form(...),
+                     line_id: str = Form(...),
+                     facebook_id: str = Form(...)):
+    shop.add_branch(Branch(branch_name,
+                open_time,
+                location,
+                tel,
+                line_id,
+                facebook_id))
+    return RedirectResponse(url="/branches/", status_code=status.HTTP_302_FOUND)
+
+# PUT
+@app.post("/branches/modify/")
+async def modify_branch(name: str = Form(...),
+                        branch_name: str = Form(...),
+                        open_time: str = Form(...),
+                        location: str = Form(...),
+                        tel: str = Form(...),
+                        line_id: str = Form(...),
+                        facebook_id: str = Form(...)):
+    select_branch = shop.select_branch(name)
+    select_branch.modify_branch(branch_name, open_time, location, tel, line_id, facebook_id,[],[])
+    return RedirectResponse(url="/branches/", status_code=status.HTTP_302_FOUND)
+
+# DELETE
+@app.post("/branches/delete/")
+async def delete_branch(branch_name : str = Form(...)):
+    shop.delete_branch(branch_name)
+    return RedirectResponse(url="/branches/", status_code=status.HTTP_302_FOUND)
 
 @app.post("/add_basket")
 async def add_book_to_basket(book:str = Form(...)):
@@ -378,26 +414,26 @@ async def home():
     return {"Welcome to BookShop"}
 
 
-@app.get("/GetCreditCard/")
+@app.get("/GetCreditCard/", tags=["credit_card"])
 async def get_credit_card(current_user = Depends(Sys.get_current_user)):
     return current_user.credit_card
 
-@app.post("/AddCreditCard/")
+@app.post("/AddCreditCard/", tags=["credit_card"])
 async def add_credit_card(credit_card : CreditCardDTO, current_user = Depends(Sys.get_current_user)):
     current_user.add_credit_card(CreditCard(credit_card.card_num, credit_card.expire_date, credit_card.cvc))
     return {"Add CreditCard Success"}
 
 # edit this
-@app.put("/ModifyCreditCard/")
+@app.put("/ModifyCreditCard/", tags=["credit_card"])
 async def modify_credit_card(credit_card : CreditCardDTO, current_user = Depends(Sys.get_current_user)):
     current_user.credit_card.modify_credit_card_info(credit_card.card_num, credit_card.expire_date, credit_card.cvc)
     return {"Modify Success"}
 
-@app.get("/GetAllBranch/")
+@app.get("/GetAllBranch/", tags=["branch"])
 async def get_branch():
     return shop.list_of_branch
 
-@app.post("/AddBookToBranch/{branch_name}")
+@app.post("/AddBookToBranch/{branch_name}", tags=["branch"])
 async def add_book_to_stock(branch_name, data:AddBookDTO):
     select_branch = shop.select_branch(branch_name)
     select_branch.add_book_to_stock(Book(
@@ -413,7 +449,6 @@ async def add_book_to_stock(branch_name, data:AddBookDTO):
                         data.summary,
                         data.genre,
                         data.date_created,
-                        data.rating,
                         data.price,
                         data.amount))
     return {"Add to stock Success"}
@@ -428,7 +463,7 @@ async def add_branch(data:AddBranchDTO):
                 data.facebook_id))
     return {"Add Branch Success"}
 
-@app.put("/ModifyBranch/{branch_name}")
+@app.put("/ModifyBranch/{branch_name}", tags=["branch"])
 async def modify_branch(data : ModifyBranchDTO, branch_name):
     select_branch = shop.select_branch(branch_name)
     select_branch.modify_branch(data.branch_name, 
@@ -441,17 +476,17 @@ async def modify_branch(data : ModifyBranchDTO, branch_name):
                                 data.remove_book)
     return {"Modify Success"}
 
-@app.delete("/RemoveBranch/{branch_name}")
+@app.delete("/RemoveBranch/{branch_name}", tags=["branch"])
 async def remove_branch(branch_name):
     select_branch = shop.select_branch(branch_name)
     shop.delete_branch(select_branch)
     return {"Remove Branch Success"}
 
-@app.get("/GetAllEvent/")
+@app.get("/GetAllEvent/", tags=["event"])
 async def get_event():
     return shop.list_of_event
 
-@app.post("/AddEvent/")
+@app.post("/AddEvent/", tags=["event"])
 async def add_event(data : EventDTO):
     shop.list_of_event(EventDiscount(data.event_name, 
                                     data.event_start, 
@@ -460,7 +495,7 @@ async def add_event(data : EventDTO):
     return {"Add Event Success"}
 
 # we dont place to collect class bookshop
-@app.put("/ModifyEvent/{event_name}")
+@app.put("/ModifyEvent/{event_name}", tags=["event"])
 async def modify_event(data : ModifyEventDTO, event_name):
     # loop check in bigger class
     select_event = shop.select_event(event_name)
@@ -470,7 +505,7 @@ async def modify_event(data : ModifyEventDTO, event_name):
                               data.discounted_percentage)
     return {"Modify Success"}
 
-@app.delete("/RemoveEvent/{event_name}")
+@app.delete("/RemoveEvent/{event_name}", tags=["event"])
 async def delete_event(event_name):
     select_event = shop.select_event(event_name)
     shop.list_of_event.delete_event(select_event)
