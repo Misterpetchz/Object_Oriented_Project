@@ -22,6 +22,12 @@ class Book :
     
     def __repr__(self) -> str:
         return self._name
+    
+    def get_amount_in_stock(self):
+        return self._amount_in_stock
+    
+    def set_amount_in_stock(self,new_amount):
+        self._amount_in_stock = new_amount
         
     def add_rating(self, rating:Rating):
         self._rating.append(rating)
@@ -57,6 +63,8 @@ class Book :
             self._price = price
         if isinstance(amount,int):
             self.amount = amount
+        
+    stock_amount = property(get_amount_in_stock,set_amount_in_stock)
 class BookItem():
     def __init__(self, book):
         self._cover = book._cover

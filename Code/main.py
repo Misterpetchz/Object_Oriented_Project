@@ -215,7 +215,7 @@ async def add_book_to_basket(book: str = Form(...)):
 @app.post("/add_amount")
 async def add_book_to_basket(book_item: str = Form(...)):
     event.event_dis(batalog)
-    book = batalog.find_book_by_name(book)
+    book = batalog.find_book_by_name(book_item)
     pookaneiei.add_amount(book_item, book)
     return RedirectResponse(url="/basket", status_code=status.HTTP_302_FOUND)
 
