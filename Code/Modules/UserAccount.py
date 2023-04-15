@@ -91,14 +91,15 @@ class Customer(UserAccount):
         pass
     def add_book_to_basket(self, book_item, book:Book):
         self.in_basket = False
-        for i in self.__basket.get_book():
-            if i.name.lower() == book_item.name.lower():
-                i.amount = i.amount + 1
-                self.in_basket = True
-        if self.in_basket == False:
-            self.__basket.add_book(book_item)
-        book._amount_in_stock -= 1
-        self.__basket.price += book_item._price
+        if book.stock_amount > 0:
+            for i in self.__basket.get_book():
+                if i.name.lower() == book_item.name.lower():
+                    i.amount = i.amount + 1
+                    self.in_basket = True
+            if self.in_basket == False:
+                self.__basket.add_book(book_item)
+            book.stock_amount -= 1
+            self.__basket.price += book_item._price
         
     def reduce_amount(self,book_item,book:Book):
         for item in self.basket.book_item:
@@ -110,11 +111,12 @@ class Customer(UserAccount):
                     self.basket.book_item.remove(item)
                     
     def add_amount(self,book_item,book:Book):
-        for item in self.basket.book_item:
-            if book_item == item.name:
-                item.amount = item.amount+1
-                book._amount_in_stock -=1
-                self.basket.price += item.price
+        if book.stock_amount > 0:
+            for item in self.basket.book_item:
+                if book_item == item.name:
+                    item.amount = item.amount+1
+                    book.stock_amount -=1
+                    self.basket.price += item.price
                     
         
     def remove_book_from_basket(self, book_item, book:Book):
