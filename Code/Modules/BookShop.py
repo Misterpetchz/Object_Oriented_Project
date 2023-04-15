@@ -1,5 +1,6 @@
 from Modules.Branch import Branch
 from Modules.EventDiscount import EventDiscount
+from Modules.Book import Book
 class BookShop():
     def __init__(self):
         self.__list_of_branch = []
@@ -46,11 +47,11 @@ class BookShop():
                 self.select_branch = element
                 return self.select_branch
     
-    def search_available_branch(self, book):
+    def search_available_branch(self, book_name):
         self.__available = []
         for element in self.__list_of_branch:
             for elements in element._product_in_stock:
-                if elements == book:
+                if book_name == elements._name :
                     self.__available.append(element)
         return self.__available
     

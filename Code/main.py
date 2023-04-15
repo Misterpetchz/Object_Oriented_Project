@@ -166,6 +166,11 @@ async def view_book(request:Request,book_name:str):
 async def basket(request:Request):
     return templates.TemplateResponse("cart.html", {"request":request,"basket_list":pookaneiei.basket})
 
+#################################  BRANCH PAGE  #################################### 
+@app.get("/branch/search/")
+async def search_branch(request:Request, book_name:str):
+    return templates.TemplateResponse("branch.html", {"request": request, "branch_list": shop.search_available_branch(book_name)})
+
 @app.post("/add_basket")
 async def add_book_to_basket(book:str = Form(...)):
     event_dis()
@@ -196,22 +201,22 @@ async def make_order(request:Request):
 @app.post("/addbook")
 async def add_book(data:AddBookDTO):
     batalog.add_book(Book(
-            data.cover,
-            data.brief,
-            data.creator,
-            data.name,
-            data.book_info,
-            data.book_publisher,
-            data.book_preview,
-            data.critic_review,
-            data.table_of_content,
-            data.summary,
-            data.genre,
-            data.date_created,
-            data.rating,
-            data.price,
-            data.amount)
-    )
+                        data.cover,
+                        data.brief,
+                        data.creator,
+                        data.name,
+                        data.book_info,
+                        data.book_publisher,
+                        data.book_preview,
+                        data.critic_review,
+                        data.table_of_content,
+                        data.summary,
+                        data.genre,
+                        data.date_created,
+                        data.rating,
+                        data.price,
+                        data.amount)
+                )
     return batalog.list_all_of_book
 
 @app.post("/addbranch")
@@ -260,6 +265,27 @@ async def modify_credit_card(credit_card : CreditCardDTO, current_user = Depends
 @app.get("/GetAllBranch/")
 async def get_branch():
     return shop.list_of_branch
+
+@app.post("/AddBookToBranch/{branch_name}")
+async def add_book_to_stock(branch_name, data:AddBookDTO):
+    select_branch = shop.select_branch(branch_name)
+    select_branch.add_book_to_stock(Book(
+                        data.cover,
+                        data.brief,
+                        data.creator,
+                        data.name,
+                        data.book_info,
+                        data.book_publisher,
+                        data.book_preview,
+                        data.critic_review,
+                        data.table_of_content,
+                        data.summary,
+                        data.genre,
+                        data.date_created,
+                        data.rating,
+                        data.price,
+                        data.amount))
+    return {"Add to stock Success"}
 
 @app.post("/AddBranch")
 async def add_branch(data:AddBranchDTO):
