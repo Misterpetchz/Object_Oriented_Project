@@ -29,6 +29,7 @@
     <p>{{book._date_created}}<br></p>
     <del>{{book._price}}<br></del>
     <p>{{book._new_price}}<br></p>
+    <p>{{book._amount_in_stock}}<br></p>
     <form method="post" action="/add_basket">
       <input type="hidden" name="book" value={{book._name}}>
       <button type="submit"><i class="fa fa-shopping-cart"></i></button>

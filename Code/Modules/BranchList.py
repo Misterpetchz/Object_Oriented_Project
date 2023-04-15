@@ -17,11 +17,12 @@ class BranchList():
                 return self.select_branch
             
     def search_available_branch(self, book):
-        self.__available = []
+        self.__available = [] #???? who the fuck??
         for element in self.__list_of_branch:
-            for elements in element._product_in_stock:
-                if elements == book:
+            for product in element._product_in_stock:
+                if product == book:
                     self.__available.append(element)
+        return self.__available
     
     def get_list(self):
         return self.__list_of_branch

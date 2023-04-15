@@ -100,6 +100,23 @@ class Customer(UserAccount):
         book._amount_in_stock -= 1
         self.__basket.price += book_item._price
         
+    def reduce_amount(self,book_item,book:Book):
+        for item in self.basket.book_item:
+            if book_item == item.name:
+                item.amount = item.amount-1
+                book._amount_in_stock +=1
+                self.basket.price -= item.price
+                if item.amount == 0:
+                    self.basket.book_item.remove(item)
+                    
+    def add_amount(self,book_item,book:Book):
+        for item in self.basket.book_item:
+            if book_item == item.name:
+                item.amount = item.amount+1
+                book._amount_in_stock -=1
+                self.basket.price += item.price
+                    
+        
     def remove_book_from_basket(self, book_item, book:Book):
         self.__basket.remove_book(book_item)
         book._amount_in_stock += 1

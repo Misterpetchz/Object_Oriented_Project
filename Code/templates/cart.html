@@ -24,11 +24,11 @@
       <p>{{book._price * book.amount}}<br></p>
       <p>{{book.amount}}<br></p>
       <form method="post" action="/reduce_amount">
-        <input type="hidden" name="book" value={{book.name}}>
+        <input type="hidden" name="book_item" value={{book.name}}>
         <button type="submit"><i class="fas fa-minus"></i></button>
       </form>
       <form method="post" action="/add_amount">
-        <input type="hidden" name="book" value={{book.name}}>
+        <input type="hidden" name="book_item" value={{book.name}}>
         <button type="submit"><i class="fas fa-plus"></i></button>
       </form>
     </div>
