@@ -1,8 +1,4 @@
-from fastapi import BackgroundTasks, FastAPI, Request, Form, Response
-from fastapi.responses import FileResponse, HTMLResponse, RedirectResponse
-from fastapi.templating import Jinja2Templates
-from fastapi.staticfiles import StaticFiles
-from pathlib import Path
+from fastapi import FastAPI
 from Modules.Catalog import Catalog
 from Modules.EventDiscount import EventDiscount
 from Modules.Book import *
@@ -22,9 +18,26 @@ from datetime import datetime
 import random
 import datetime
 import starlette.status as status
+from fastapi.middleware.cors import CORSMiddleware
 
 
 app = FastAPI()
+
+origins = {
+    "http://localhost",
+    "http://localhost:5173",
+}
+
+app.add_middleware(
+   CORSMiddleware,
+    allow_origins = origins,
+    allow_credentials =True,
+    allow_methods = ["*"],
+    allow_headers= ["*"],
+)
+
+
+
 Sys = System()
 
 
@@ -228,7 +241,7 @@ async def make_order(current_user : Customer = Depends(Sys.get_current_user)):
 
 
 @app.post("/books/{bookname}/addrating", tags=["books"])
-async def add_rating(bookname, data: AddRatingDTO):
+async def add_rating(bookname, data: AddRatingDTO, current_user : Customer = Depends(Sys.get_current_user)):
     book: Book = batalog.find_book_by_name(bookname)
     book.add_rating(Rating(data.score, data.comment))
     return {"status": "Success"}
