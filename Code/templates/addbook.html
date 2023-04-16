@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Branch</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+  <h1 class="body-head">all book</h1>
+  {%for book in list_book%}
+  <div class="body-item">
+      <a href="/book/{{book._name}}">{{book._name}}</a>
+  </div>
+  {% endfor %}
+    <h1 class="body-head">Add book page is working</h1>
+    <div>
+      <form class="body-search" id="search-form" action="/book/add/" method="post">
+        <input type="text" id="search-input" name="cover" placeholder="cover"><br>
+        <input type="text" id="search-input" name="brief" minlength="1" maxlength="10" placeholder="brief"><br>
+        <input type="text" id="search-input" name="creator" minlength="1" maxlength="50" placeholder="creator"><br>
+        <input type="text" id="search-input" name="name" minlength="1" maxlength="20" placeholder="name"><br>
+        <input type="text" id="search-input" name="book_info" minlength="1" maxlength="20" placeholder="book_info"><br>
+        <input type="text" id="search-input" name="book_publisher" minlength="1" maxlength="20" placeholder="book publisher"><br>
+        <input type="text" id="search-input" name="book_preview" minlength="1" maxlength="20" placeholder="book preview"><br>
+        <input type="text" id="search-input" name="critic_review" minlength="1" maxlength="20" placeholder="critic_review"><br>
+        <input type="text" id="search-input" name="table_of_content" minlength="1" maxlength="20" placeholder="table_of_content"><br>
+        <input type="text" id="search-input" name="summary" minlength="1" maxlength="20" placeholder="summary"><br>
+        <input type="text" id="search-input" name="genre" minlength="1" maxlength="20" placeholder="genre"><br>
+        <input type="text" id="search-input" name="date_created" minlength="1" maxlength="20" placeholder="date_created"><br>
+        <input type="text" id="search-input" name="price"  placeholder="price"><br>
+        <input type="text" id="search-input" name="amount" placeholder="amount">
+        <button type="submit">add book</button>
+      </form>
+    </div>
+    <nav>
+        <ul>
+          <li>
+            <a href="/">
+              <i class="fas fa-home"></i>
+              <span class="nav-item">Home</span>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <i class="fas fa-user"></i>
+              <span class="nav-item">User</span>
+            </a>
+          </li>
+          <li>
+            <a href="/basket">
+              <i class="fas fa-cart-arrow-down"></i>
+              <span class="nav-item">Cart</span>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <i class="fas fa-sign-out-alt"></i>
+              <span class="nav-item">User</span>
+            </a>
+          </li>
+        </ul>
+      </nav> 
+</html>

@@ -274,6 +274,41 @@ async def show_book(bookname:str,branch_available:bool | None = None):
             "score":book._rating_score,
             "brief":book._brief}
 
+@app.get("/book/")
+async def show_book_catalog(request:Request):
+    return templates.TemplateResponse("addbook.html",{"request": request, "list_book": batalog.list_all_of_book})
+
+@app.post("/book/add")
+async def add_book_to_catalog(cover:str = Form(...),
+                              brief:str = Form(...),
+                              creator:str = Form(...),
+                              name:str = Form(...),
+                              book_info:str = Form(...),
+                              book_publisher:str = Form(...),
+                              book_preview:str = Form(...),
+                              critic_review:str = Form(...),
+                              table_of_content:str = Form(...),
+                              summary:str = Form(...),
+                              genre:str = Form(...),
+                              date_created:str = Form(...),
+                              price:int = Form(...),
+                              amount:int = Form(...)):
+    batalog.add_book(Book(cover,
+                          brief,
+                          creator,
+                          name,
+                          book_info,
+                          book_publisher,
+                          book_preview,
+                          critic_review,
+                          table_of_content,
+                          summary,
+                          genre,
+                          date_created,
+                          price,
+                          amount))
+    return RedirectResponse(url="/book/",status_code=status.HTTP_302_FOUND)
+
 @app.post("/books/{bookname}/add_book_to_basket", tags=["user"])
 async def add_book_to_basket(bookname:str, amount:int, current_user : Customer = Depends(Sys.get_current_user)):
     event.event_dis(batalog)
