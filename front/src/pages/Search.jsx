@@ -44,7 +44,6 @@ export default function Searchs() {
                     {search_list.map((item) => (
                         <li>
                             <div>
-                                <li>
                                     <span>{item.name} </span>
                                     <span>{item.creator} </span>
                                     <span>{item.old_price} </span>
@@ -54,7 +53,6 @@ export default function Searchs() {
                                     ))} </span>
                                     <span>{item.score} </span>
                                     <span>{item.brie} </span>
-                                </li>
                             </div>
                         </li>
                     ))}
