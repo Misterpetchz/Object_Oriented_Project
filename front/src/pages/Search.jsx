@@ -60,8 +60,6 @@ export default function Searchs() {
                     ))}
                 </ul>
             </div>
-
-
           </div>
         </div>
       );

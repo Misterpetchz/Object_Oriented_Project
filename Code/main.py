@@ -364,21 +364,26 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
 
 @app.get("/users/me", tags=["user"])
 async def view_info(userid=Depends(Sys.get_current_user)):
-	return userid
+	return {"address" : userid._address,
+            "email ": userid._email,
+            "full_name" : userid._full_name,
+            "gender": userid._gender,
+            "tel": userid._tel, 
+    }
 
 @app.post("/users/registration", tags=["user"])
-async def registration(email : str , password : str, full_name : str, gender : str, tel : str, address : str,
-				email_noti : bool, sms_noti : bool):
+async def registration(data:RegisterDTO):
     input_dict = {}
-    input_dict['_email'] = email
-    input_dict['_password'] = Sys.get_password_hash(password)
-    input_dict['_full_name'] = full_name
-    input_dict['_gender'] = gender
-    input_dict['_tel'] = tel
-    input_dict['_address'] = address
-    input_dict['__email_notification'] = email_noti
-    input_dict['__sms_notification'] = sms_noti
+    input_dict['_email'] = data.email
+    input_dict['_password'] = Sys.get_password_hash(data.password)
+    input_dict['_full_name'] = data.full_name
+    input_dict['_gender'] = data.gender
+    input_dict['_tel'] = data.tel
+    input_dict['_address'] = data.address
+    input_dict['__email_notification'] = data.email_noti
+    input_dict['__sms_notification'] = data.sms_noti
     Sys.register(Customer(input_dict["_email"], input_dict["_password"], input_dict["_full_name"], input_dict["_gender"], input_dict["_tel"], input_dict["__email_notification"], input_dict["__sms_notification"], input_dict["_address"]))
+    print(Sys.User_DB)
     return {"status":"Success"}
 
 @app.put("/basket", tags=["user"])

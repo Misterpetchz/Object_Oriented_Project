@@ -1,9 +1,20 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import axios from "axios";
+
+
 export default function Profile() {
   const navigate = useNavigate();
+  const[user, setUser] = useState('');
+
+  useEffect(() => {
+    axios.get("http://localhost:8000/users/me")
+    .then((response) => {console.log(response)
+    setUser(response.data)})
+  },[])
 
   const signOut = () => {
-    localStorage.removeItem("temitope");
+    localStorage.removeItem("access_token");
     navigate("/");
   };
 
@@ -14,6 +25,21 @@ export default function Profile() {
         <p>Hello there, welcome to your profile page</p>
 
         <button onClick={signOut}>sign out</button>
+        <ul>
+          {user.full_name}
+        </ul>
+        <ul>
+          {user.email}
+        </ul>
+        <ul>
+          {user.gender}
+        </ul>
+        <ul>
+          {user.tel}
+        </ul>
+        <ul>
+          {user.address}
+        </ul>
       </div>
     </>
   );

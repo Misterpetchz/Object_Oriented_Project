@@ -82,4 +82,14 @@ class BranchModel(BaseModel):
         line_id = str
         facebook_id = str
         product_in_stock = str
-        
+    
+    
+class RegisterDTO(BaseModel):
+    email : str 
+    password : str
+    full_name : str
+    gender : str
+    tel : str
+    address : str
+    email_noti : str
+    sms_noti : str

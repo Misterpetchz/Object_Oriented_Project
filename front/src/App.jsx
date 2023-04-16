@@ -4,9 +4,21 @@ import { BrowserRouter, NavLink } from 'react-router-dom'
 import { Routes, Route } from "react-router-dom";
 import Login from './pages/Login'
 import Profile from './pages/Profile'
+import Register from './pages/Register';
 import Home from './pages/Home'
 import Searchs from './pages/Search'
 import { RequireToken } from './auth'
+import axios from 'axios';
+
+axios.interceptors.request.use(
+  config => {
+    config.headers['Authorization'] = `Bearer ${localStorage.getItem('access_token')}`;
+        return config;
+    },
+    error => {
+        return Promise.reject(error);
+    }
+);
 
 function App() {
   const [count, setCount] = useState(0)
@@ -21,6 +33,7 @@ function App() {
         <NavLink to="/contact">Contact</NavLink>
         <NavLink to="/cart">Cart</NavLink>
         <NavLink to="/search">Search</NavLink>
+        <NavLink to="/register">Register</NavLink>
       </nav>
       <Routes>
         <Route path='/' element = {<Home/>}/>
@@ -30,6 +43,7 @@ function App() {
                                         </RequireToken>}                        
         />
         <Route path='search' element={<Searchs/>}/>
+        <Route path='register' element={<Register/>}></Route>
       </Routes>
     </BrowserRouter>
   )

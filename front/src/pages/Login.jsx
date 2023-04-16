@@ -20,7 +20,6 @@ export default function Login() {
           password: password,
         })
         .then(function (response) {
-          console.log(response.data.access_token, "response.data.access_token");
           if (response.data.access_token) {
             setToken(response.data.access_token);
             navigate("/profile");
