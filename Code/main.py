@@ -347,6 +347,18 @@ async def delete_branch(branch_name : str = Form(...)):
     shop.delete_branch(branch_name)
     return RedirectResponse(url="/branches/", status_code=status.HTTP_302_FOUND)
 
+@app.get("/card/")
+async def show_credit_card(request:Request):
+    return templates.TemplateResponse("card.html",{"request":request})
+
+@app.post("/card/modify/")
+async def modify_card(card_num: str = Form(...),
+                 expire_date: str = Form(...),
+                 cvc: str = Form(...), 
+                 current_user = Depends(Sys.get_current_user)):
+    current_user.credit_card.modify_credit_card_info(card_num, expire_date, cvc)
+    return RedirectResponse(url="/card/", status_code=status.HTTP_302_FOUND)
+
 @app.post("/add_basket")
 async def add_book_to_basket(book:str = Form(...)):
     event.event_dis(batalog)
