@@ -211,20 +211,21 @@ async def add_book_to_basket(book: str = Form(...)):
     pookaneiei.add_book_to_basket(BookItem(book_item), book_item)
     return RedirectResponse(url="/books/"+book, status_code=status.HTTP_302_FOUND)
 
+class BookName(BaseModel):
+    name:str
 
-@app.post("/add_amount")
-async def add_book_to_basket(book_item: str = Form(...)):
+@app.put("/add_amount")
+async def add_amount(book_item: BookName):
     event.event_dis(batalog)
-    book = batalog.find_book_by_name(book_item)
-    pookaneiei.add_amount(book_item, book)
+    book = batalog.find_book_by_name(book_item.name)
+    pookaneiei.add_amount(book_item.name, book)
     return RedirectResponse(url="/basket", status_code=status.HTTP_302_FOUND)
 
-
-@app.post("/reduce_amount")
-async def add_book_to_basket(book_item: str = Form(...)):
+@app.put("/reduce_amount")
+async def add_book_to_basket(book_item: BookName):
     event.event_dis(batalog)
-    book = batalog.find_book_by_name(book_item)
-    pookaneiei.reduce_amount(book_item, book)
+    book = batalog.find_book_by_name(book_item.name)
+    pookaneiei.reduce_amount(book_item.name, book)
     return RedirectResponse(url="/basket", status_code=status.HTTP_302_FOUND)
 
 #################################  ORDERPAGE  ####################################
