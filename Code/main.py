@@ -79,6 +79,8 @@ all_branch.add_branch(rangsit)
 all_branch.add_branch(moon_branch)
 pookaneiei1 = Customer("pookan@gmail.com", Sys.get_password_hash("test1"),
                        "pookan", "Male", "0000000000", True, False, "LLL")
+pookaneiei2 = Customer("pookan2@gmail.com", Sys.get_password_hash("test1"),
+                       "pookan", "Male", "0000000000", True, False, "LLL")
 pookaneiei = Customer('pookantong.p@gmail.com',
                  Sys.get_password_hash("test2"),
                  'PookanNaja',
@@ -138,8 +140,8 @@ moon_branch.add_product(pookantong_book2)
 rangsit.add_product(pookantong_book1)
 rangsit.add_product(pookantong_book2)
 
-pookantong_book1.add_rating(Rating(10, "Bad ending, I don't like it"))
-pookantong_book1.add_rating(Rating(5, "OK, I don't like it"))
+pookantong_book1.add_rating(Rating(10, "Bad ending, I don't like it", pookaneiei))
+pookantong_book1.add_rating(Rating(5, "OK, I don't like it", pookaneiei2))
 pookaneiei1.add_book_to_basket(BookItem(pookantong_book1),pookantong_book1)
 pookaneiei1.add_book_to_basket(BookItem(pookantong_book2),pookantong_book2)
 pookaneiei1.add_book_to_basket(BookItem(pookantong_book1),pookantong_book1)
@@ -181,7 +183,7 @@ async def show_book(bookname:str | None = None):
             "old_price":book._price,
             "new_price":book._new_price,
             "genre":book._genre,
-            "score":book._rating_score,
+            "score":f'{book._rating_score:.2f}',
             "brief":book._brief,
             "available_branch":[x._branch_name for x in all_branch.available_branch]}
 
@@ -189,7 +191,7 @@ async def show_book(bookname:str | None = None):
 @app.get("/books/{bookname}/rating", tags=["books"])
 async def show_book_rating(bookname):
     book = batalog.find_book_by_name(bookname)
-    return {"rating_score": book._rating_score,
+    return {"rating_score": f'{book._rating_score:.2f}',
             "rating": [{"score_each_rating": x._book_rating,
                        "comment": x._book_comment} for x in book._rating]}
 
@@ -243,7 +245,8 @@ async def make_order(current_user : Customer = Depends(Sys.get_current_user)):
 @app.post("/books/{bookname}/addrating", tags=["books"])
 async def add_rating(bookname, data: AddRatingDTO, current_user : Customer = Depends(Sys.get_current_user)):
     book: Book = batalog.find_book_by_name(bookname)
-    book.add_rating(Rating(data.score, data.comment))
+    if current_user not in [x._user for x in book._rating]:
+        book.add_rating(Rating(data.score, data.comment, current_user))
     return {"status": "Success"}
 
 
