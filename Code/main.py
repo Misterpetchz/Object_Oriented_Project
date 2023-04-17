@@ -348,6 +348,7 @@ async def info_verification(email: Optional[str] = None, password: Optional[str]
 		id._full_name = full_name or id._full_name
 		id._gender = gender or id._gender
 		id._tel = tel or id._tel
+	print([vars(x) for x in Sys.User_DB])
 
 
 @app.post("/token", response_model=Token, tags=["user"])
@@ -364,12 +365,14 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
 
 @app.get("/users/me", tags=["user"])
 async def view_info(userid=Depends(Sys.get_current_user)):
-	return {"address" : userid._address,
+    print(vars(userid))
+    return {"address" : userid._address,
             "email ": userid._email,
             "full_name" : userid._full_name,
             "gender": userid._gender,
             "tel": userid._tel, 
     }
+
 
 @app.post("/users/registration", tags=["user"])
 async def registration(data:RegisterDTO):

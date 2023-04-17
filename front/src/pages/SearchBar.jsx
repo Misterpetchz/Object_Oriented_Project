@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 const SearchBar = ({searching}) => {
     const [term, setTerm] = useState('');
+    
 
     useEffect(() => {
         if(term !== ''){

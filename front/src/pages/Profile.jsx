@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 
 export default function Profile() {
@@ -40,6 +41,7 @@ export default function Profile() {
         <ul>
           {user.address}
         </ul>
+        <Link to="/editprofile" className="btn btn-primary">Edit</Link>
       </div>
     </>
   );

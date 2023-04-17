@@ -5,11 +5,12 @@ import { Routes, Route } from "react-router-dom";
 import Login from './pages/Login'
 import Profile from './pages/Profile'
 import Register from './pages/Register';
-import Home from './pages/Home'
+import Catalog from './pages/Home'
 import Searchs from './pages/Search'
 import Admin from './pages/Admin';
 import { RequireToken } from './auth'
 import axios from 'axios';
+import Book from './pages/Book';
 
 axios.interceptors.request.use(
   config => {
@@ -22,7 +23,6 @@ axios.interceptors.request.use(
 );
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <BrowserRouter>
@@ -38,7 +38,7 @@ function App() {
         <NavLink to="/admin">Admin</NavLink>
         </nav>
       <Routes>
-        <Route path='/' element = {<Home/>}/>
+        <Route path='/' element = {<Catalog/>}/>
         <Route path='/login' element = {<Login/>}/>
         <Route path='/profile' element={<RequireToken>
                                           <Profile />
@@ -47,6 +47,7 @@ function App() {
         <Route path='/search' element={<Searchs/>}/>
         <Route path='/register' element={<Register/>}/>
         <Route path='/admin' element={<Admin/>}/>
+        <Route path='/books/:bookname' element = {<Book/>}/>
       </Routes>
     </BrowserRouter>
   )
