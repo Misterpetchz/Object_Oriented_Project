@@ -30,8 +30,24 @@ from fastapi.responses import FileResponse, RedirectResponse
 import time
 import datetime
 import starlette.status as status
+from fastapi.middleware.cors import CORSMiddleware
+
 
 app = FastAPI()
+
+origins = {
+    "http://localhost",
+    "http://localhost:5173",
+}
+
+app.add_middleware(
+   CORSMiddleware,
+    allow_origins = origins,
+    allow_credentials =True,
+    allow_methods = ["*"],
+    allow_headers= ["*"],
+)
+
 templates = Jinja2Templates(directory="templates")
 
 app.mount("/static",
@@ -478,7 +494,7 @@ async def modify_credit_card(credit_card : CreditCardDTO, current_user = Depends
 
 @app.get("/GetAllBranch/", tags=["branch"])
 async def get_branch():
-    return shop.list_of_branch
+    return {"name" : [{"branch_name" :x._branch_name} for x in shop.list_of_branch] }
 
 @app.post("/AddBookToBranch/{branch_name}", tags=["branch"])
 async def add_book_to_stock(branch_name, data:AddBookDTO):
@@ -519,14 +535,14 @@ async def modify_branch(data : ModifyBranchDTO, branch_name):
                                 data.tel, 
                                 data.line_id, 
                                 data.facebook_id, 
-                                data.add_book, 
-                                data.remove_book)
+                                [], 
+                                [])
     return {"Modify Success"}
 
 @app.delete("/RemoveBranch/{branch_name}", tags=["branch"])
 async def remove_branch(branch_name):
     select_branch = shop.select_branch(branch_name)
-    shop.delete_branch(select_branch)
+    shop.delete_branch(select_branch._branch_name)
     return {"Remove Branch Success"}
 
 @app.get("/GetAllEvent/", tags=["event"])

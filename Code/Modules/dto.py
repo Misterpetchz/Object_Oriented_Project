@@ -13,8 +13,8 @@ class ModifyBranchDTO(BaseModel):
     tel : str
     line_id : str
     facebook_id : str
-    add_book : list
-    remove_book : list
+    # add_book : list
+    # remove_book : list
 
 class AddBranchDTO(BaseModel):
     branch_name : str
