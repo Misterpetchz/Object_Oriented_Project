@@ -1,14 +1,15 @@
 import React from "react";
 import { useState } from "react";
 import axios from "axios";
-
+import SearchBar from "./SearchBar";
 
 export default function Searchs() {
 
-    const [search, setSearch] = useState("");
     const [search_list, setSearchList] = useState([]);
 
-    const searching = () => {
+    const clearResults = () => setQuotes([]);
+
+    const searching = async search => {
         if (search == "") {
           return;
         } else {
@@ -28,18 +29,7 @@ export default function Searchs() {
       return (
         <div style={{ minHeight: 800, marginTop: 30 }}>
           <h1>Search page</h1>
-          <div style={{ marginTop: 30 }}>
-            <form>
-                <label style={{ marginRight: 10 }}>Input Book Name</label>
-                <input
-                type="text"
-                onChange={(e) => setSearch(e.target.value)}
-                />
-                <button type="button" onClick={searching}>
-                search
-                </button>
-            </form>
-            <div>
+          <SearchBar searching={searching} clearResults={clearResults}/>
                 <ul>
                     {search_list.map((item) => (
                         <li>
@@ -58,7 +48,5 @@ export default function Searchs() {
                     ))}
                 </ul>
             </div>
-          </div>
-        </div>
       );
     }
