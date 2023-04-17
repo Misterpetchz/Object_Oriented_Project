@@ -52,7 +52,7 @@ export default function Searchs() {
                                             <span>{genre}, </span>
                                     ))} </span>
                                     <span>{item.score} </span>
-                                    <span>{item.brie} </span>
+                                    <span>{item.brief} </span>
                             </div>
                         </li>
                     ))}

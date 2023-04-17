@@ -16,7 +16,6 @@ class AddBookDTO(BaseModel):
     summary:str
     genre:list[str]
     date_created:str
-    rating:str
     price:int
     amount:int
     
