@@ -4,31 +4,19 @@ class Basket:
         self.__book_item = []
         self.__price = 0
         
-    def reduce_amount(self,book):
-        for item in self.__book_item:
-            if book == item.name:
-                item.amount = item.amount-1
-                self.__price -= item.price
-                if item.amount == 0:
-                    self.__book_item.remove(item)
-                    
-    def add_amount(self,book):
-        for item in self.__book_item:
-            if book == item.name:
-                item.amount = item.amount+1
-                self.__price += item.price
-                    
     def add_book(self, book):
         self.__book_item.append(book)
     def remove_book(self, book):
-        self.__book_item.pop(1)
+        self.__book_item.pop(book)
     def get_book(self):
         return self.__book_item
     def get_price(self):
         return self.__price
     def set_price(self, new_price):
         self.__price = new_price
+    def set_book_item(self, new_book_item):
+        self.__book_item = new_book_item
 
     
     price = property(get_price, set_price)
-    book_item = property(get_book)
+    book_item = property(get_book, set_book_item)

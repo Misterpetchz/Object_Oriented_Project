@@ -1,7 +1,7 @@
 from Modules.Rating import Rating
 class Book : 
     def __init__(self, cover, brief, creator, name, book_info, book_publisher, book_preview, 
-                 critic_review, table_of_content, summary, genre, date_created, rating, price, amount):
+                 critic_review, table_of_content, summary, genre, date_created, price, amount):
         self._cover = cover
         self._brief = brief
         self._creator = creator
@@ -18,9 +18,20 @@ class Book :
         self._price = price
         self._amount_in_stock = amount
         self._new_price = price
+        self._rating_score = 0
+    
+    def __repr__(self) -> str:
+        return self._name
+    
+    def get_amount_in_stock(self):
+        return self._amount_in_stock
+    
+    def set_amount_in_stock(self,new_amount):
+        self._amount_in_stock = new_amount
         
     def add_rating(self, rating:Rating):
         self._rating.append(rating)
+        self._rating_score = sum([x._book_rating for x in self._rating])/len(self._rating)
          
     def modify_book(self,cover, brief, creator, name, book_info, book_publisher, book_preview, 
                  critic_review, table_of_content, summary, genre, date_created, price, amount):
@@ -52,6 +63,8 @@ class Book :
             self._price = price
         if isinstance(amount,int):
             self.amount = amount
+        
+    stock_amount = property(get_amount_in_stock,set_amount_in_stock)
 class BookItem():
     def __init__(self, book):
         self._cover = book._cover
