@@ -672,7 +672,20 @@ async def search_book(name:str):
 @app.put("/books/{bookname}", tags=["books"])
 async def modify_book_to_catalog(bookname, data:ModifyBookDTO):
     book = batalog.find_book_by_name(bookname)
-    book.modify_book(data)
+    book.modify_book(data.cover,
+                     data.brief,
+                     data.creator,
+                     data.name,
+                     data.book_info,
+                     data.book_publisher,
+                     data.book_preview,
+                     data.critic_review,
+                     data.table_of_content,
+                     data.summary,
+                     data.genre,
+                     data.date_created,
+                     data.price,
+                     data.amount)
     return {"status":"Success"}
 
 @app.delete("/books/{bookname}", tags=["books"])

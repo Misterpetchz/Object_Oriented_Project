@@ -28,7 +28,22 @@ class Book :
         self._rating.append(rating)
         self._rating_score = sum([x._book_rating for x in self._rating])/len(self._rating)
         
-    
+    def modify_book(self, new_cover, new_brief, new_creator, new_name, new_info, new_publisher, new_preview,
+                    new_critic_review, new_content, new_summary, new_genre, new_date_created, new_price, new_amount):
+        self._cover = new_cover
+        self._brief = new_brief
+        self._creator = new_creator
+        self._name = new_name
+        self._book_info = new_info
+        self._book_publisher = new_publisher
+        self._book_preview = new_preview
+        self._critic_review = new_critic_review
+        self._table_of_content = new_content
+        self._summary = new_summary
+        self._genre = new_genre
+        self._date_created = new_date_created
+        self._price = new_price
+        self._amount_in_stock = new_amount
         
 #class BookItem():
    # def __init__(self, cover, creator, name, book_info, genre, date_created, price):

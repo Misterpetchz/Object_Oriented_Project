@@ -3,11 +3,27 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import { BrowserRouter, NavLink, Route, Routes, Navigate} from 'react-router-dom'
+import { RequireToken } from './auth'
+import axios from 'axios';
 
 // Pages
 import Home from './pages/Home'
 import Error from './pages/error'
+import Book from './pages/Book'
 import Branches from './pages/branch'
+import Login from './pages/login'
+import Profile from './pages/Profile'
+import Register from './pages/Register'
+
+axios.interceptors.request.use(
+  config => {
+    config.headers['Authorization'] = `Bearer ${localStorage.getItem('access_token')}`;
+        return config;
+    },
+    error => {
+        return Promise.reject(error);
+    }
+);
 
 function App() {
   const [count, setCount] = useState(0)
@@ -18,14 +34,22 @@ function App() {
     <BrowserRouter>
       <nav>
         <NavLink to="/" className={({ isActive }) => isActive ? activeClassName : undefined}>Home</NavLink><br />
-        <NavLink to="/branches" className={({ isActive }) => isActive ? activeClassName : undefined}>Branches</NavLink><br />
-        {/* <NavLink to='/branches/addBranch' className={({ isActive }) => isActive ? activeClassName : undefined}>Add Branch</NavLink> */}
+        <NavLink to="/login" className={({ isActive }) => isActive ? activeClassName : undefined}>Login</NavLink><br />
+        <NavLink to="/profile" className={({ isActive }) => isActive ? activeClassName : undefined}>Profile</NavLink><br />
+        <NavLink to='/book' className={({ isActive }) => isActive ? activeClassName : undefined}>Book</NavLink><br />
+        <NavLink to="/branches" className={({ isActive }) => isActive ? activeClassName : undefined}>Branches</NavLink>
+
       </nav>
       <Routes>
         <Route path='/' element={<Home />} />
-        <Route path='/branches' element={<Branches />}>
-        </Route>
+        <Route path='/book' element={<Book />} />
+        <Route path='/branches' element={<Branches />} />
         <Route path='*' element={<Error />} />
+        <Route path='/login' element = {<Login/>}/>
+        <Route path='/profile' element={<RequireToken>
+                                          <Profile />
+                                        </RequireToken>}                        
+        />
       </Routes>
     </BrowserRouter>
   )

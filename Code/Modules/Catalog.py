@@ -6,8 +6,11 @@ class Catalog():
 
     def get_book_info(search_string):
         pass
-    def remove_book(book):
-        pass
+    def remove_book(self, book_name:str):
+        for element in self.__all_list_of_book:
+            if book_name == element._name:
+                self.__all_list_of_book.remove(element)
+                
     def modify_book(book):
         pass
     def find_book(Book):
