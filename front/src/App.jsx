@@ -13,6 +13,8 @@ import { RequireToken } from './auth'
 import axios from 'axios';
 import Book from './pages/Book';
 import EditProfile from './pages/EditProfile';
+import CreditCard from './pages/CreditCard';
+import EditCreditCard from './pages/EditCreditCard';
 
 axios.interceptors.request.use(
   config => {
@@ -39,15 +41,19 @@ function App() {
         <NavLink to="/register">Register</NavLink>
         <NavLink to="/admin">Admin</NavLink>
         <NavLink to="/basket">Basket</NavLink>
+        <NavLink to="/profile/credit_card">CreditCard</NavLink>
+        <NavLink to="/profile/credit_card/edit">EditCreditCard</NavLink>
         </nav>
       <Routes>
         <Route path='/' element = {<Catalog/>}/>
         <Route path='/login' element = {<Login/>}/>
         <Route path='/profile' element={<RequireToken>
                                           <Profile />
-                                        </RequireToken>}                        
+                                        </RequireToken>}
         />
         <Route path='/search' element={<Searchs/>}/>
+        <Route path='/profile/credit_card' element={<CreditCard/>}/>
+        <Route path='/profile/credit_card/edit' element={<EditCreditCard/>}/>
         <Route path='/register' element={<Register/>}/>
         <Route path='/admin' element={<Admin/>}/>
         <Route path='/books/:bookname' element = {<Book/>}/>
