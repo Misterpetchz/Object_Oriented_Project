@@ -92,3 +92,13 @@ class RegisterDTO(BaseModel):
     address : str
     email_noti : str
     sms_noti : str
+    
+class EditProfile(BaseModel):
+    password: str | None
+    full_name: str | None 
+    gender: str | None
+    tel: str | None
+    address: str | None
+    email_noti: bool | None
+    sms_noti: bool | None
+	

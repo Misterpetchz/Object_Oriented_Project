@@ -12,6 +12,7 @@ import Basket from './pages/Basket';
 import { RequireToken } from './auth'
 import axios from 'axios';
 import Book from './pages/Book';
+import EditProfile from './pages/EditProfile';
 
 axios.interceptors.request.use(
   config => {
@@ -50,7 +51,8 @@ function App() {
         <Route path='/register' element={<Register/>}/>
         <Route path='/admin' element={<Admin/>}/>
         <Route path='/books/:bookname' element = {<Book/>}/>
-        <Route path='basket' element = {<Basket/>}/>
+        <Route path='/basket' element = {<Basket/>}/>
+        <Route path='/editprofile' element = {<EditProfile/>}/>
       </Routes>
     </BrowserRouter>
   )

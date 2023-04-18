@@ -328,12 +328,11 @@ async def modify_book_to_catalog(bookname, data:ModifyBookDTO):
 
 
 @app.put("/users/edit", tags=["user"])
-async def info_verification(email: Optional[str] = None, password: Optional[str] = None, full_name: Optional[str] = None, gender: Optional[str] = None, tel: Optional[str] = None, address: Optional[str] = None,
+async def info_verification(password: Optional[str] = None, full_name: Optional[str] = None, gender: Optional[str] = None, tel: Optional[str] = None, address: Optional[str] = None,
 				email_noti: Optional[bool] = None, sms_noti: Optional[bool] = None, id=Depends(Sys.get_current_user)):
 	if (id == None):
 		return {"Error-101": "Didn't find any account with this id"}
 	elif (isinstance(id, Customer)):
-		id._email = email or id._email
 		id._password = password or id._password
 		id._full_name = full_name or id._full_name
 		id._gender = gender or id._gender
@@ -345,13 +344,14 @@ async def info_verification(email: Optional[str] = None, password: Optional[str]
 			id.email_notification = email_noti
 		if email_noti != None:
 			id.sms_notification = sms_noti
+		return {"status":"Success"}
 	elif (isinstance(id, Admin)):
-		id._email = email or id._email
 		id._password = password or id._password
 		id._full_name = full_name or id._full_name
 		id._gender = gender or id._gender
 		id._tel = tel or id._tel
-	print([vars(x) for x in Sys.User_DB])
+		return {"status":"Success"}
+	
 
 
 @app.post("/token", response_model=Token, tags=["user"])
@@ -368,7 +368,6 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
 
 @app.get("/users/me", tags=["user"])
 async def view_info(userid=Depends(Sys.get_current_user)):
-    print(vars(userid))
     return {"address" : userid._address,
             "email ": userid._email,
             "full_name" : userid._full_name,
@@ -389,7 +388,6 @@ async def registration(data:RegisterDTO):
     input_dict['__email_notification'] = data.email_noti
     input_dict['__sms_notification'] = data.sms_noti
     Sys.register(Customer(input_dict["_email"], input_dict["_password"], input_dict["_full_name"], input_dict["_gender"], input_dict["_tel"], input_dict["__email_notification"], input_dict["__sms_notification"], input_dict["_address"]))
-    print(Sys.User_DB)
     return {"status":"Success"}
 
 @app.put("/remove_basket", tags=["user"])
