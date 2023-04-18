@@ -50,7 +50,7 @@ function Book() {
             axios
               .post(`http://localhost:8000/books/${params.bookname}/add_book_to_basket?amount=10`)
               .then(() => {
-                  navigate("/")
+                  navigate("/basket")
                 })
               .catch(function (error) {
                 console.log(error, "error");

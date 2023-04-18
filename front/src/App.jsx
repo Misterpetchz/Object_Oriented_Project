@@ -8,6 +8,7 @@ import Register from './pages/Register';
 import Catalog from './pages/Home'
 import Searchs from './pages/Search'
 import Admin from './pages/Admin';
+import Basket from './pages/Basket';
 import { RequireToken } from './auth'
 import axios from 'axios';
 import Book from './pages/Book';
@@ -36,6 +37,7 @@ function App() {
         <NavLink to="/search">Search</NavLink>
         <NavLink to="/register">Register</NavLink>
         <NavLink to="/admin">Admin</NavLink>
+        <NavLink to="/basket">Basket</NavLink>
         </nav>
       <Routes>
         <Route path='/' element = {<Catalog/>}/>
@@ -48,6 +50,7 @@ function App() {
         <Route path='/register' element={<Register/>}/>
         <Route path='/admin' element={<Admin/>}/>
         <Route path='/books/:bookname' element = {<Book/>}/>
+        <Route path='basket' element = {<Basket/>}/>
       </Routes>
     </BrowserRouter>
   )

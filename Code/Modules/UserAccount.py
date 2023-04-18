@@ -65,6 +65,7 @@ class Customer(UserAccount):
         self._disabled = False
         self.__order_list = []
         self.__credit_card = None
+        self.__order_id = 1
 
     def search_book(self, search_string, catalog:Catalog):
         lists=[]
@@ -125,6 +126,7 @@ class Customer(UserAccount):
     def make_order(self, order):
         if len(self.__basket.book_item) > 0:
             self.__order_list.append(order)
+        self.__order_id += 1
             
     def make_payment(payment_type):
         pass

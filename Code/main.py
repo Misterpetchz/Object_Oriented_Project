@@ -392,7 +392,7 @@ async def registration(data:RegisterDTO):
     print(Sys.User_DB)
     return {"status":"Success"}
 
-@app.put("/basket", tags=["user"])
+@app.put("/remove_basket", tags=["user"])
 async def remove_from_basket(data:RemoveBookDTO, current_user : Customer = Depends(Sys.get_current_user)):
     book = batalog.find_book_by_name(data.book_name)
     current_user.remove_book_from_basket(data.index,book)
