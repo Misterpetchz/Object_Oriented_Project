@@ -14,7 +14,9 @@ class Basket:
         return self.__price
     def set_price(self, new_price):
         self.__price = new_price
+    def set_book_item(self, new_book_item):
+        self.__book_item = new_book_item
 
     
     price = property(get_price, set_price)
-    book_item = property(get_book)
+    book_item = property(get_book, set_book_item)

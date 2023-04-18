@@ -64,7 +64,8 @@ class Customer(UserAccount):
         self.__basket = Basket()
         self._disabled = False
         self.__order_list = []
-        self.__credit_card = CreditCard()
+        self.__credit_card = None
+        self.__order_id = 1
 
     def search_book(self, search_string, catalog:Catalog):
         lists=[]
@@ -87,19 +88,23 @@ class Customer(UserAccount):
         pass
     def info_verification(email, password, full_name, gender, tel, shipping, address, email_notification, sms_notification):
         pass
-    def add_credit_card_info(card_info):
-        pass
+    def add_credit_card(self, credit_card):
+        self.__credit_card = credit_card
+    @property
+    def credit_card(self):
+        return self.__credit_card
     def add_book_to_basket(self, book_item, book:Book):
-        self.in_basket = False
         if book.stock_amount > 0:
             for i in self.__basket.get_book():
                 if i.name.lower() == book_item.name.lower():
                     i.amount = i.amount + 1
-                    self.in_basket = True
-            if self.in_basket == False:
+                    book.stock_amount -= 1
+                    self.__basket.price += book_item._price
+                    return None
+            else:
                 self.__basket.add_book(book_item)
-            book.stock_amount -= 1
-            self.__basket.price += book_item._price
+                book.stock_amount -= 1
+                self.__basket.price += book_item._price
         
     def reduce_amount(self,book_item,book:Book):
         for item in self.basket.book_item:
@@ -117,16 +122,11 @@ class Customer(UserAccount):
                     item.amount = item.amount+1
                     book.stock_amount -=1
                     self.basket.price += item.price
-                    
-        
-    def remove_book_from_basket(self, book_item, book:Book):
-        self.__basket.remove_book(book_item)
-        book._amount_in_stock += 1
-        self.__basket.price -= book_item._price
         
     def make_order(self, order):
         if len(self.__basket.book_item) > 0:
             self.__order_list.append(order)
+        self.__order_id += 1
             
     def make_payment(payment_type):
         pass

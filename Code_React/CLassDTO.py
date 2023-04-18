@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from datetime import datetime
 class AddBooktoBasketDTO(BaseModel):
     amount:int
 
@@ -15,7 +16,6 @@ class AddBookDTO(BaseModel):
     summary:str
     genre:list[str]
     date_created:str
-    rating:str
     price:int
     amount:int
     
@@ -66,3 +66,39 @@ class ModifyBookDTO(BaseModel):
     rating:str|None
     price:int|None
     amount:int|None
+
+class CreditCards(BaseModel):
+    card_num : str
+    expire_date : datetime
+    cvc : str
+
+
+class BranchModel(BaseModel):
+        branch_name = str
+        open_time = str
+        location = str
+        tel = str
+        line_id = str
+        facebook_id = str
+        product_in_stock = str
+    
+    
+class RegisterDTO(BaseModel):
+    email : str 
+    password : str
+    full_name : str
+    gender : str
+    tel : str
+    address : str
+    email_noti : str
+    sms_noti : str
+    
+class EditProfile(BaseModel):
+    password: str | None
+    full_name: str | None 
+    gender: str | None
+    tel: str | None
+    address: str | None
+    email_noti: bool | None
+    sms_noti: bool | None
+	
