@@ -219,14 +219,14 @@ async def add_amount(book_item: BookName):
     event.event_dis(batalog)
     book = batalog.find_book_by_name(book_item.name)
     pookaneiei.add_amount(book_item.name, book)
-    return RedirectResponse(url="/basket", status_code=status.HTTP_302_FOUND)
+    #return RedirectResponse(url="/basket", status_code=status.HTTP_302_FOUND)
 
 @app.put("/reduce_amount")
 async def add_book_to_basket(book_item: BookName):
     event.event_dis(batalog)
     book = batalog.find_book_by_name(book_item.name)
     pookaneiei.reduce_amount(book_item.name, book)
-    return RedirectResponse(url="/basket", status_code=status.HTTP_302_FOUND)
+    #return RedirectResponse(url="/basket", status_code=status.HTTP_302_FOUND)
 
 #################################  ORDERPAGE  ####################################
 
