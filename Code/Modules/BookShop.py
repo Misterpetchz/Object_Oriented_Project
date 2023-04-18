@@ -58,15 +58,18 @@ class BookShop():
         return self.__available
     
     # Event List
-    def add_event(self, event:EventDiscount):
-        self.__list_of_event.append(event)
-
-    def delete_event(self, event:EventDiscount):
-        self.__list_of_event.remove(event)
-
     def select_event(self, event_name):
         for element in self.__list_of_event:
             if event_name == element.event_name:
                 select_event = element
                 return select_event
+
+    def add_event(self, event:EventDiscount):
+        self.__list_of_event.append(event)
+
+    def delete_event(self, event_name:str):
+        for element in self.__list_of_event:
+            if event_name == element.event_name:
+                self.__list_of_event.remove(element)
+
     

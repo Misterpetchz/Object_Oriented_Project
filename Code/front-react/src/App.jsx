@@ -13,6 +13,7 @@ import Book from './pages/Book'
 import Branches from './pages/branch'
 import Login from './pages/login'
 import Profile from './pages/Profile'
+import Event from './pages/Event'
 import Register from './pages/Register'
 
 axios.interceptors.request.use(
@@ -37,7 +38,8 @@ function App() {
         <NavLink to="/login" className={({ isActive }) => isActive ? activeClassName : undefined}>Login</NavLink><br />
         <NavLink to="/profile" className={({ isActive }) => isActive ? activeClassName : undefined}>Profile</NavLink><br />
         <NavLink to='/book' className={({ isActive }) => isActive ? activeClassName : undefined}>Book</NavLink><br />
-        <NavLink to="/branches" className={({ isActive }) => isActive ? activeClassName : undefined}>Branches</NavLink>
+        <NavLink to="/branches" className={({ isActive }) => isActive ? activeClassName : undefined}>Branches</NavLink><br />
+        <NavLink to="/event" className={({ isActive }) => isActive ? activeClassName : undefined}>Event</NavLink>
 
       </nav>
       <Routes>
@@ -50,6 +52,7 @@ function App() {
                                           <Profile />
                                         </RequireToken>}                        
         />
+        <Route path='/event' element={<Event/>}/>
       </Routes>
     </BrowserRouter>
   )

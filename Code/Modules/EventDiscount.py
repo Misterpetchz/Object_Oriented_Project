@@ -18,15 +18,26 @@ class EventDiscount():
         return self.__event_end
     def get_event_percentage(self):
         return self.__event_start
-    def modify_event(self, new_name, new_start, new_end, new_percentage):
+    
+    @property
+    def event_genre(self):
+        return self.__event_genre
+    @event_genre.setter
+    def event_genre(self, new_value):
+        self.__event_genre = new_value
+
+    def modify_event(self, new_name, new_start, new_end, new_percentage, new_genre):
         if isinstance(new_name, str):
             self.__event_name = new_name
         if isinstance(new_start, str):
             self.__event_start = new_start
         if isinstance(new_end, str):
             self.__event_end = new_end
-        if isinstance(new_percentage, float):
+        if isinstance(new_percentage, int):
             self.__discounted_percentage = new_percentage
+        if isinstance(new_genre, str):
+            self.__event_genre = new_genre
+            
     def event_dis(self, catalog):
         for i in catalog.list_all_of_book:
             if self.__event_genre in i._genre:

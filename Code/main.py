@@ -547,14 +547,16 @@ async def remove_branch(branch_name):
 
 @app.get("/GetAllEvent/", tags=["event"])
 async def get_event():
-    return shop.list_of_event
+    return {"eventDis" : [{"event_name": x.event_name,
+                           "genre": x.event_genre} for x in shop.list_of_event]}
 
 @app.post("/AddEvent/", tags=["event"])
 async def add_event(data : EventDTO):
-    shop.list_of_event(EventDiscount(data.event_name, 
+    shop.list_of_event.append((EventDiscount(data.event_name, 
                                     data.event_start, 
                                     data.event_end, 
-                                    data.discounted_percentage))
+                                    data.discounted_percentage,
+                                    data.event_genre)))
     return {"Add Event Success"}
 
 # we dont place to collect class bookshop
@@ -565,13 +567,14 @@ async def modify_event(data : ModifyEventDTO, event_name):
     select_event.modify_event(data.event_name,
                               data.event_start,
                               data.event_end,
-                              data.discounted_percentage)
+                              data.discounted_percentage,
+                              data.event_genre)
     return {"Modify Success"}
 
 @app.delete("/RemoveEvent/{event_name}", tags=["event"])
 async def delete_event(event_name):
     select_event = shop.select_event(event_name)
-    shop.list_of_event.delete_event(select_event)
+    shop.delete_event(select_event.event_name)
     return {"Remove This Event Success"}
 
 @app.get("/Payment/Check")

@@ -29,14 +29,14 @@ class EventDTO(BaseModel):
     event_start : str
     event_end : str
     discounted_percentage : int
+    event_genre : str
 
 class ModifyEventDTO(BaseModel):
     event_name : str
     event_start : str
     event_end : str
     discounted_percentage : int
-        
-
+    event_genre : str
 
 class QrCodeDTO(BaseModel):
     amount : int
