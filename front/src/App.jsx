@@ -32,7 +32,7 @@ function App() {
     <BrowserRouter>
       <h1>BookShop</h1>
       <nav>
-        <NavLink to="/">Home</NavLink>
+        <NavLink to="/">Home</NavLink><br/>
         <NavLink to="/login">Login</NavLink>
         <NavLink to="/profile">Profile</NavLink>
         <NavLink to="/contact">Contact</NavLink>

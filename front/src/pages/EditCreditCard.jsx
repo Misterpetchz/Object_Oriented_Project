@@ -22,6 +22,9 @@ export default function EditCreditCard() {
 					if (response.data.status == "Success") {
 						navigate("/profile/credit_card")
 					}
+					else if (response.data.status == "Error") {
+						console.log(error, "Wrong format of card info")
+					}
 				})
 				.catch(function (error) {
 					console.log(error, "error");

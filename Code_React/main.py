@@ -14,6 +14,7 @@ from Modules.UserAccount import *
 from Modules.dto import *
 from Modules.settings import *
 from CLassDTO import *
+import re
 from datetime import datetime
 import random
 import datetime
@@ -304,14 +305,19 @@ async def add_credit_card(credit_card: CreditCards, current_user = Depends(Sys.g
 
 @app.put("/Creditcard/edit", tags=["user"])
 async def modify_credit_card(credit_card: CreditCards, current_user = Depends(Sys.get_current_user)):
-	if (current_user.credit_card == None) :
-		current_user.add_credit_card(CreditCard(credit_card.card_num,
-												credit_card.expire_date,
-												credit_card.cvc))
+	if (bool(re.match(r"[0-9]{2}/[0-9]{2}", credit_card.expire_date))
+	and bool(re.match(r"[0-9]{16}", credit_card.card_num))
+	and bool(re.match(r"[0-9]{3}", credit_card.cvc))) :
+		if (current_user.credit_card == None) :
+			current_user.add_credit_card(CreditCard(credit_card.card_num,
+													credit_card.expire_date,
+													credit_card.cvc))
+		else :
+			current_user.credit_card.modify_credit_card_info(
+				credit_card.card_num, credit_card.expire_date, credit_card.cvc)
+		return {"status": "Success"}
 	else :
-		current_user.credit_card.modify_credit_card_info(
-			credit_card.card_num, credit_card.expire_date, credit_card.cvc)
-	return {"status": "Success"}
+		return {"status": "Error"}
 
 
 @app.post("/branch/", tags=["branch"])
