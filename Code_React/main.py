@@ -320,6 +320,20 @@ async def modify_credit_card(credit_card: CreditCards, current_user = Depends(Sy
 		return {"status": "Error"}
 
 
+@app.post("/branch/search/", tags=["books"])
+async def search_branch(name:str):
+    return {"branch":[{"name":x.branch_name,
+                        "open":x.open_time,
+                        "location":x.location,
+                        "tel":x.tel,
+                        "line_id":x.line_id,
+                        "facebook_id":x.facebook_id,
+                        "product":x.product_in_stock
+                        }
+                       for x in all_branch.search_branch(name)]}
+
+
+
 @app.post("/branch/", tags=["branch"])
 async def add_branch(branch: Branchs):
     pookan_admin555.add_branch(all_branch, branch)
@@ -339,8 +353,7 @@ async def modify_branch(branch: dict):
                           tel, line_id, facebook_id, [], [])
     return {"status":"Success"}
 
-
-@app.put("/books/{bookname}", tags=["books"])
+app.put("/books/{bookname}", tags=["books"])
 async def modify_book_to_catalog(bookname, data:ModifyBookDTO):
     book = batalog.find_book_by_name(bookname)
     book.modify_book(data)

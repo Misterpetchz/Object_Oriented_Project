@@ -15,6 +15,7 @@ import Book from './pages/Book';
 import EditProfile from './pages/EditProfile';
 import CreditCard from './pages/CreditCard';
 import EditCreditCard from './pages/EditCreditCard';
+import SearchBranch from './pages/SearchBranch';
 
 axios.interceptors.request.use(
   config => {
@@ -38,6 +39,7 @@ function App() {
         <NavLink to="/contact">Contact</NavLink>
         <NavLink to="/cart">Cart</NavLink>
         <NavLink to="/search">Search</NavLink>
+		<NavLink to="/branch/search">Search_B</NavLink>
         <NavLink to="/register">Register</NavLink>
         <NavLink to="/admin">Admin</NavLink>
         <NavLink to="/basket">Basket</NavLink>
@@ -52,6 +54,7 @@ function App() {
                                         </RequireToken>}
         />
         <Route path='/search' element={<Searchs/>}/>
+        <Route path='/branch/search' element={<SearchBranch/>}/>
         <Route path='/profile/credit_card' element={<CreditCard/>}/>
         <Route path='/profile/credit_card/edit' element={<EditCreditCard/>}/>
         <Route path='/register' element={<Register/>}/>
