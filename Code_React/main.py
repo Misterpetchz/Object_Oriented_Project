@@ -20,6 +20,7 @@ import datetime
 import starlette.status as status
 from fastapi.middleware.cors import CORSMiddleware
 import uuid
+import re
 
 
 app = FastAPI()
@@ -282,8 +283,17 @@ async def add_branch_to_branch_list(data: AddBranchDTO):
                 data.facebook_id))
     return {"status": "Success"}
 
+@app.get("/CreditCard/", tags=["user"])
+async def print_credit_card(current_user = Depends(Sys.get_current_user)):
+	if (isinstance(current_user, Customer) and current_user.credit_card != None) :
+		card = current_user.credit_card
+		return {"credit_card_num" : card.card_num,
+				"credit_card_exp" : card.expire_date,
+				"credit_card_cvc" : card.cvc}
+	else :
+		return {"status" : "Error"}
 
-@app.post("/CreditCard/", tags=["user"])
+@app.post("/CreditCard/add", tags=["user"])
 async def add_credit_card(credit_card: CreditCards, current_user = Depends(Sys.get_current_user)):
     current_user.add_credit_card(CreditCard(credit_card.card_num,
                                             credit_card.expire_date,
@@ -293,11 +303,35 @@ async def add_credit_card(credit_card: CreditCards, current_user = Depends(Sys.g
 # loop to get credit card object
 
 
-@app.put("/creditcard/", tags=["user"])
+@app.put("/Creditcard/edit", tags=["user"])
 async def modify_credit_card(credit_card: CreditCards, current_user = Depends(Sys.get_current_user)):
-    current_user.credit_card.modify_credit_card_info(
-        credit_card.card_num, credit_card.expire_date, credit_card.cvc)
-    return {"status": "Success"}
+	if (bool(re.match(r"[0-9]{2}/[0-9]{2}", credit_card.expire_date))
+	and bool(re.match(r"[0-9]{16}", credit_card.card_num))
+	and bool(re.match(r"[0-9]{3}", credit_card.cvc))) :
+		if (current_user.credit_card == None) :
+			current_user.add_credit_card(CreditCard(credit_card.card_num,
+													credit_card.expire_date,
+													credit_card.cvc))
+		else :
+			current_user.credit_card.modify_credit_card_info(
+				credit_card.card_num, credit_card.expire_date, credit_card.cvc)
+		return {"status": "Success"}
+	else :
+		return {"status": "Error"}
+
+
+@app.post("/branch/search/", tags=["books"])
+async def search_branch(name:str):
+    return {"branch":[{"name":x.branch_name,
+                        "open":x.open_time,
+                        "location":x.location,
+                        "tel":x.tel,
+                        "line_id":x.line_id,
+                        "facebook_id":x.facebook_id,
+                        "product":x.product_in_stock
+                        }
+                       for x in all_branch.search_branch(name)]}
+
 
 
 @app.post("/branch/", tags=["branch"])
@@ -351,7 +385,7 @@ async def info_verification(data: EditProfile,id=Depends(Sys.get_current_user)):
 		id._gender = data.gender or id._gender
 		id._tel = data.tel or id._tel
 		return {"status":"Success"}
-	
+
 
 
 @app.post("/token", response_model=Token, tags=["user"])
@@ -372,7 +406,7 @@ async def view_info(userid=Depends(Sys.get_current_user)):
             "email ": userid._email,
             "full_name" : userid._full_name,
             "gender": userid._gender,
-            "tel": userid._tel, 
+            "tel": userid._tel,
     }
 
 @app.get("/user", tags=["user"])
@@ -399,7 +433,7 @@ async def registration(data:RegisterDTO):
     input_dict['__email_notification'] = data.email_noti
     input_dict['__sms_notification'] = data.sms_noti
     Sys.register(Customer(input_dict["_email"], input_dict["_password"], input_dict["_full_name"], input_dict["_gender"], input_dict["_tel"], input_dict["__email_notification"], input_dict["__sms_notification"], input_dict["_address"]))
-    
+
     return {"status":"Success"}
 
 @app.put("/remove_basket", tags=["user"])
@@ -421,7 +455,7 @@ async def search_book(name:str):
                         "score":f'{x._rating_score:.2f}',
                         "brief":x._brief}
                        for x in batalog.list_of_book if x._amount_in_stock != 0]}
-    
+
 @app.put("/books/{bookname}", tags=["books"])
 async def modify_book_to_catalog(bookname, data:ModifyBookDTO):
     book = batalog.find_book_by_name(bookname)
