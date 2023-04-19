@@ -206,6 +206,16 @@ async def show_basket(current_user : Customer = Depends(Sys.get_current_user)):
                         "amount":x._amount
                         }
                        for x in current_user.basket.book_item]}
+    
+@app.put("/basket/add_amount/{bookname}", tags=["user"])
+async def add_amount(bookname:str, current_user : Customer = Depends(Sys.get_current_user)):
+    book = batalog.find_book_by_name(bookname)
+    current_user.add_amount(bookname,book)
+        
+@app.put("/basket/reduce_amount/{bookname}", tags=["user"])
+async def reduce_amount(bookname:str, current_user : Customer = Depends(Sys.get_current_user)):
+    book = batalog.find_book_by_name(bookname)
+    current_user.reduce_amount(bookname,book)
 
 @app.post("/books/{bookname}/add_book_to_basket", tags=["user"])
 async def add_book_to_basket(bookname:str, amount:int, current_user : Customer = Depends(Sys.get_current_user)):

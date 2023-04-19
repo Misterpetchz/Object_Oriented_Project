@@ -35,7 +35,7 @@ export default function EditProfile() {
     (address == "") &&
     (email_noti == old_data.email_noti) &&
     (sms_noti == old_data.sms_noti)){
-      return;
+      navigate("/profile");
     } else {
       axios
         .put("http://localhost:8000/users/edit", {

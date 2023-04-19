@@ -31,6 +31,28 @@ function Basket() {
             });
     }
 
+    const add_amount = (bookname) => {
+        axios
+            .put(`http://localhost:8000/basket/add_amount/${bookname}`)
+            .then(() => {
+                location.reload();
+            })
+            .catch(function (error) {
+                console.log(error, "error");
+            });
+    }
+
+    const reduce_amount = (bookname) => {
+        axios
+            .put(`http://localhost:8000/basket/reduce_amount/${bookname}`)
+            .then(() => {
+                location.reload();
+            })
+            .catch(function (error) {
+                console.log(error, "error");
+            });
+    }
+
     return(
         <div style={{ minHeight: 800, marginTop: 30 }}>
             <h1>Basket</h1>
@@ -42,6 +64,8 @@ function Basket() {
                                     <div>{book.price} </div>
                                     <div>{book.genre} </div>
                                     <div>{book.amount} </div>
+                                    <button type="button" onClick={() => add_amount(book.name)}>Add</button>
+                                    <button type="button" onClick={() => reduce_amount(book.name)}>reduce</button>
                                     <br></br>
                                 </div>
                         ))} </span>
