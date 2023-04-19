@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>OOP Project</title>
+  <link rel="stylesheet" href="{{ url_for('static', path='/css/style.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+  <h1 class="body-head">This Page is working!</h1>
+  <br>
+  <br>
+  <div class="body-item">
+    {%for order in order_list.get_item%}
+        <p>{{order.name}} x {{order.amount}} : {{order.price*order.amount}}<br></p>
+    {%endfor%}
+    <br>
+    <p>TOTAL : {{order_list.total}}</p>
+    <br>
+    <form>
+      <input type="hidden" name="book">
+      <button type="submit">Make Payment</button>
+    </form>
+  </div>
+  <nav>
+    <ul>
+      <li>
+        <a href="/">
+          <i class="fas fa-home"></i>
+          <span class="nav-item">Home</span>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <i class="fas fa-user"></i>
+          <span class="nav-item">User</span>
+        </a>
+      </li>
+      <li>
+        <a href="/basket">
+          <i class="fas fa-cart-arrow-down"></i>
+          <span class="nav-item">Cart</span>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <i class="fas fa-sign-out-alt"></i>
+          <span class="nav-item">User</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+</body>    
+</html>
