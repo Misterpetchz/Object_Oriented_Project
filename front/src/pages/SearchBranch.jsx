@@ -4,9 +4,9 @@ import axios from "axios";
 import SearchBar from "./SearchBar";
 import { NavLink } from "react-router-dom";
 
-export default function Searchs() {
+export default function SearchBranch() {
 
-    const [search_list, setSearchList] = useState([]);
+    const [search_list_b, setSearchList_b] = useState([]);
 
     const clearResults = () => setQuotes([]);
 
@@ -15,9 +15,9 @@ export default function Searchs() {
           return;
         } else {
           axios
-            .post(`http://localhost:8000/search/?name=${search}`)
+            .post(`http://localhost:8000/branch/search/?name=${search}`)
             .then((result) => {
-                setSearchList(result.data.searchlist);
+                setSearchList_b(result.data.branch);
                 console.log(result)
                 }
             )
@@ -32,19 +32,10 @@ export default function Searchs() {
           <h1>Search page</h1>
           <SearchBar searching={searching} clearResults={clearResults}/>
                 <ul>
-                    {search_list.map((item) => (
+                    {search_list_b.map((item) => (
                         <li>
                             <div>
-
-									<NavLink to={`/books/${item.name}`}>{item.name}</NavLink>
-                                    <span>{item.creator} </span>
-                                    <span>{item.old_price} </span>
-                                    <span>{item.new_price} </span>
-                                    <span>{item.genre.map((genre)=>(
-                                            <span>{genre}, </span>
-                                    ))} </span>
-                                    <span>{item.score} </span>
-                                    <span>{item.brief} </span>
+                                    <span>{item.name} </span>
                             </div>
                         </li>
                     ))}

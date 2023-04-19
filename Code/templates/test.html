@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <script>function sendPut_Add(event) {
+            event.preventDefault(); // prevent form submission
+        
+            const book_item = event.target.book_item.value;
+            const url = '/add_amount';
+        
+            fetch(url, {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'text/plain'
+              },
+              body: JSON.stringify({book_item})
+            })
+            .then(response => {
+              if (response.ok) {
+                // Redirect to the new page
+                window.location.href = '/basket';
+              } else {
+                throw new Error('Network response was not ok');
+              }
+            })
+          }
+        </script>
+    </body>
+</html>
