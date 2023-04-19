@@ -23,8 +23,8 @@ function Basket() {
     const make_order = () => {
         axios
             .get(`http://localhost:8000/make_order`)
-            .then(() => {
-                navigate('/payment')
+            .then((response) => {
+                navigate(`/payment/${response.data.id}`)
             })
             .catch(function (error) {
             console.log(error, "error");

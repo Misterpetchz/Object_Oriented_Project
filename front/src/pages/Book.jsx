@@ -10,6 +10,7 @@ function Book() {
     const [score_each_rating, setRatingScore] = useState("");
     const [comment, setComment] = useState("");
     const [rating, setRating] = useState([]);
+    const [comment_submit, setCommentSubmit] = useState(false)
     const params = useParams()
 
     useEffect(() => {
@@ -27,20 +28,22 @@ function Book() {
             .then((result) => {
                 setRating(result.data);
                 }
+            ).then(
+              setCommentSubmit(false)
             )
             .catch(function (error) {
               console.log(error, "error");
             });
-        },[])
+        },[comment_submit])
 
         const add_rating = () => {
           axios
               .post(`http://localhost:8000/books/${params.bookname}/addrating`, {
                 comment:comment, score:score_each_rating
               })
-              .then(() => {
-                window.location.reload(false);
-                })
+              .then(
+                setCommentSubmit(true)
+              )
               .catch(function (error) {
                 console.log(error, "error");
               });
@@ -48,7 +51,7 @@ function Book() {
 
         const add_book_to_basket = () => {
             axios
-              .post(`http://localhost:8000/books/${params.bookname}/add_book_to_basket?amount=10`)
+              .post(`http://localhost:8000/books/${params.bookname}/add_book_to_basket?amount=1`)
               .then(() => {
                   navigate("/basket")
                 })
@@ -61,7 +64,7 @@ function Book() {
         return(
             <div style={{ minHeight: 800, marginTop: 30 }}>
               <h1>Home</h1>
-                            <span>{book.cover} </span>
+                            <img src={book.cover} height="200px" />
                             <span>{book.name} </span>
                             <span>{book.creator} </span>
                             <span>{book.old_price} </span>

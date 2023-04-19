@@ -1,32 +1,47 @@
 import axios from "axios";
 import { useNavigate } from "react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function EditProfile() {
   const navigate = useNavigate();
+  const [old_data, setOldData] = useState("");
   const [password, setPassword] = useState("");
   const [full_name, setFullname] = useState("");
   const [gender, setGender] = useState("");
   const [tel, setTel] = useState("");
   const [address, setAddress] = useState("");
-  const [email_noti, setEmailNoti] = useState("");
-  const [sms_noti, setSmsNoti] = useState("");
+  const [email_noti, setEmailNoti] = useState(false);
+  const [sms_noti, setSmsNoti] = useState(false);
+
+  useEffect(() => {
+    axios
+        .get(`http://localhost:8000/user`)
+        .then((result) => {
+            setOldData(result.data);
+            setSmsNoti(result.data.sms_noti)
+            setEmailNoti(result.data.email_noti)
+            }
+        )
+        .catch(function (error) {
+          console.log(error, "error");
+        });
+    },[])
 
   const editprofile = () => {
     if ((password == "") &&
     (full_name == "") &&
     (gender == "") &&
     (tel == "") &&
-    (address == "") && 
-    (email_noti == "") &&
-    (sms_noti == "")){
+    (address == "") &&
+    (email_noti == old_data.email_noti) &&
+    (sms_noti == old_data.sms_noti)){
       return;
     } else {
       axios
         .put("http://localhost:8000/users/edit", {
            password : password, full_name : full_name,
             gender : gender, tel : tel, address : address,
-            email_noti : email_noti, sms_noti : sms_noti
+            email_noti : old_data.email_noti, sms_noti : old_data.sms_noti
         })
         .then((response) => {
           if (response.data.status == "Success") {
@@ -37,6 +52,16 @@ export default function EditProfile() {
           console.log(error, "error");
         });
     }
+  };
+
+  const handleInputChange = (event) => {
+    const { name, type, checked, value } = event.target;
+    const newValue = type === 'checkbox' ? checked : value;
+
+    setOldData({
+      ...old_data,
+      [name]: newValue
+    });
   };
 
   return (
@@ -55,6 +80,7 @@ export default function EditProfile() {
                 <label style={{ marginRight: 10 }}>Full Name</label>
                 <input
                 type="text"
+                placeholder={old_data.full_name}
                 onChange={(e) => setFullname(e.target.value)}
               />
                 </div>
@@ -62,6 +88,7 @@ export default function EditProfile() {
                 <label style={{ marginRight: 10 }}>Gender</label>
                 <input
                 type="text"
+                placeholder={old_data.gender}
                 onChange={(e) => setGender(e.target.value)}
               />
                 </div>
@@ -69,6 +96,7 @@ export default function EditProfile() {
                 <label style={{ marginRight: 10 }}>Tel</label>
                 <input
                 type="text"
+                placeholder={old_data.tel}
                 onChange={(e) => setTel(e.target.value)}
               />
                 </div>
@@ -76,24 +104,28 @@ export default function EditProfile() {
                 <label style={{ marginRight: 10 }}>Address</label>
                 <input
                 type="text"
+                placeholder={old_data.address}
                 onChange={(e) => setAddress(e.target.value)}
               />
                 </div>
                 <div>
                 <label style={{ marginRight: 10 }}>Email Noti</label>
                 <input
-                type="text"
-                onChange={(e) => setEmailNoti(e.target.value)}
+                type="checkbox"
+                name="email_noti"
+                checked={old_data.email_noti}
+                onChange={handleInputChange}
               />
                 </div>
                 <div>
                 <label style={{ marginRight: 10 }}>Sms Noti</label>
                 <input
-                type="text"
-                onChange={(e) => setSmsNoti(e.target.value)}
+                type="checkbox"
+                name="sms_noti"
+                checked={old_data.sms_noti}
+                onChange={handleInputChange}
               />
-                </div>
-                
+                </div>  
               <button type="button" onClick={editprofile}>
                 Edit
               </button>

@@ -13,9 +13,6 @@ import { RequireToken } from './auth'
 import axios from 'axios';
 import Book from './pages/Book';
 import EditProfile from './pages/EditProfile';
-import CreditCard from './pages/CreditCard';
-import EditCreditCard from './pages/EditCreditCard';
-import SearchBranch from './pages/SearchBranch';
 
 axios.interceptors.request.use(
   config => {
@@ -33,34 +30,29 @@ function App() {
     <BrowserRouter>
       <h1>BookShop</h1>
       <nav>
-        <NavLink to="/">Home</NavLink><br/>
+        <NavLink to="/">Home</NavLink>
         <NavLink to="/login">Login</NavLink>
         <NavLink to="/profile">Profile</NavLink>
         <NavLink to="/contact">Contact</NavLink>
         <NavLink to="/cart">Cart</NavLink>
         <NavLink to="/search">Search</NavLink>
-		<NavLink to="/branch/search">Search_B</NavLink>
-        <NavLink to="/register">Register</NavLink>
         <NavLink to="/admin">Admin</NavLink>
         <NavLink to="/basket">Basket</NavLink>
-        <NavLink to="/profile/credit_card">CreditCard</NavLink>
-        <NavLink to="/profile/credit_card/edit">EditCreditCard</NavLink>
         </nav>
       <Routes>
         <Route path='/' element = {<Catalog/>}/>
         <Route path='/login' element = {<Login/>}/>
         <Route path='/profile' element={<RequireToken>
                                           <Profile />
-                                        </RequireToken>}
+                                        </RequireToken>}                        
         />
         <Route path='/search' element={<Searchs/>}/>
-        <Route path='/branch/search' element={<SearchBranch/>}/>
-        <Route path='/profile/credit_card' element={<CreditCard/>}/>
-        <Route path='/profile/credit_card/edit' element={<EditCreditCard/>}/>
         <Route path='/register' element={<Register/>}/>
         <Route path='/admin' element={<Admin/>}/>
         <Route path='/books/:bookname' element = {<Book/>}/>
-        <Route path='/basket' element = {<Basket/>}/>
+        <Route path='/basket' element = {<RequireToken>
+                                          <Basket />
+                                        </RequireToken>}/>
         <Route path='/editprofile' element = {<EditProfile/>}/>
       </Routes>
     </BrowserRouter>

@@ -2,6 +2,7 @@ import { useNavigate } from "react-router";
 import { fetchToken, setToken } from "../auth";
 import { useState } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -48,7 +49,7 @@ export default function Login() {
 
               <label style={{ marginRight: 10 }}>Input Password</label>
               <input
-                type="text"
+                type="password"
                 onChange={(e) => setPassword(e.target.value)}
               />
 
@@ -58,6 +59,7 @@ export default function Login() {
             </form>
           </div>
         )}
+        <Link to="/register" >Register</Link>
       </div>
     </div>
   );

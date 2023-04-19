@@ -1,10 +1,11 @@
 from pydantic import BaseModel
 from datetime import datetime
+
 class AddBooktoBasketDTO(BaseModel):
     amount:int
 
 class AddBookDTO(BaseModel):
-    cover:str
+    cover: bytes
     brief:str
     creator:str
     name:str
@@ -18,7 +19,7 @@ class AddBookDTO(BaseModel):
     date_created:str
     price:int
     amount:int
-
+    
 class AddBranchDTO(BaseModel):
     branch_name:str
     open_time:str
@@ -26,22 +27,22 @@ class AddBranchDTO(BaseModel):
     tel:str
     line_id:str
     facebook_id:str
-
+    
 class MakeOrderDto(BaseModel):
     status : bool
-
-
+    
+    
 class RemoveBookDTO(BaseModel):
     index:int
     book_name:str
 
 class SearchBookDTO(BaseModel):
     string:str
-
+    
 class AddRatingDTO(BaseModel):
     comment:str
     score:int
-
+    
 class Branchs(BaseModel):
     branch_name : str
     open_time : str
@@ -69,8 +70,7 @@ class ModifyBookDTO(BaseModel):
 
 class CreditCards(BaseModel):
     card_num : str
-    expire_date : str
-    # expire_date : datetime
+    expire_date : datetime
     cvc : str
 
 
@@ -82,23 +82,24 @@ class BranchModel(BaseModel):
         line_id = str
         facebook_id = str
         product_in_stock = str
-
-
+    
+    
 class RegisterDTO(BaseModel):
-    email : str
+    email : str 
     password : str
     full_name : str
     gender : str
     tel : str
     address : str
-    email_noti : str
-    sms_noti : str
-
+    email_noti : bool
+    sms_noti : bool
+    
 class EditProfile(BaseModel):
     password: str | None
-    full_name: str | None
+    full_name: str | None 
     gender: str | None
     tel: str | None
     address: str | None
     email_noti: bool | None
     sms_noti: bool | None
+	

@@ -10,11 +10,12 @@ export default function Register() {
   const [gender, setGender] = useState("");
   const [tel, setTel] = useState("");
   const [address, setAddress] = useState("");
-  const [email_noti, setEmailNoti] = useState("");
-  const [sms_noti, setSmsNoti] = useState("");
+  const [email_noti, setEmailNoti] = useState(false);
+  const [sms_noti, setSmsNoti] = useState(false);
+  const [fail, setFail] = useState("");
 
   const register = () => {
-    if ((username == "") || (password == "") || (full_name == "") || (gender == "") || (tel == "") || (address == "") || (email_noti == "") || (sms_noti == "")){
+    if ((username == "") || (password == "") || (full_name == "") || (gender == "") || (tel == "") || (address == "")){
       return;
     } else {
       axios
@@ -26,6 +27,9 @@ export default function Register() {
         .then(function (response) {
           if (response.data.status == "Success") {
             navigate("/login");
+          }
+          else if (response.data.status == "Reject"){
+            setFail("Have already Username")
           }
         })
         .catch(function (error) {
@@ -84,15 +88,17 @@ export default function Register() {
                 <div>
                 <label style={{ marginRight: 10 }}>Email Noti</label>
                 <input
-                type="text"
-                onChange={(e) => setEmailNoti(e.target.value)}
+                type="checkbox"
+                checked={email_noti}
+                onChange={(e) => setEmailNoti(!email_noti)}
               />
                 </div>
                 <div>
                 <label style={{ marginRight: 10 }}>Sms Noti</label>
                 <input
-                type="text"
-                onChange={(e) => setSmsNoti(e.target.value)}
+                type="checkbox"
+                checked={sms_noti}
+                onChange={(e) => setSmsNoti(!sms_noti)}
               />
                 </div>
                 
@@ -100,6 +106,9 @@ export default function Register() {
                 Register
               </button>
             </form>
+            <div>
+              {fail}
+            </div>
           </div>
     </div>
   );
