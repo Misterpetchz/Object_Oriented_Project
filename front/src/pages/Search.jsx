@@ -2,6 +2,7 @@ import React from "react";
 import { useState } from "react";
 import axios from "axios";
 import SearchBar from "./SearchBar";
+import { NavLink } from "react-router-dom";
 
 export default function Searchs() {
 
@@ -25,7 +26,7 @@ export default function Searchs() {
             });
         }
       };
-    
+
       return (
         <div style={{ minHeight: 800, marginTop: 30 }}>
           <h1>Search page</h1>
@@ -34,7 +35,8 @@ export default function Searchs() {
                     {search_list.map((item) => (
                         <li>
                             <div>
-                                    <span>{item.name} </span>
+
+									<NavLink to={`/books/${item.name}`}>{item.name}</NavLink>
                                     <span>{item.creator} </span>
                                     <span>{item.old_price} </span>
                                     <span>{item.new_price} </span>
