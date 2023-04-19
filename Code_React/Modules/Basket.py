@@ -8,6 +8,7 @@ class Basket:
         self.__book_item.append(book)
     def remove_book(self, book):
         self.__book_item.pop(book)
+
     def get_book(self):
         return self.__book_item
     def get_price(self):

@@ -39,7 +39,7 @@ function App() {
         <NavLink to="/contact">Contact</NavLink>
         <NavLink to="/cart">Cart</NavLink>
         <NavLink to="/search">Search</NavLink>
-		<NavLink to="/branch/search">Search_B</NavLink>
+		    <NavLink to="/branch/search">Search_B</NavLink>
         <NavLink to="/register">Register</NavLink>
         <NavLink to="/admin">Admin</NavLink>
         <NavLink to="/basket">Basket</NavLink>
