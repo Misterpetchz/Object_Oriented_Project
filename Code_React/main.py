@@ -216,6 +216,11 @@ async def add_amount(bookname:str, current_user : Customer = Depends(Sys.get_cur
 async def reduce_amount(bookname:str, current_user : Customer = Depends(Sys.get_current_user)):
     book = batalog.find_book_by_name(bookname)
     current_user.reduce_amount(bookname,book)
+    
+@app.delete("/basket/delete_item/{bookname}", tags=["user"])
+async def delete_amount(bookname:str, current_user : Customer = Depends(Sys.get_current_user)):
+    book = batalog.find_book_by_name(bookname)
+    current_user.delete_item(bookname,book)
 
 @app.post("/books/{bookname}/add_book_to_basket", tags=["user"])
 async def add_book_to_basket(bookname:str, amount:int, current_user : Customer = Depends(Sys.get_current_user)):

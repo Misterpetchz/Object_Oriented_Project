@@ -53,6 +53,17 @@ function Basket() {
             });
     }
 
+    const delete_amount = (bookname) => {
+        axios
+        .delete(`http://localhost:8000/basket/delete_item/${bookname}`)
+        .then(() => {
+            location.reload();
+        })
+        .catch(function (error) {
+            console.log(error, "error");
+        });
+    }
+
     return(
         <div style={{ minHeight: 800, marginTop: 30 }}>
             <h1>Basket</h1>
@@ -66,6 +77,7 @@ function Basket() {
                                     <div>{book.amount} </div>
                                     <button type="button" onClick={() => add_amount(book.name)}>Add</button>
                                     <button type="button" onClick={() => reduce_amount(book.name)}>reduce</button>
+                                    <button type="button" onClick={() => delete_amount(book.name)}>delete</button>
                                     <br></br>
                                 </div>
                         ))} </span>

@@ -122,7 +122,13 @@ class Customer(UserAccount):
                     item.amount = item.amount+1
                     book.stock_amount -=1
                     self.basket.price += item.price
-        
+    
+    def delete_item(self,book_item,book:Book):
+        for item in self.basket.book_item:
+            if book_item == item.name:
+                book.stock_amount += item.amount
+                self.basket.book_item.remove(item)
+                        
     def make_order(self, order):
         if len(self.__basket.book_item) > 0:
             self.__order_list.append(order)
