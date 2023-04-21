@@ -3,7 +3,7 @@ import React from "react"
 import ModifyBookForm from "./ModifyBook"
 import RemoveBookForm from "./removeBook"
 
-export default function Book(){
+export default function BookEdit(){
 
     return (
         <div>

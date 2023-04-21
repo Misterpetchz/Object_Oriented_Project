@@ -1,5 +1,6 @@
 from Modules.settings import *
 from Modules.UserAccount import *
+from datetime import date, datetime, timedelta
 
 class System :
     def __init__(self) :
@@ -59,3 +60,12 @@ class System :
         if user is None :
             raise credential_exception
         return user
+    
+    # @property
+    # def userDB(self):
+    #     return self.User_DB
+
+    def find_user_by_payment_id(self, id):
+        for user in self.User_DB:
+            if id == user.payment_id:
+                return user

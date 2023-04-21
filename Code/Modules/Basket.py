@@ -24,6 +24,8 @@ class Basket:
         self.__book_item.pop(index)
     def get_book(self):
         return self.__book_item
+    def set_book(self, book):
+        self.__book_item = book
     def get_price(self):
         return self.__price
     def set_price(self, new_price):
@@ -31,4 +33,4 @@ class Basket:
 
     
     price = property(get_price, set_price)
-    book_item = property(get_book)
+    book_item = property(get_book, set_book)

@@ -31,6 +31,7 @@ import time
 import datetime
 import starlette.status as status
 from fastapi.middleware.cors import CORSMiddleware
+import io
 
 
 app = FastAPI()
@@ -119,15 +120,8 @@ shop.add_branch(moon_branch)
 
 
 
-pookaneiei1 = Customer("pookan@gmail.com", Sys.get_password_hash("test1"), "pookan", "Male", "0000000000", True, False, "LLL")
-pookaneiei = Customer('pookantong.p@gmail.com',
-                 Sys.get_password_hash("test2"),
-                 'PookanNaja',
-                 'Male',
-                 '0980231173',
-                 True,
-                 True,
-                 '29/7 หมู่2 ตำบลบั้นเด้า อำเภอรถแห่ จังหวัดสก๊อย ประเทศหิวข้าว ดาวSun')
+pookaneiei1 = Customer("pookan2@gmail.com", Sys.get_password_hash("test1"), "pookan", "Male", "0000000000", True, False, "LLL")
+
 Sys.register(pookaneiei)
 Sys.register(pookaneiei1)
 
@@ -294,37 +288,6 @@ async def show_book(bookname:str,branch_available:bool | None = None):
 async def show_book_catalog(request:Request):
     return templates.TemplateResponse("addbook.html",{"request": request, "list_book": batalog.list_all_of_book})
 
-@app.post("/book/add")
-async def add_book_to_catalog(cover:str = Form(...),
-                              brief:str = Form(...),
-                              creator:str = Form(...),
-                              name:str = Form(...),
-                              book_info:str = Form(...),
-                              book_publisher:str = Form(...),
-                              book_preview:str = Form(...),
-                              critic_review:str = Form(...),
-                              table_of_content:str = Form(...),
-                              summary:str = Form(...),
-                              genre:str = Form(...),
-                              date_created:str = Form(...),
-                              price:int = Form(...),
-                              amount:int = Form(...)):
-    batalog.add_book(Book(cover,
-                          brief,
-                          creator,
-                          name,
-                          book_info,
-                          book_publisher,
-                          book_preview,
-                          critic_review,
-                          table_of_content,
-                          summary,
-                          genre,
-                          date_created,
-                          price,
-                          amount))
-    return RedirectResponse(url="/book/",status_code=status.HTTP_302_FOUND)
-
 @app.post("/books/{bookname}/add_book_to_basket", tags=["user"])
 async def add_book_to_basket(bookname:str, amount:int, current_user : Customer = Depends(Sys.get_current_user)):
     event.event_dis(batalog)
@@ -341,9 +304,6 @@ async def view_book(request:Request,book_name:str):
     return templates.TemplateResponse("bookdetail.html", {"request":request,"book":get_book(book_name)})
 
 #################################  BASKETPAGE  ####################################  
-@app.get("/basket")
-async def basket(request:Request):
-    return templates.TemplateResponse("cart.html", {"request":request,"basket_list":pookaneiei.basket})
 @app.get("/books/{bookname}/rating", tags=["books"])
 async def show_book_rating(bookname):
     book = batalog.find_book_by_name(bookname)
@@ -352,90 +312,10 @@ async def show_book_rating(bookname):
                        "comment":x._book_comment} for x in book._rating]}
 
 #################################  BRANCH PAGE  ####################################
-@app.get("/branch/")
-async def show_branch(request:Request):
-    return templates.TemplateResponse("search_branch.html", {"request": request, "branch_list": shop.list_of_branch})
-                       
-@app.get("/branch/search/")
-async def search_branch(request:Request, book_name:str):
-    return templates.TemplateResponse("search_branch.html", {"request": request, "branch_list": shop.search_available_branch(book_name)})
 
-@app.get("/branches/")
-async def show_branch(request:Request):
-     return templates.TemplateResponse("branch.html", {"request": request, "branch_list": shop.list_of_branch})
-
-@app.post("/branches/add/")
-async def add_branch(branch_name: str = Form(...),
-                     open_time: str = Form(...),
-                     location: str = Form(...),
-                     tel: str = Form(...),
-                     line_id: str = Form(...),
-                     facebook_id: str = Form(...)):
-    shop.add_branch(Branch(branch_name,
-                open_time,
-                location,
-                tel,
-                line_id,
-                facebook_id))
-    return RedirectResponse(url="/branches/", status_code=status.HTTP_302_FOUND)
-
-# PUT
-@app.post("/branches/modify/")
-async def modify_branch(name: str = Form(...),
-                        branch_name: str = Form(...),
-                        open_time: str = Form(...),
-                        location: str = Form(...),
-                        tel: str = Form(...),
-                        line_id: str = Form(...),
-                        facebook_id: str = Form(...)):
-    select_branch = shop.select_branch(name)
-    select_branch.modify_branch(branch_name, open_time, location, tel, line_id, facebook_id,[],[])
-    return RedirectResponse(url="/branches/", status_code=status.HTTP_302_FOUND)
-
-# DELETE
-@app.post("/branches/delete/")
-async def delete_branch(branch_name : str = Form(...)):
-    shop.delete_branch(branch_name)
-    return RedirectResponse(url="/branches/", status_code=status.HTTP_302_FOUND)
-
-@app.get("/card/")
-async def show_credit_card(request:Request):
-    return templates.TemplateResponse("card.html",{"request":request})
-
-@app.post("/card/modify/")
-async def modify_card(card_num: str = Form(...),
-                 expire_date: str = Form(...),
-                 cvc: str = Form(...), 
-                 current_user = Depends(Sys.get_current_user)):
-    current_user.credit_card.modify_credit_card_info(card_num, expire_date, cvc)
-    return RedirectResponse(url="/card/", status_code=status.HTTP_302_FOUND)
-
-@app.post("/add_basket")
-async def add_book_to_basket(book:str = Form(...)):
-    event.event_dis(batalog)
-    book_item = get_book(book)
-    pookaneiei.add_book_to_basket(BookItem(book_item),book_item)
-    return RedirectResponse(url="/books/"+book, status_code=status.HTTP_302_FOUND)
-@app.post("/add_amount")
-async def add_book_to_basket(book:str = Form(...)):
-    event.event_dis(batalog)
-    pookaneiei.basket.add_amount(book)
-    return RedirectResponse(url="/basket", status_code=status.HTTP_302_FOUND)
-@app.post("/reduce_amount")
-async def add_book_to_basket(book:str = Form(...)):
-    event.event_dis(batalog)
-    pookaneiei.basket.reduce_amount(book)
-    return RedirectResponse(url="/basket", status_code=status.HTTP_302_FOUND)
 
 #################################  ORDERPAGE  ####################################
-@app.get("/order")
-async def make_order(request:Request):
-    order = Order(pookaneiei.basket.book_item,
-                        random.randint(1000,9999),
-                        False,
-                        pookaneiei.basket.price,
-                        pookaneiei)
-    return templates.TemplateResponse("order.html", {"request":request,"order_list":order})
+
 @app.post("/books/{bookname}/addrating", tags=["books"])
 async def add_rating(bookname, data:AddRatingDTO):
     book:Book = batalog.find_book_by_name(bookname)
@@ -577,20 +457,44 @@ async def delete_event(event_name):
     shop.delete_event(select_event.event_name)
     return {"Remove This Event Success"}
 
-@app.get("/Payment/Check")
-async def check_payment(status : str):
-    if status.lower() == "success":
-        return {"success"}
-    else:
-        return {"reject"}
+@app.get("/make_order", tags=["user"])
+async def make_order(current_user : Customer = Depends(Sys.get_current_user)):
+    current_user.make_order(Order(current_user.basket.book_item,
+                                current_user.order_id,
+                                True,
+                                current_user.basket.price,
+                                current_user._full_name))
+    current_user.basket.book_item = []
+    return {"payment_id" : current_user.payment_id}
 
-@app.get("/QrPayment/Generate/")
-async def generate_qr(current_user = Depends(Sys.get_current_user)):
-    transactions = ViaQrCode(current_user.basket.price, "04-07-2023")
-    transactions.generate_qr_code()
-    del transactions
-    return FileResponse("../qrcode-0890767442.png")
-    # redirect to check payment
+@app.get('/payment/{id}')
+async def get_payment(id, current_user = Depends(Sys.get_current_user), payment_type:str = None):
+    if id == current_user.payment_id:
+        if payment_type is None:
+            return current_user.order
+        elif payment_type.lower() == 'qrcode':
+             return {"payment" : current_user.make_payment(payment_type) }
+        
+# Check Status api        
+@app.get('/payment_status/{id}')
+async def check_payment(id, current_user = Depends(Sys.get_current_user)):
+    if id == current_user.payment_id:
+        if current_user.status == 'paid':
+            current_user.add_order_to_order_list(current_user.order)
+            current_user.reset_payment()
+            return current_user.payment.status
+
+# Bank api
+@app.post('/payment_status/{id}')
+async def fake_bank(id, status:str = None):
+    user = Sys.find_user_by_payment_id(id)
+    user.payment.check_status(status)
+
+    # if  user.payment.status == status
+
+# @app.get("/payment/{id}")
+# async def generate_qrCode(payment_type ,current_user = Depends(Sys.get_current_user)):
+#     return {"Payment" : current_user.make_payment(payment_type) }
 
 async def get_current_active_user(current_user = Depends(Sys.get_current_user)) :
 	# print(current_user.__dict__)
@@ -652,11 +556,17 @@ async def registration(email : str , password : str, full_name : str, gender : s
 	Sys.register(Customer(input_dict["_email"], input_dict["_password"], input_dict["_full_name"], input_dict["_gender"], input_dict["_tel"], input_dict["__email_notification"], input_dict["__sms_notification"], input_dict["_address"]))
 	return {"status":"Success"}
 
-@app.put("/basket", tags=["user"])
-async def remove_from_basket(data:RemoveBookDTO, current_user : Customer = Depends(Sys.get_current_user)):
-    book = batalog.find_book_by_name(data.book_name)
-    current_user.remove_book_from_basket(data.index,book)
-    return {"status":"Success"}
+
+@app.get("/basket", tags=["user"])
+async def show_basket(current_user : Customer = Depends(Sys.get_current_user)):
+    print(current_user.basket.book_item)
+    return {"basket":[{"cover":x._cover,
+                        "name":x._name,
+                        "price":x._price,
+                        "genre":x._genre,
+                        "amount":x._amount
+                        }
+                       for x in current_user.basket.book_item]}
 
 @app.post("/search", tags=["books"])
 async def search_book(name:str):

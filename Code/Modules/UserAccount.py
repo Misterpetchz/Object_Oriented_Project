@@ -9,6 +9,8 @@ from Modules.Rating import Rating
 from Modules.EventDiscount import EventDiscount
 from Modules.CreditCard import CreditCard
 from Modules.settings import *
+from Modules.Payment import *
+import datetime
 
 
 class UserAccount:
@@ -59,11 +61,16 @@ class Customer(UserAccount):
     def __init__(self, email, password, fullname, gender, tel, email_noti, sms_noti, address):
         super().__init__(email, password, fullname, gender, tel)
         self._address = address
-        self.__email_notification = email_noti
-        self.__sms_notification = sms_noti
+        self.__email_notification = email_noti #bool
+        self.__sms_notification = sms_noti #bool
         self.__basket = Basket()
         self._disabled = False
         self.__order_list = []
+        self.__credit_card = None
+        self.__order_id = 1
+        self.__order = None
+        self.__payment = None
+        self.__payment_id = None
 
     def search_book(self, search_string, catalog:Catalog):
         lists=[]
@@ -79,34 +86,77 @@ class Customer(UserAccount):
                 if elements == book:
                     lists.append(element)
                     return lists
-    
     def request_edit():
         pass
 
+    def modify_credit_card_info(card_num,exp_date,cvc):
+        pass
     def info_verification(email, password, full_name, gender, tel, shipping, address, email_notification, sms_notification):
         pass
-    def add_credit_card(self, credit_card:CreditCard):
+    def add_credit_card(self, credit_card):
         self.__credit_card = credit_card
-
+    @property
+    def credit_card(self):
+        return self.__credit_card
+    
     def add_book_to_basket(self, book_item, book:Book):
-        self.in_basket = False
-        for i in self.__basket.get_book():
-            if i.name.lower() == book_item.name.lower():
-                i.amount = i.amount + 1
-                self.in_basket = True
-        if self.in_basket == False:
-            self.__basket.add_book(book_item)
-        book._amount_in_stock -= 1
-        self.__basket.price += book_item._price
-    def remove_book_from_basket(self, index, book:Book):
-        self.__basket.remove_book(index)
-        book._amount_in_stock += 1
+        if book._amount_in_stock > 0:
+            for i in self.__basket.get_book():
+                if i.name.lower() == book_item.name.lower():
+                    i.amount = i.amount + 1
+                    book._amount_in_stock -= 1
+                    self.__basket.price += book_item._price
+            else:
+                self.__basket.add_book(book_item)
+                book._amount_in_stock -= 1
+                self.__basket.price += book_item._price
+        
+    def reduce_amount(self,book_item,book:Book):
+        for item in self.basket.book_item:
+            if book_item == item.name:
+                item.amount = item.amount-1
+                book._amount_in_stock +=1
+                self.basket.price -= item.price
+                if item.amount == 0:
+                    self.basket.book_item.remove(item)
+                    
+    def add_amount(self,book_item,book:Book):
+        if book._amount_in_stock > 0:
+            for item in self.basket.book_item:
+                if book_item == item.name:
+                    item.amount = item.amount+1
+                    book._amount_in_stock -=1
+                    self.basket.price += item.price
+    def generate_seed(self, payment_id:str):
+        self.__payment_id = PWD_CONTEXT.hash(payment_id)    
+
     def make_order(self, order):
-        if len(self.__basket.book_item) > 0:
-            self.__order_list.append(order)
-            
-    def make_payment(payment_type):
-        pass
+        if len(self.__basket.book_item) > 0 and self.__payment == None:
+            # self.__order_list.append(order)
+            # self.__order_id += 1
+            self.__order = order
+            self.generate_seed(self._email + str(self.__order_id))
+
+    def make_payment(self, payment_type):
+        current_date = datetime.date.today()
+        format_date = current_date.strftime('%d-%m-%Y') 
+        if payment_type.lower() == 'qrcode':
+            self.__payment = ViaQrCode(self.__basket.price, format_date)
+            return self.__payment.generate_qr_code()
+        
+        if payment_type.lower() == 'creditcard':
+            self.__payment = ViaCreditCard(self.__basket.price, format_date)
+            return self.__payment
+        
+    def add_order_to_order_list(self, order):
+        self.__order_list.append(order)
+    
+    def reset_payment(self):
+        self.__order_id += 1
+        self.__payment = None
+        self.__payment_id = None
+        self.__order = None
+
     def get_basket(self):
         return self.__basket
     def get_order_list(self):
@@ -121,9 +171,18 @@ class Customer(UserAccount):
         self.__email_notification = value
     def set_sms_noti(self, value):
          self.__sms_notification = value
+
+    @property     
+    def payment_id(self):
+        return self.__payment_id
+    
     @property
-    def credit_card(self):
-        return self.__credit_card
+    def order(self):
+        return self.__order
+    
+    @property
+    def payment(self):
+        return self.__payment
 
     order_list = property(get_order_list)
     basket = property(get_basket)
@@ -135,6 +194,7 @@ class Customer(UserAccount):
         return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
         pass
     #! ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
     # def verify_password(plain_password, hashed_password) :
     #     return PWD_CONTEXT.verify(plain_password, hashed_password)
 
