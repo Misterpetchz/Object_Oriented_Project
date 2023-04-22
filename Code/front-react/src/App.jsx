@@ -17,6 +17,7 @@ import Event from './pages/Event'
 import Register from './pages/Register'
 import Basket from './pages/Basket'
 import Payment from './pages/Payment'
+import OrderList from './pages/OrderList'
 
 axios.interceptors.request.use(
   config => {
@@ -29,7 +30,6 @@ axios.interceptors.request.use(
 );
 
 function App() {
-  const [count, setCount] = useState(0)
 
   let activeClassName = "nav-active"
 
@@ -57,7 +57,8 @@ function App() {
         />
         <Route path='/event' element={<Event/>}/>
         <Route path='/basket' element={<Basket />}/>
-        <Route path='/payment/:id/' element={<Payment/>} />
+        <Route path='/payment/:id' element={<Payment/>} />
+        <Route path='/order_list' element={<OrderList/>} />
       </Routes>
     </BrowserRouter>
   )

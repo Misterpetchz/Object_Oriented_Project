@@ -10,6 +10,7 @@ from Modules.EventDiscount import EventDiscount
 from Modules.CreditCard import CreditCard
 from Modules.settings import *
 from Modules.Payment import *
+import hashlib
 import datetime
 
 
@@ -128,7 +129,8 @@ class Customer(UserAccount):
                     book._amount_in_stock -=1
                     self.basket.price += item.price
     def generate_seed(self, payment_id:str):
-        self.__payment_id = PWD_CONTEXT.hash(payment_id)    
+        payment_id = hashlib.sha256(payment_id.encode())    
+        self.__payment_id = payment_id.hexdigest()
 
     def make_order(self, order):
         if len(self.__basket.book_item) > 0 and self.__payment == None:
@@ -151,8 +153,10 @@ class Customer(UserAccount):
     def add_order_to_order_list(self, order):
         self.__order_list.append(order)
     
-    def reset_payment(self):
+    def update_order_id(self):
         self.__order_id += 1
+
+    def reset_payment(self):
         self.__payment = None
         self.__payment_id = None
         self.__order = None

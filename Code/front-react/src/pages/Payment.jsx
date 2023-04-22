@@ -21,7 +21,7 @@ export default function Payment(){
         axios.get(`http://localhost:8000/payment_status/${id}`)
         .then(response => {
             if (response.data.status === 'paid'){
-                Navigate(`/`)
+                Navigate(`/order_list`)
             }
         })
     },)

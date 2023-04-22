@@ -466,7 +466,7 @@ async def make_order(current_user : Customer = Depends(Sys.get_current_user)):
                                 current_user._full_name))
     current_user.basket.book_item = []
     return {"payment_id" : current_user.payment_id}
-
+    
 @app.get('/payment/{id}')
 async def get_payment(id, current_user = Depends(Sys.get_current_user), payment_type:str = None):
     if id == current_user.payment_id:
@@ -481,21 +481,22 @@ async def check_payment(id, current_user = Depends(Sys.get_current_user)):
     if id == current_user.payment_id:
         if current_user.payment.status == 'paid':
             current_user.add_order_to_order_list(current_user.order)
-            status = current_user.payment.status
-            # current_user.reset_payment()
-            return {"status" : status}
-
+            current_user.update_order_id()
+            current_user.reset_payment()
+            return {"status" : 'paid'}
+        # return {"status" : current_user.payment.status}
+    
 # Bank api
 @app.post('/payment_status/{id}')
 async def fake_bank(id, status:str = None):
     user = Sys.find_user_by_payment_id(id)
     user.payment.check_status(status)
 
-    # if  user.payment.status == status
+# Order List after Payment Success
+@app.get('/order_list/')
+async def show_order_list(current_user = Depends(Sys.get_current_user)):
+    return {'order_list' : current_user.order_list}
 
-# @app.get("/payment/{id}")
-# async def generate_qrCode(payment_type ,current_user = Depends(Sys.get_current_user)):
-#     return {"Payment" : current_user.make_payment(payment_type) }
 
 async def get_current_active_user(current_user = Depends(Sys.get_current_user)) :
 	# print(current_user.__dict__)
