@@ -21,12 +21,12 @@ class Token(BaseModel) :
 class TokenData(BaseModel) :
 	email : str or None = None
 
-def	InstanceFinder(classType, attribute, Target) :
-    # return (obj for obj in gc.get_objects() if isinstance(obj, classType) and getattr(obj, attribute) == Target)
-	for obj in gc.get_objects() :
-		if isinstance(obj, classType) and getattr(obj, attribute) == Target :
-			return (obj)
-	return (None);
+# ! Legacy Code (Break the OOP Principal) DO NOT USE!!
+# def	InstanceFinder(classType, attribute, Target) :
+# 	for obj in gc.get_objects() :
+# 		if isinstance(obj, classType) and getattr(obj, attribute) == Target :
+# 			return (obj)
+# 	return (None);
 
 def	ClassInstancePacker(classType) :
 	instance_list = []
