@@ -479,10 +479,11 @@ async def get_payment(id, current_user = Depends(Sys.get_current_user), payment_
 @app.get('/payment_status/{id}')
 async def check_payment(id, current_user = Depends(Sys.get_current_user)):
     if id == current_user.payment_id:
-        if current_user.status == 'paid':
+        if current_user.payment.status == 'paid':
             current_user.add_order_to_order_list(current_user.order)
-            current_user.reset_payment()
-            return current_user.payment.status
+            status = current_user.payment.status
+            # current_user.reset_payment()
+            return {"status" : status}
 
 # Bank api
 @app.post('/payment_status/{id}')

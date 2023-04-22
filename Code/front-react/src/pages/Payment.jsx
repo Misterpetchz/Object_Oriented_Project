@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useParams,useNavigate } from "react-router-dom";
 
 import SelectMethod from "./SelectMethodPayment";
 
 export default function Payment(){
 
+    const Navigate = useNavigate()
     const { id } = useParams();
     const [order, setOrder] = useState('');
 
@@ -13,11 +14,18 @@ export default function Payment(){
         axios.get(`http://localhost:8000/payment/${id}`)
         .then(response => {
             setOrder(response.data)
-        })
+        },)
         .catch(function (error) {
             console.log(error, "error");
             });
-    },[id])
+        axios.get(`http://localhost:8000/payment_status/${id}`)
+        .then(response => {
+            if (response.data.status === 'paid'){
+                Navigate(`/`)
+            }
+        })
+    },)
+
 
     return (
         <div>

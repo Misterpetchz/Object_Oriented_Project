@@ -56,7 +56,7 @@ class ViaQrCode(Payment):
     def check_status(self, status):
         if status.lower() == 'paid':
             self.__status = 'paid'
-            return self.__status
+            # return self.__status
         else:
-            self.__status = 'not paid'
-            return self.__status
+            self.__status = 'reject'
+            # return self.__status
