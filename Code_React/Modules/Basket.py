@@ -6,18 +6,19 @@ class Basket:
         
     def add_book(self, book):
         self.__book_item.append(book)
-    def remove_book(self, book):
-        self.__book_item.pop(book)
 
-    def get_book(self):
+    @property
+    def book_item(self):
         return self.__book_item
-    def get_price(self):
-        return self.__price
-    def set_price(self, new_price):
-        self.__price = new_price
-    def set_book_item(self, new_book_item):
+    @book_item.setter
+    def book_item(self, new_book_item):
         self.__book_item = new_book_item
+    @property
+    def price(self):
+        return self.__price
+    @price.setter
+    def price(self, new_price):
+        self.__price = new_price
+    
 
     
-    price = property(get_price, set_price)
-    book_item = property(get_book, set_book_item)

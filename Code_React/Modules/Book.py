@@ -22,13 +22,15 @@ class Book :
     
     def __repr__(self) -> str:
         return self._name
-    
-    def get_amount_in_stock(self):
+    ##################################################################################################################
+        #GETTER/SETTER#
+    @property
+    def stock_amount(self):
         return self._amount_in_stock
-    
-    def set_amount_in_stock(self,new_amount):
+    @stock_amount.setter
+    def stock_amount(self,new_amount):
         self._amount_in_stock = new_amount
-        
+    ##################################################################################################################
     def add_rating(self, rating:Rating):
         self._rating.append(rating)
         self._rating_score = sum([x._book_rating for x in self._rating])/len(self._rating)
@@ -64,7 +66,6 @@ class Book :
         if isinstance(amount,int):
             self.amount = amount
         
-    stock_amount = property(get_amount_in_stock,set_amount_in_stock)
 class BookItem():
     def __init__(self, book):
         self._cover = book._cover
@@ -76,16 +77,19 @@ class BookItem():
         self._amount = 1
         self._price = book._new_price
         
-    def get_amount(self):
+    #################################################################################################################
+        #GETTER/SETTER#
+    @property
+    def amount(self):
         return self._amount
-    def set_amount(self,new_amount):
+    @amount.setter
+    def amount(self,new_amount):
         self._amount = new_amount
-    def get_name(self):
+    @property
+    def name(self):
         return self._name
-    def get_price(self):
+    @property
+    def price(self):
         return self._price
-
-    amount = property(get_amount,set_amount)
-    name = property(get_name)
-    price = property(get_price)
+    ################################################################################################################
 

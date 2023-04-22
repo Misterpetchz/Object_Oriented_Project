@@ -10,16 +10,24 @@ class EventDiscount():
         self.__discounted_percentage = discounted_percentage
         self.__event_genre = event_genre
         
-    def get_event_name(self):
+    ################################################################################################################## 
+        #GETTER/SETTER#
+    @property   
+    def event_name(self):
         return self.__event_name
-    def get_event_start(self):
+    @property
+    def event_start(self):
         return self.__event_start
-    def get_event_end(self):
+    @property
+    def event_end(self):
         return self.__event_end
-    def get_event_percentage(self):
+    @property
+    def discounted_percentage(self):
         return self.__event_start
-    def get_list_of_book(self):
+    @property
+    def list_of_book(self):
         return self.__list_of_book
+    #################################################################################################################
     def add_book_to_event(self, book:Book):
         self.__list_of_book.append(book)
     def modify_event(self, new_name, new_start, new_end, new_percentage):
@@ -43,10 +51,3 @@ class EventDiscount():
 
     def apply_discount(self, book):
         book._new_price = math.floor(book._price * self.__discounted_percentage)
-
-    event_name = property(get_event_name)
-    event_start = property(get_event_start)
-    event_end = property(get_event_end)
-    discounted_percentage = property(get_event_percentage)
-    list_of_book = property(get_list_of_book)
-    discounted_percentage = property(get_event_percentage)
