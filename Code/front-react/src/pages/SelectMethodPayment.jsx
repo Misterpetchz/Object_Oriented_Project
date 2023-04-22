@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import QrCode from "./QrCode";
+import ViaCreditCard from "./ViaCreditCard";
 
 export default function SelectMethod(){
 
@@ -10,18 +11,6 @@ export default function SelectMethod(){
     const handlePaymentMethodSelect = (event) => {
         setSelectedPaymentMethod(event.target.value)
     }
-
-    // const handlePaidClick = () => {
-    //     setPaymentStatus('paid');
-    // }
-
-    // const handleNotPaidClick = () => {
-    //     setPaymentStatus('not paid');
-    // }
-    // const handleSubmit = (event) => {
-    //     event.preventDefault();
-    //     console.log(`Selected Payment Method : ${selectedPaymentMethod}`);
-    // }
 
     return (
         <div>
@@ -41,7 +30,7 @@ export default function SelectMethod(){
                 {selectedPaymentMethod === 'CreditCard' && (
                     <div>
                         <h3>Pay with Credit Card</h3>
-                        {/* tag credit card */}
+                        <ViaCreditCard />
                     </div>
                 )}
             </form>

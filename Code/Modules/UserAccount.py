@@ -96,6 +96,7 @@ class Customer(UserAccount):
         pass
     def add_credit_card(self, credit_card):
         self.__credit_card = credit_card
+        
     @property
     def credit_card(self):
         return self.__credit_card
@@ -146,9 +147,12 @@ class Customer(UserAccount):
             self.__payment = ViaQrCode(self.__basket.price, format_date)
             return self.__payment.generate_qr_code()
         
-        if payment_type.lower() == 'creditcard':
+        elif payment_type.lower() == 'creditcard':
             self.__payment = ViaCreditCard(self.__basket.price, format_date)
-            return self.__payment
+            # if self.__credit_card == None:
+            #     return {'credit_card' : None}
+            # elif self.__credit_card:
+            #     return {'credit_card' : self.__payment}
         
     def add_order_to_order_list(self, order):
         self.__order_list.append(order)

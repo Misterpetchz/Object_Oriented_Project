@@ -16,15 +16,15 @@ class ViaCreditCard(Payment):
         super().__init__(amount, date)
         self.__status = None
 
-    # def generate_seed(self, payment_id:str):
-    #     self.__payment_id = PWD_CONTEXT.hash(payment_id)
-    #     return self.__payment_id
+    @property
+    def status(self):
+        return self.__status
 
-    def check_payment(self):
-        if self.__status == True:
-            return self.__status
+    def check_status(self, status):
+        if status == 'paid':
+            self.__status = 'paid'
         else:
-            return False
+            self.__status = 'reject'
         
 class ViaQrCode(Payment):
     def __init__(self, amount, date):

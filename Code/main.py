@@ -473,7 +473,12 @@ async def get_payment(id, current_user = Depends(Sys.get_current_user), payment_
         if payment_type is None:
             return current_user.order
         elif payment_type.lower() == 'qrcode':
-             return {"payment" : current_user.make_payment(payment_type) }
+            return {"payment" : current_user.make_payment(payment_type) }
+        elif payment_type.lower() == 'creditcard':
+            # return info credit card
+            current_user.make_payment(payment_type)
+            return {"payment" : {'card_num' : current_user.credit_card.card_num, 
+                                 'expire_date' : current_user.credit_card.expire_date}}
         
 # Check Status api        
 @app.get('/payment_status/{id}')
