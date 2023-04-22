@@ -1,0 +1,18 @@
+.menu_tab {
+    position:relative;
+    left: 100px;
+    top: -115px;
+    padding: 15px;
+    display: inline;
+}
+
+.menu_tab:hover{
+    background-color: #404040;
+    border: 1px solid white;
+}
+
+.web_title{
+    position: relative;
+    left: -575px;
+    top: -50px;
+}

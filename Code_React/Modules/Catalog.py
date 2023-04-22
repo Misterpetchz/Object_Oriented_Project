@@ -24,13 +24,16 @@ class Catalog():
             if search_string in element._name:
                 self.__list_of_book.append(element)
         self.__list_of_book
-    def get_all_list(self):
+        
+    ##################################################################################################################
+        #GETTER/SETTER#
+    @property
+    def list_all_of_book(self):
         return self.__all_list_of_book
-    def set_all_list(self, new_list):
+    @list_all_of_book.setter
+    def list_all_of_book(self, new_list):
         self.__all_list_of_book = new_list
-    def get_list(self):
+    @property
+    def list_of_book(self):
         return self.__list_of_book
-    
-                
-    list_all_of_book = property(get_all_list, set_all_list)
-    list_of_book = property(get_list)
+    ##################################################################################################################

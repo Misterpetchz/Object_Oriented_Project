@@ -95,7 +95,7 @@ class Customer(UserAccount):
         return self.__credit_card
     def add_book_to_basket(self, book_item, book:Book):
         if book._amount_in_stock > 0:
-            for i in self.__basket.get_book():
+            for i in self.__basket.book_item:
                 if i.name.lower() == book_item.name.lower():
                     i.amount = i.amount + 1
                     book._amount_in_stock -= 1

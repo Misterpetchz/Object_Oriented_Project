@@ -1,12 +1,13 @@
 import { useState } from 'react'
-import './App.css'
-import { BrowserRouter, NavLink } from 'react-router-dom'
+import './App.css';
+import './css/home.css';
+import { BrowserRouter, NavLink } from 'react-router-dom';
 import { Routes, Route } from "react-router-dom";
-import Login from './pages/Login'
-import Profile from './pages/Profile'
+import Login from './pages/Login';
+import Profile from './pages/Profile';
 import Register from './pages/Register';
-import Catalog from './pages/Home'
-import Searchs from './pages/Search'
+import Catalog from './pages/Home';
+import Searchs from './pages/Search';
 import Admin from './pages/Admin';
 import Basket from './pages/Basket';
 import { RequireToken } from './auth'
@@ -31,21 +32,21 @@ function App() {
 
   return (
     <BrowserRouter>
-      <h1>BookShop</h1>
+      <h1 class="web_title">BookShop</h1>
       <nav>
-        <NavLink to="/">Home</NavLink>
-        <NavLink to="/login">Login</NavLink>
-        <NavLink to="/profile">Profile</NavLink>
-        <NavLink to="/contact">Contact</NavLink>
-        <NavLink to="/cart">Cart</NavLink>
-        <NavLink to="/search">Search</NavLink>
-		    <NavLink to="/branch/search">Search_B</NavLink>
-        <NavLink to="/register">Register</NavLink>
-        <NavLink to="/admin">Admin</NavLink>
-        <NavLink to="/basket">Basket</NavLink>
-        <NavLink to="/profile/credit_card">CreditCard</NavLink>
-        <NavLink to="/profile/credit_card/edit">EditCreditCard</NavLink>
-        </nav>
+        <div class="menu_tab"><NavLink to="/">Home</NavLink></div>
+        <div class="menu_tab"><NavLink to="/login">Login</NavLink></div>
+        <div class="menu_tab"><NavLink to="/profile">Profile</NavLink></div>
+        <div class="menu_tab"><NavLink to="/contact">Contact</NavLink></div>
+        <div class="menu_tab"><NavLink to="/cart">Cart</NavLink></div>
+        <div class="menu_tab"><NavLink to="/search">Search</NavLink></div>
+		    <div class="menu_tab"><NavLink to="/branch/search">Search_B</NavLink></div>
+        <div class="menu_tab"><NavLink to="/register">Register</NavLink></div>
+        <div class="menu_tab"><NavLink to="/admin">Admin</NavLink></div>
+        <div class="menu_tab"><NavLink to="/basket">Basket</NavLink></div>
+        <div class="menu_tab"><NavLink to="/profile/credit_card">CreditCard</NavLink></div>
+        <div class="menu_tab"><NavLink to="/profile/credit_card/edit">EditCreditCard</NavLink></div>
+      </nav>
       <Routes>
         <Route path='/' element = {<Catalog/>}/>
         <Route path='/login' element = {<Login/>}/>
