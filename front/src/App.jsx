@@ -38,7 +38,6 @@ function App() {
         <div class="menu_tab"><NavLink to="/login">Login</NavLink></div>
         <div class="menu_tab"><NavLink to="/profile">Profile</NavLink></div>
         <div class="menu_tab"><NavLink to="/contact">Contact</NavLink></div>
-        <div class="menu_tab"><NavLink to="/cart">Cart</NavLink></div>
         <div class="menu_tab"><NavLink to="/search">Search</NavLink></div>
 		    <div class="menu_tab"><NavLink to="/branch/search">Search_B</NavLink></div>
         <div class="menu_tab"><NavLink to="/register">Register</NavLink></div>

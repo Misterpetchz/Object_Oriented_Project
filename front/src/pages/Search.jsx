@@ -37,19 +37,20 @@ export default function Searchs() {
           <SearchBar searching={searching} clearResults={clearResults}/>
                 <ul>
                     {search_list.map((item) => (
-                        <li>
-                            <div>
-                                    <span>{item.name} </span>
-                                    <span>{item.creator} </span>
-                                    <span>{item.old_price} </span>
-                                    <span>{item.new_price} </span>
-                                    <span>{item.genre.map((genre)=>(
-                                            <span>{genre}, </span>
-                                    ))} </span>
-                                    <span>{item.score} </span>
-                                    <span>{item.brief} </span>
-                            </div>
-                        </li>
+                        <p class='book'>
+                        <img src='{item.cover}'></img><br></br>
+                        <div class='book_detail'>
+                            <div><b><u>Book name</u> : </b>{item.name} </div>
+                            <div><b><u>Author</u> : </b>{item.creator} </div>
+                            <div><b><u>Price</u> : </b>{item.old_price} </div>
+                            <div><b><u>Discounted</u> : </b>{item.new_price} </div>
+                            <div><b><u>Genre</u> : </b>{item.genre.map((genre)=>(
+                                    <span>{genre}, </span>
+                            ))} </div>
+                            <div><b><u>Rating</u> : </b>{item.score} </div>
+                            <div><b><u>Brief</u> : </b>{item.brief} </div>
+                        </div>
+                    </p>
                     ))}
                 </ul>
             </div>
