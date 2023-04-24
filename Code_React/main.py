@@ -1,4 +1,9 @@
-from fastapi import FastAPI, UploadFile, File
+from fastapi import BackgroundTasks, FastAPI, Request ,Form,Response
+from fastapi.responses import HTMLResponse,RedirectResponse
+from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
+from pathlib import Path
+from fastapi.responses import FileResponse, HTMLResponse
 from Modules.Catalog import Catalog
 from Modules.EventDiscount import EventDiscount
 from Modules.Book import *
@@ -11,14 +16,22 @@ from Modules.Order import Order
 from Modules.CreditCard import CreditCard
 from Modules.Rating import Rating
 from Modules.UserAccount import *
+from Modules.Payment import *
 from Modules.dto import *
 from Modules.settings import *
 from CLassDTO import *
+from Modules.EventDiscount import EventDiscount
+from Modules.Payment import *
 from datetime import datetime
 import random
+from Modules.dto import *
+from Modules.BookShop import BookShop
+from fastapi.responses import FileResponse, RedirectResponse
+import time
 import datetime
 import starlette.status as status
 from fastapi.middleware.cors import CORSMiddleware
+import io
 import uuid
 import re
 
@@ -40,13 +53,27 @@ app.add_middleware(
 
 
 
-Sys = System()
+app.mount("/static",
+    StaticFiles(directory="static"),
+    name="static")
 
+shop = BookShop()
+User_DB = []
+list_credit_card = []
+
+list_branch = BranchList()
+Sys = System()
+class Branchs(BaseModel):
+    branch_name : str
+    open_time : str
+    location : str
+    tel : str
+    line_id : str
+    facebook_id : str
 
 pookan_card = CreditCard("121231232",
                          "15-07-22",
                          "123")
-all_branch = BranchList()
 bangkok = Branch("Bangkok",
                  "6.00 - 22.00",
                  "Bangkok",
@@ -75,10 +102,10 @@ moon_branch = Branch('Moon',
                      'bookshop.moon',
                      'moon_bookshop'
                      )
-all_branch.add_branch(bangkok)
-all_branch.add_branch(nonthaburi1)
-all_branch.add_branch(rangsit)
-all_branch.add_branch(moon_branch)
+shop.add_branch(bangkok)
+shop.add_branch(nonthaburi1)
+shop.add_branch(rangsit)
+shop.add_branch(moon_branch)
 pookaneiei1 = Customer("pookan@gmail.com", Sys.get_password_hash("test1"),
                        "pookan", "Male", "0000000000", True, False, "LLL")
 pookaneiei2 = Customer("pookan2@gmail.com", Sys.get_password_hash("test1"),
@@ -171,7 +198,7 @@ async def show_book(bookname:str | None = None):
     book = batalog.find_book_by_name(bookname)
     if book == None:
         raise HTTPException(status_code=404, detail="Book not found")
-    all_branch.search_available_branch(book)
+    shop.search_available_branch(book)
     return {"cover":book._cover,
             "name":book._name,
             "creator":book._creator,
@@ -187,7 +214,7 @@ async def show_book(bookname:str | None = None):
             "genre":book._genre,
             "score":f'{book._rating_score:.2f}',
             "brief":book._brief,
-            "available_branch":[x._branch_name for x in all_branch.available_branch]}
+            "available_branch":[x._branch_name for x in shop.available_branch]}
 
 
 @app.get("/books/{bookname}/rating", tags=["books"])
@@ -206,17 +233,17 @@ async def show_basket(current_user : Customer = Depends(Sys.get_current_user)):
                         "amount":x._amount
                         }
                        for x in current_user.basket.book_item]}
-    
+
 @app.put("/basket/add_amount/{bookname}", tags=["user"])
 async def add_amount(bookname:str, current_user : Customer = Depends(Sys.get_current_user)):
     book = batalog.find_book_by_name(bookname)
     current_user.add_amount(bookname,book)
-        
+
 @app.put("/basket/reduce_amount/{bookname}", tags=["user"])
 async def reduce_amount(bookname:str, current_user : Customer = Depends(Sys.get_current_user)):
     book = batalog.find_book_by_name(bookname)
     current_user.reduce_amount(bookname,book)
-    
+
 @app.delete("/basket/delete_item/{bookname}", tags=["user"])
 async def delete_amount(bookname:str, current_user : Customer = Depends(Sys.get_current_user)):
     book = batalog.find_book_by_name(bookname)
@@ -290,7 +317,7 @@ async def add_book_to_catalog(data: AddBookDTO):
 
 @app.post("/addbranch", tags=["branch"])
 async def add_branch_to_branch_list(data: AddBranchDTO):
-    all_branch.add_branch(Branch(data.branch_name,
+    shop.add_branch(Branch(data.branch_name,
                 data.open_time,
                 data.location,
                 data.tel,
@@ -345,13 +372,13 @@ async def search_branch(name:str):
                         "facebook_id":x.facebook_id,
                         "product":x.product_in_stock
                         }
-                       for x in all_branch.search_branch(name)]}
+                       for x in shop.search_branch(name)]}
 
 
 
 @app.post("/branch/", tags=["branch"])
 async def add_branch(branch: Branchs):
-    pookan_admin555.add_branch(all_branch, branch)
+    pookan_admin555.add_branch(shop, branch)
     return {"status":"Success"}
 
 
