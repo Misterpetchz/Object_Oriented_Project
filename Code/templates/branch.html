@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Branch</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+  <h1 class="body-head">All Branch</h1>
+  {%for branch in branch_list%}
+  <div class="body-item">
+      <a href="/branch/{{branch._branch_name}}">{{branch._branch_name}}</a>
+  </div>
+  {% endfor %}
+    <h1 class="body-head">Add Branch page is working</h1>
+    <div>
+      <form class="body-search" id="search-form" action="/branches/add/" method="post">
+        <input type="text" id="search-input" name="branch_name" minlength="1" maxlength="20" placeholder="name"><br>
+        <input type="text" id="search-input" name="open_time" minlength="1" maxlength="10" placeholder="open time"><br>
+        <input type="text" id="search-input" name="location" minlength="1" maxlength="50" placeholder="location"><br>
+        <input type="text" id="search-input" name="tel" minlength="10" maxlength="10" placeholder="tel"><br>
+        <input type="text" id="search-input" name="line_id" minlength="1" maxlength="20" placeholder="line id"><br>
+        <input type="text" id="search-input" name="facebook_id" minlength="1" maxlength="20" placeholder="facebook">
+        <button type="submit">Add</button>
+      </form>
+    </div>
+
+    <br>
+    <h1 class="body-head">Modify Branch page is working </h1>
+    <div>
+      <form class="body-search" id="search-form" action="/branches/modify/" method="post">
+        <input type="hidden" name="_method" value="put">
+        <input type="text" id="search-input" name="name" minlength="1" maxlength="20" placeholder="branch name"><br>
+        <input type="text" id="search-input" name="branch_name" minlength="1" maxlength="20" placeholder="new branch name"><br>
+        <input type="text" id="search-input" name="open_time" minlength="1" maxlength="10" placeholder="new open time"><br>
+        <input type="text" id="search-input" name="location" minlength="1" maxlength="50" placeholder="new location"><br>
+        <input type="text" id="search-input" name="tel" minlength="10" maxlength="10" placeholder="new tel"><br>
+        <input type="text" id="search-input" name="line_id" minlength="1" maxlength="20" placeholder="new line"><br>
+        <input type="text" id="search-input" name="facebook_id" minlength="1" maxlength="20" placeholder="new facebook">
+        <button type="submit">modify</button>
+      </form>
+    </div>
+    <br>
+    <h1 class="body-head">Delete Branch page is working</h1>
+    <div>
+      <form class="body-search" id="search-form" action="/branches/delete/" method="post">
+        <input type="hidden" name="_method" value="delete">
+        <input type="text" id="search-input" name="branch_name" minlength="1" maxlength="20" placeholder="branch name">
+        <button type="submit">delete</button>
+      </form>
+    </div>
+    <nav>
+        <ul>
+          <li>
+            <a href="/">
+              <i class="fas fa-home"></i>
+              <span class="nav-item">Home</span>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <i class="fas fa-user"></i>
+              <span class="nav-item">User</span>
+            </a>
+          </li>
+          <li>
+            <a href="/basket">
+              <i class="fas fa-cart-arrow-down"></i>
+              <span class="nav-item">Cart</span>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <i class="fas fa-sign-out-alt"></i>
+              <span class="nav-item">User</span>
+            </a>
+          </li>
+        </ul>
+      </nav> 
+
+</html>

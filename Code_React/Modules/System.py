@@ -8,7 +8,6 @@ class System :
     def verify_password(plain_password, hashed_password) :
         return PWD_CONTEXT.verify(plain_password, hashed_password)
 
-	# ! Dev Helper Function, Should remove before deploy
     def get_password_hash(self, password) :
         return PWD_CONTEXT.hash(password)
 
@@ -16,6 +15,13 @@ class System :
         for i in self.User_DB :
             if i._email == username :
                 return i
+		# user = InstanceFinder(Customer, "_email", username)
+        # if not user == None :
+        #     return user
+        # if username in db :
+        # 	user_data = db[username]
+        # 	return Customer(user_data)
+            # return UserInDB(**user_data)
 
     def authenticate_user(self, username : str, password : str) :
         user = self.get_user(username)
@@ -37,6 +43,7 @@ class System :
 
     def register(self, customer):
         self.User_DB.append(customer)
+
 
     async def get_current_user(self, token : str = Depends(OAUTH2_SCHEME)) :
         credential_exception = HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Could not validate your credentials", headers={"WWW-Authenticate" : "Bearer"})

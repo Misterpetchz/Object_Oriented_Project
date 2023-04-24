@@ -1,3 +1,5 @@
+from Modules.Book import Book
+
 class Branch():
     def __init__(self, branch_name, open_time, location, tel, line_id, facebook_id):
         self._branch_name = branch_name
@@ -88,4 +90,7 @@ class Branch():
         if isinstance(list_delete_book, list):
             for book in list_delete_book:
                 self._product_in_stock.remove(book)
-
+    
+    def add_book_to_stock(self, book:Book):
+        if book not in self._product_in_stock:
+            self._product_in_stock.append(book)

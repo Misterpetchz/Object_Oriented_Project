@@ -8,6 +8,8 @@ class Catalog():
         pass
     def remove_book(book):
         pass
+    def modify_book(book):
+        pass
     def find_book(Book):
         pass
     def add_to_basket(Book):
@@ -23,17 +25,13 @@ class Catalog():
         for element in self.__all_list_of_book:
             if search_string in element._name:
                 self.__list_of_book.append(element)
-        self.__list_of_book
-        
-    ##################################################################################################################
-        #GETTER/SETTER#
-    @property
-    def list_all_of_book(self):
+    def get_all_list(self):
         return self.__all_list_of_book
-    @list_all_of_book.setter
-    def list_all_of_book(self, new_list):
+    def set_all_list(self, new_list):
         self.__all_list_of_book = new_list
-    @property
-    def list_of_book(self):
+    def get_list(self):
         return self.__list_of_book
-    ##################################################################################################################
+
+
+    list_all_of_book = property(get_all_list, set_all_list)
+    list_of_book = property(get_list)
