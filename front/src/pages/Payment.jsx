@@ -24,7 +24,7 @@ export default function Payment(){
                 Navigate(`/order_list`)
             }
         })
-    },)
+    },[])
 
 
     return (

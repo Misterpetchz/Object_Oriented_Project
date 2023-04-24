@@ -59,3 +59,8 @@ class System :
         if user is None :
             raise credential_exception
         return user
+
+    def find_user_by_payment_id(self, id):
+        for user in self.User_DB:
+            if id == user.payment_id :
+                return user
