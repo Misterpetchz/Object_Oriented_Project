@@ -67,6 +67,9 @@ class Customer(UserAccount):
 		self.__order_list = []
 		self.__credit_card = None
 		self.__order_id = 1
+		self.__order = None
+		self.__payment = None
+		self.__payment_id = None
 
 	def search_book(self, search_string, catalog:Catalog):
 		lists=[]
