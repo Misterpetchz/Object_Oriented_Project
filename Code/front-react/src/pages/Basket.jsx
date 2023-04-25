@@ -55,7 +55,7 @@ function Basket() {
                     Make Order
                 </button>
                 </div>
-            </div>
+            </div>          
         </div>
 
         );

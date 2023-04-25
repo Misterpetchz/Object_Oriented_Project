@@ -9,6 +9,8 @@ from Modules.Rating import Rating
 from Modules.EventDiscount import EventDiscount
 from Modules.CreditCard import CreditCard
 from Modules.settings import *
+from Modules.Payment import *
+import datetime
 
 
 class UserAccount:
@@ -66,6 +68,9 @@ class Customer(UserAccount):
 		self.__order_list = []
 		self.__credit_card = None
 		self.__order_id = 1
+		self.__order = None
+		self.__payment = None
+		self.__payment_id = None
 
 	def search_book(self, search_string, catalog:Catalog):
 		lists=[]
@@ -129,14 +134,42 @@ class Customer(UserAccount):
 				book.stock_amount += item.amount
 				self.basket.book_item.remove(item)
 
+	def generate_seed(self, payment_id:str):
+		payment_id = hashlib.sha256(payment_id.encode())
+		self.__payment_id = payment_id.hexdigest()
+
 	def make_order(self, order):
-		if len(self.__basket.book_item) > 0:
-			self.__order_list.append(order)
+		if len(self.__basket.book_item) > 0 and self.__payment == None:
+			# self.__order_list.append(order)
+			# self.__order_id += 1
+			self.__order = order
+			self.generate_seed(self._email + str(self.__order_id))
+
+	def make_payment(self, payment_type):
+		current_date = datetime.date.today()
+		format_date = current_date.strftime('%d-%m-%Y')
+		if payment_type.lower() == 'qrcode':
+			self.__payment = ViaQrCode(self.__basket.price, format_date)
+			return self.__payment.generate_qr_code()
+
+		elif payment_type.lower() == 'creditcard':
+			self.__payment = ViaCreditCard(self.__basket.price, format_date)
+			# if self.__credit_card == None:
+			#     return {'credit_card' : None}
+			# elif self.__credit_card:
+			#     return {'credit_card' : self.__payment}
+	# ? GETTER // SETTER ############################################################
+	def add_order_to_order_list(self, order):
+		self.__order_list.append(order)
+
+	def update_order_id(self):
 		self.__order_id += 1
 
-	def make_payment(payment_type):
-		pass
-	# ? GETTER // SETTER ############################################################
+	def reset_payment(self):
+		self.__payment = None
+		self.__payment_id = None
+		self.__order = None
+
 	@property
 	def basket(self):
 		return self.__basket
@@ -158,6 +191,18 @@ class Customer(UserAccount):
 	@sms_notification.setter
 	def sms_notification(self, value):
 		self.__sms_notification = value
+
+	@property
+	def payment_id(self):
+		return self.__payment_id
+
+	@property
+	def order(self):
+		return self.__order
+
+	@property
+	def payment(self):
+		return self.__payment
 	#################################################################################
 	def toJSON(self) :
 		return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)

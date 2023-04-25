@@ -3,11 +3,12 @@ from typing import Optional
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from pydantic import BaseModel
-from datetime import datetime, timedelta
+from datetime import timedelta, datetime
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 import gc
 import json
+import hashlib
 
 SECRET_KEY = "0ecb3c3265b8073a4686a79606109099c6116152a390597514c9eff447fb1f94"
 ALGORITHM = "HS256"

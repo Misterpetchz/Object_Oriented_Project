@@ -17,6 +17,11 @@ import EditProfile from './pages/EditProfile';
 import CreditCard from './pages/CreditCard';
 import EditCreditCard from './pages/EditCreditCard';
 import SearchBranch from './pages/SearchBranch';
+import Payment from './pages/Payment'
+import OrderList from './pages/OrderList'
+import Event from './pages/Event'
+import Branches from './pages/branch'
+import Error from './pages/error'
 
 axios.interceptors.request.use(
   config => {
@@ -39,7 +44,9 @@ function App() {
         <div class="menu_tab"><NavLink to="/profile">Profile</NavLink></div>
         <div class="menu_tab"><NavLink to="/contact">Contact</NavLink></div>
         <div class="menu_tab"><NavLink to="/search">Search</NavLink></div>
-		    <div class="menu_tab"><NavLink to="/branch/search">Search_B</NavLink></div>
+		<div class="menu_tab"><NavLink to="/branches/search">Search_B</NavLink></div>
+		<div class="menu_tab"><NavLink to="/branches">Branches</NavLink></div>
+		<div class="menu_tab"><NavLink to="/event">Event</NavLink></div>
         <div class="menu_tab"><NavLink to="/register">Register</NavLink></div>
         <div class="menu_tab"><NavLink to="/admin">Admin</NavLink></div>
         <div class="menu_tab"><NavLink to="/basket">Basket</NavLink></div>
@@ -56,7 +63,10 @@ function App() {
         <Route path='/search' element={<Searchs/>}/>
         <Route path='/register' element={<Register/>}/>
         <Route path='/admin' element={<Admin/>}/>
-		<Route path='/branch/search' element={<SearchBranch/>}/>
+		<Route path='/branches' element={<Branches />} />
+		<Route path='*' element={<Error />} />
+		<Route path='/branches/search' element={<SearchBranch/>}/>
+		<Route path='/event' element={<Event/>}/>
         <Route path='/profile/credit_card' element={<CreditCard/>}/>
         <Route path='/profile/credit_card/edit' element={<EditCreditCard/>}/>
         <Route path='/books/:bookname' element = {<Book/>}/>
@@ -64,6 +74,8 @@ function App() {
                                           <Basket />
                                         </RequireToken>}/>
         <Route path='/editprofile' element = {<EditProfile/>}/>
+		<Route path='/payment/:id' element={<Payment/>} />
+        <Route path='/order_list' element={<OrderList/>} />
       </Routes>
     </BrowserRouter>
   )
