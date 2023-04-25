@@ -24,12 +24,12 @@ function Catalog() {
           <h1>Home</h1>
                 <ul>
                     {list_of_book.map((item) => (
-                        <p class='book'>
+                        <div class='book'>
                             <img class='book_img' src='{item.cover}'></img><br></br>
                             <div class='book_detail'>
                                 <div><b><u>Book name</u> : </b>{item.name} </div>
                                 <div><b><u>Author</u> : </b>{item.creator} </div>
-                                <div><b><u>Price</u> : </b>{item.old_price} </div>
+                                <div><del><b><u>Price</u> : </b>{item.old_price}</del></div>
                                 <div><b><u>Discounted</u> : </b>{item.new_price} </div>
                                 <div><b><u>Genre</u> : </b>{item.genre.map((genre)=>(
                                         <span>{genre}, </span>
@@ -37,7 +37,7 @@ function Catalog() {
                                 <div><b><u>Rating</u> : </b>{item.score} </div>
                                 <div><b><u>Brief</u> : </b>{item.brief} </div>
                             </div>
-                        </p>
+                        </div>
                     ))}
                 </ul>
             </div>

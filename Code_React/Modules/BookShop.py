@@ -52,7 +52,7 @@ class BookShop():
 	def search_available_branch(self, book_name):
 		self.__available = []
 		for element in self.__list_of_branch:
-			for elements in element._product_in_stock:
+			for elements in element.product_in_stock:
 				if book_name == elements._name :
 					self.__available.append(element)
 		return self.__available

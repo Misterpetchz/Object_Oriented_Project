@@ -65,18 +65,18 @@ function Book() {
             <div style={{ minHeight: 800, marginTop: 30 }}>
               <h1>Home</h1>
                             <img src={book.cover} height="200px" />
-                            <span>{book.name} </span>
-                            <span>{book.creator} </span>
-                            <span>{book.old_price} </span>
-                            <span>{book.new_price} </span>
+                            <span>{book.name} </span><br></br>
+                            <span>{book.creator} </span><br></br>
+                            <span>{book.old_price} </span><br></br>
+                            <span>{book.new_price} </span><br></br>
                             <span>{book.genre?.map((genre)=>(
                                             <span>{genre}, </span>
-                                    ))} </span>
-                            <span>{book.score} </span>
-                            <span>{book.brief} </span>
+                                    ))} </span><br></br>
+                            <span>{book.score} </span><br></br>
+                            <span>{book.brief} </span><br></br>
                             <span>{book.available_branch?.map((branch)=>(
-                                            <span>{branch}, </span>
-                                    ))} </span>
+                                            <span>{branch.name}, </span>
+                                    ))} </span><br></br><br></br>
                             <div>
                             <button type="button" onClick={add_book_to_basket}>
                                 Add Book to Basket
@@ -95,10 +95,19 @@ function Book() {
                               />
 
                               <label style={{ marginRight: 10 }}>Score</label>
-                              <input
-                                type="number"
-                                onChange={(e) => setRatingScore(e.target.value)}
-                              />
+                              <select onChange={(e) => setRatingScore(parseInt(e.target.value))}>
+                                <option>--</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                              </select>
 
                               <button type="button" onClick={add_rating}>
                                 Post

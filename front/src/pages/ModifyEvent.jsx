@@ -10,6 +10,17 @@ export default function ModifyEventForm(){
     const [discountedPercentage, setDiscountedPercentage] = useState('');
     const [eventGenre, setEventGenre] = useState('')
 
+    const genre_checkList = ["School", "Intense", "Shounen", "Drama"];
+
+    const handleCheckboxChange = (event) => {
+        const item = event.target.name;
+        const isChecked = event.target.checked;
+        const newCheckedItems = isChecked
+          ? [...eventGenre, item]
+          : eventGenre.filter((eventGenre) => eventGenre !== item);
+          setEventGenre(newCheckedItems);
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -67,12 +78,18 @@ export default function ModifyEventForm(){
                     />
             </div>
             <div>
-                <label>Genre:</label>
-                <input
-                    type="text"
-                    onChange={(e) => setEventGenre(e.target.value)}
-                    />
-            </div>
+                        {genre_checkList.map((item) => (
+                        <label key={item}>
+                        <input
+                            type="checkbox"
+                            name={item}
+                            checked={eventGenre.includes(item)}
+                            onChange={handleCheckboxChange}
+                        />
+                        {item}
+                        </label>
+                        ))}
+                    </div>
             <button type="submit">Modify</button>
         </form>
     )

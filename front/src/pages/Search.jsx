@@ -38,7 +38,7 @@ export default function Searchs() {
                 <ul>
                     {search_list.map((item) => (
                         <p class='book'>
-                        <img src='{item.cover}'></img><br></br>
+                        <img class='book_img' src='{item.cover}'></img><br></br>
                         <div class='book_detail'>
                             <div><b><u>Book name</u> : </b>{item.name} </div>
                             <div><b><u>Author</u> : </b>{item.creator} </div>

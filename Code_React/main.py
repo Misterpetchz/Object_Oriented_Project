@@ -135,8 +135,7 @@ pookantong_book1 = Book(
 					'critic review',
 					[],
 					'พระเอกตาย',
-					['comedy', 'adult', 'intense', 'violent', 'drama',
-						'romantic', 'Yuri', 'Yaoi', 'School life'],
+					['Intense'],
 					'18/12/29999',
 					999,
 					10)
@@ -151,8 +150,7 @@ pookantong_book2 = Book(
 					'critic review',
 					[],
 					'นางเอกตาย',
-					['Comedy', 'Adult', 'Intense', 'Violent', 'Drama', 'Romantic',
-						'Yuri', 'Yaoi', 'School life', 'Shounen'], '18/12/29999',
+					['School','Shounen'], '18/12/29999',
 					999,
 					9
 					)
@@ -194,7 +192,6 @@ async def show_book(bookname:str | None = None):
 	book = batalog.find_book_by_name(bookname)
 	if book == None:
 		raise HTTPException(status_code=404, detail="Book not found")
-	shop.search_available_branch(book)
 	return {"cover":book._cover,
 			"name":book._name,
 			"creator":book._creator,
@@ -210,7 +207,7 @@ async def show_book(bookname:str | None = None):
 			"genre":book._genre,
 			"score":f'{book._rating_score:.2f}',
 			"brief":book._brief,
-			"available_branch":[x._branch_name for x in shop.available_branch]}
+			"available_branch":[x._branch_name for x in shop.search_available_branch(book)]}
 
 
 @app.get("/books/{bookname}/rating", tags=["books"])

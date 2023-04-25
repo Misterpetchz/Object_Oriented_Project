@@ -4,7 +4,7 @@ import axios from "axios";
 
 
 export default function Admin(){
-
+    const navigate = useNavigate();
     const[add_book_cover, setAddCover] = useState("");
     const[add_book_brief, setAddBrief] = useState("");
     const[add_book_creator, setAddCreator] = useState("");
@@ -90,6 +90,7 @@ export default function Admin(){
             })
             .then((result) => {
                 console.log(result)
+                navigate("/");
             }
             )
             .catch(function (error) {

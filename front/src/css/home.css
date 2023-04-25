@@ -1,8 +1,8 @@
 .menu_tab {
     position:relative;
-    left: 100px;
-    top: -115px;
-    padding: 15px;
+    left: 80px;
+    top: -125px;
+    padding: 10px;
     display: inline-block;
 }
 
@@ -19,16 +19,17 @@
 
 .book{
     border:1px solid white;
-    padding: 15px;
+    padding: 25px;
+    width: 2000;
 }
 
 .book_detail{
     position: relative;
-    left: 300px;
+    left: 250px;
     text-align: left;
 }
 
 .book_img{
     position: relative;
-    left:-450px;
+    left:-390px;
 }

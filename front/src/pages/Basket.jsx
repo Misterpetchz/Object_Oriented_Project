@@ -7,15 +7,12 @@ function Basket() {
 
     const navigate = useNavigate();
     const [basket, setBasket] = useState([]);
-    const [paymentId, setPaymentId] = useState('');
-    // const [paymentId, setPaymentId] = useState('')
 
     useEffect(() => {
         axios
             .get(`http://localhost:8000/basket`)
             .then((result) => {
                 setBasket(result.data.basket);
-                console.log(result.data)
                 }
             )
             .catch(function (error) {
@@ -27,13 +24,44 @@ function Basket() {
         axios
             .get(`http://localhost:8000/make_order`)
             .then((response) => {
-                setPaymentId(response.data.paymentId)
-                navigate(`/payment/${response.data.payment_id}`)
-                // navigate(`/payment/`)
+                navigate(`/payment/${response.data.id}`)
             })
             .catch(function (error) {
             console.log(error, "error");
             });
+    }
+
+    const add_amount = (bookname) => {
+        axios
+            .put(`http://localhost:8000/basket/add_amount/${bookname}`)
+            .then(() => {
+                location.reload();
+            })
+            .catch(function (error) {
+                console.log(error, "error");
+            });
+    }
+
+    const reduce_amount = (bookname) => {
+        axios
+            .put(`http://localhost:8000/basket/reduce_amount/${bookname}`)
+            .then(() => {
+                location.reload();
+            })
+            .catch(function (error) {
+                console.log(error, "error");
+            });
+    }
+
+    const delete_amount = (bookname) => {
+        axios
+        .delete(`http://localhost:8000/basket/delete_item/${bookname}`)
+        .then(() => {
+            location.reload();
+        })
+        .catch(function (error) {
+            console.log(error, "error");
+        });
     }
 
     return(
@@ -47,6 +75,9 @@ function Basket() {
                                     <div>{book.price} </div>
                                     <div>{book.genre} </div>
                                     <div>{book.amount} </div>
+                                    <button type="button" onClick={() => add_amount(book.name)}>Add</button>
+                                    <button type="button" onClick={() => reduce_amount(book.name)}>reduce</button>
+                                    <button type="button" onClick={() => delete_amount(book.name)}>delete</button>
                                     <br></br>
                                 </div>
                         ))} </span>
@@ -55,7 +86,7 @@ function Basket() {
                     Make Order
                 </button>
                 </div>
-            </div>
+            </div>          
         </div>
 
         );
