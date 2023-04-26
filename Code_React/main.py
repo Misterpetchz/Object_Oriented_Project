@@ -307,7 +307,7 @@ async def add_book_to_catalog(data: AddBookDTO):
 	)
 	return {"status": "Success"}
 
-
+'''
 @app.post("/addbranch", tags=["branch"])
 async def add_branch_to_branch_list(data: AddBranchDTO):
 	shop.add_branch(Branch(data.branch_name,
@@ -317,7 +317,7 @@ async def add_branch_to_branch_list(data: AddBranchDTO):
 				data.line_id,
 				data.facebook_id))
 	return {"status": "Success"}
-
+'''
 @app.get("/CreditCard/", tags=["user"])
 async def print_credit_card(current_user = Depends(Sys.get_current_user)):
 	if (isinstance(current_user, Customer) and current_user.credit_card != None) :
@@ -355,7 +355,7 @@ async def modify_credit_card(credit_card: CreditCards, current_user = Depends(Sy
 		return {"status": "Error"}
 
 
-@app.post("/branch/search/", tags=["books"])
+@app.post("/branch/search/", tags=["branch"])
 async def search_branch(name:str):
 	return {"branch":[{"name":x.branch_name,
 						"open":x.open_time,
@@ -366,27 +366,20 @@ async def search_branch(name:str):
 						"product":x.product_in_stock
 						}
 					for x in shop.search_branch(name)]}
-
-
-
-@app.post("/branch/", tags=["branch"])
-async def add_branch(branch: Branchs):
-	pookan_admin555.add_branch(shop, branch)
-	return {"status":"Success"}
-
-
-@app.put("/branch/", tags=["branch"])
-# loop to get branch object
-async def modify_branch(branch: dict):
-	branch_name = branch["branch_name"]
-	open_time = branch["open_time"]
-	location = branch["location"]
-	tel = branch["tel"]
-	line_id = branch["line_id"]
-	facebook_id = branch["facebook_id"]
-	rangsit.modify_branch(branch_name, open_time, location,
-						tel, line_id, facebook_id, [], [])
-	return {"status":"Success"}
+ 
+@app.get("/branch/{name}", tags=["branch"])
+async def view_branch(name:str):
+    x = shop.select_branch(name)
+    if x == None:
+        raise HTTPException(status_code=404, detail="Branch not found")
+    return {"name":x.branch_name,
+			"open":x.open_time,
+			"location":x.location,
+			"tel":x.tel,
+			"line_id":x.line_id,
+			"facebook_id":x.facebook_id,
+			"product":x.product_in_stock
+			}
 
 
 @app.put("/books/{bookname}", tags=["books"])

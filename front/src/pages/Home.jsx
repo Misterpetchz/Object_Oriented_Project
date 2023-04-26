@@ -1,10 +1,12 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import {useNavigate} from "react-router-dom";
 import '../css/home.css';
 
 function Catalog() {
 
+    const navigate = useNavigate();
     const [list_of_book, setListofBook] = useState([]);
 
     useEffect(() => {
@@ -27,7 +29,7 @@ function Catalog() {
                         <div class='book'>
                             <img class='book_img' src='{item.cover}'></img><br></br>
                             <div class='book_detail'>
-                                <div><b><u>Book name</u> : </b>{item.name} </div>
+                                <button onClick={() => navigate(`/books/${item.name}`)}><b><u>Book name</u> : </b>{item.name} </button>
                                 <div><b><u>Author</u> : </b>{item.creator} </div>
                                 <div><del><b><u>Price</u> : </b>{item.old_price}</del></div>
                                 <div><b><u>Discounted</u> : </b>{item.new_price} </div>

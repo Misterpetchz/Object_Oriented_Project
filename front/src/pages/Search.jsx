@@ -2,9 +2,10 @@ import React from "react";
 import { useState } from "react";
 import axios from "axios";
 import SearchBar from "./SearchBar";
+import {useNavigate} from "react-router-dom";
 
 export default function Searchs() {
-
+    const navigate = useNavigate();
     const [search_list, setSearchList] = useState([]);
 
     const clearResults = () => setQuotes([]);
@@ -40,7 +41,7 @@ export default function Searchs() {
                         <p class='book'>
                         <img class='book_img' src='{item.cover}'></img><br></br>
                         <div class='book_detail'>
-                            <div><b><u>Book name</u> : </b>{item.name} </div>
+                            <button onClick={() => navigate(`/books/${item.name}`)}><b><u>Book name</u> : </b>{item.name} </button>
                             <div><b><u>Author</u> : </b>{item.creator} </div>
                             <div><b><u>Price</u> : </b>{item.old_price} </div>
                             <div><b><u>Discounted</u> : </b>{item.new_price} </div>
