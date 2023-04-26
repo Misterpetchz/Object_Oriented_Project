@@ -49,8 +49,6 @@ class ViaQrCode(Payment):
         img_bytes = buffered.getvalue()
         self.__qr = base64.b64encode(img_bytes).decode('utf-8')
         # self.__qr = base64.b64encode(qr_image_data)
-
-        print(self.__qr)
         return self.__qr
 
     def check_status(self, status):
