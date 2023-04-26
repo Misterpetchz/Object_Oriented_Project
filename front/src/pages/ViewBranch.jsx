@@ -22,15 +22,22 @@ function ViewBranch() {
 
         return(
             <div style={{ minHeight: 800, marginTop: 30 }}>
-              <h1>Home</h1>
-                            <span>{branch.name} </span><br></br>
-                            <span>{branch.open_time} </span><br></br>
-                            <span>{branch.location} </span><br></br>
-                            <span>{branch.tel} </span><br></br>
-                            <span>{branch.line_id} </span><br></br>
-                            <span>{branch.facebook_id} </span><br></br>
-                            <div>
-                            </div>     
+                <div>
+                  <span>Name : {branch.name} </span><br></br>
+                  <span>Open Time : {branch.open_time} </span><br></br>
+                  <span>Location : {branch.location} </span><br></br>
+                  <span>Tel : {branch.tel} </span><br></br>
+                  <span>Line ID : {branch.line_id} </span><br></br>
+                  <span>Facebook : {branch.facebook_id} </span><br></br>
+                  <div>
+                    <h3>Products in stock</h3>
+                      {branch.product && branch.product && branch.product.map((product, index) => (
+                        <div key={index}>
+                          <span>{product._name}</span>
+                        </div>
+                      ))}
+                  </div>
+                </div>     
             </div>
 
           );
