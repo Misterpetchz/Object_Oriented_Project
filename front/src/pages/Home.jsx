@@ -1,9 +1,12 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import {useNavigate} from "react-router-dom";
+import '../css/home.css';
 
 function Catalog() {
 
+    const navigate = useNavigate();
     const [list_of_book, setListofBook] = useState([]);
 
     useEffect(() => {
@@ -23,20 +26,20 @@ function Catalog() {
           <h1>Home</h1>
                 <ul>
                     {list_of_book.map((item) => (
-                        <li>
-                            <div>
-                                <span>{item.cover} </span>
-                                <span>{item.name} </span>
-                                <span>{item.creator} </span>
-                                <span>{item.old_price} </span>
-                                <span>{item.new_price} </span>
-                                <span>{item.genre.map((genre)=>(
+                        <div class='book'>
+                            <img class='book_img' src='{item.cover}'></img><br></br>
+                            <div class='book_detail'>
+                                <button onClick={() => navigate(`/books/${item.name}`)}><b><u>Book name</u> : </b>{item.name} </button>
+                                <div><b><u>Author</u> : </b>{item.creator} </div>
+                                <div><del><b><u>Price</u> : </b>{item.old_price}</del></div>
+                                <div><b><u>Discounted</u> : </b>{item.new_price} </div>
+                                <div><b><u>Genre</u> : </b>{item.genre.map((genre)=>(
                                         <span>{genre}, </span>
-                                ))} </span>
-                                <span>{item.score} </span>
-                                <span>{item.brief} </span>
+                                ))} </div>
+                                <div><b><u>Rating</u> : </b>{item.score} </div>
+                                <div><b><u>Brief</u> : </b>{item.brief} </div>
                             </div>
-                        </li>
+                        </div>
                     ))}
                 </ul>
             </div>

@@ -1,9 +1,9 @@
 .menu_tab {
     position:relative;
-    left: 100px;
-    top: -115px;
-    padding: 15px;
-    display: inline;
+    left: 80px;
+    top: -125px;
+    padding: 10px;
+    display: inline-block;
 }
 
 .menu_tab:hover{
@@ -15,4 +15,21 @@
     position: relative;
     left: -575px;
     top: -50px;
+}
+
+.book{
+    border:1px solid white;
+    padding: 25px;
+    width: 2000;
+}
+
+.book_detail{
+    position: relative;
+    left: 250px;
+    text-align: left;
+}
+
+.book_img{
+    position: relative;
+    left:-390px;
 }

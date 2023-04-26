@@ -12,6 +12,8 @@ class EventDiscount():
 
     def get_event_name(self):
         return self.__event_name
+    def get_event_genre(self):
+        return self.__event_genre
     def get_event_start(self):
         return self.__event_start
     def get_event_end(self):
@@ -35,6 +37,7 @@ class EventDiscount():
         book._new_price = math.floor(book._price * self.__discounted_percentage)
 
     event_name = property(get_event_name)
+    event_genre = property(get_event_genre)
     event_start = property(get_event_start)
     event_end = property(get_event_end)
     discounted_percentage = property(get_event_percentage)

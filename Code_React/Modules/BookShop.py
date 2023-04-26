@@ -57,6 +57,13 @@ class BookShop():
 					self.__available.append(element)
 		return self.__available
 
+	def search_branch(self,branch_name):
+		available=[]
+		for element in self.__list_of_branch:
+			if branch_name in element.branch_name:
+				available.append(element)
+		return available
+
 	# Event List
 	def select_event(self, event_name):
 		for element in self.__list_of_event:
