@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import './App.css';
 import './css/home.css';
+import './css/navbar.css';
 import { BrowserRouter, NavLink } from 'react-router-dom';
 import { Routes, Route } from "react-router-dom";
 import Login from './pages/Login';
@@ -38,21 +39,20 @@ function App() {
 
   return (
     <BrowserRouter>
-      <h1 class="web_title">BookShop</h1>
-      <nav>
-        <div class="menu_tab"><NavLink to="/">Home</NavLink></div>
-        <div class="menu_tab"><NavLink to="/login">Login</NavLink></div>
-        <div class="menu_tab"><NavLink to="/profile">Profile</NavLink></div>
-        <div class="menu_tab"><NavLink to="/contact">Contact</NavLink></div>
-        <div class="menu_tab"><NavLink to="/search">Search</NavLink></div>
-		<div class="menu_tab"><NavLink to="/branches/search">Search_B</NavLink></div>
-		<div class="menu_tab"><NavLink to="/branches">Branches</NavLink></div>
-		<div class="menu_tab"><NavLink to="/event">Event</NavLink></div>
-        <div class="menu_tab"><NavLink to="/register">Register</NavLink></div>
-        <div class="menu_tab"><NavLink to="/admin">Admin</NavLink></div>
-        <div class="menu_tab"><NavLink to="/basket">Basket</NavLink></div>
-        <div class="menu_tab"><NavLink to="/profile/credit_card">CreditCard</NavLink></div>
-        <div class="menu_tab"><NavLink to="/profile/credit_card/edit">EditCreditCard</NavLink></div>
+      <nav class='navbar'>
+        <NavLink to="/">Home</NavLink>
+        <NavLink to="/login">Login</NavLink>
+        <NavLink to="/profile">Profile</NavLink>
+        <NavLink to="/contact">Contact</NavLink>
+        <NavLink to="/search">Search</NavLink>
+        <NavLink to="/branches/search">Search_B</NavLink>
+        <NavLink to="/branches">Branches</NavLink>
+        <NavLink to="/event">Event</NavLink>
+        <NavLink to="/register">Register</NavLink>
+        <NavLink to="/admin">Admin</NavLink>
+        <NavLink to="/basket">Basket</NavLink>
+        <NavLink to="/profile/credit_card">CreditCard</NavLink>
+        <NavLink to="/profile/credit_card/edit">EditCreditCard</NavLink>
       </nav>
       <Routes>
         <Route path='/' element = {<Catalog/>}/>

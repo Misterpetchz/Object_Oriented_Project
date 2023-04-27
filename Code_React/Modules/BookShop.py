@@ -4,7 +4,6 @@ from Modules.Book import Book
 class BookShop():
 	def __init__(self):
 		self.__list_of_branch = []
-		self.__list_of_event = []
 		self.__available = []
 
 	# Getter % Setter
@@ -63,18 +62,3 @@ class BookShop():
 			if branch_name in element.branch_name:
 				available.append(element)
 		return available
-
-	# Event List
-	def select_event(self, event_name):
-		for element in self.__list_of_event:
-			if event_name == element.event_name:
-				select_event = element
-				return select_event
-
-	def add_event(self, event:EventDiscount):
-		self.__list_of_event.append(event)
-
-	def delete_event(self, event_name:str):
-		for element in self.__list_of_event:
-			if event_name == element.event_name:
-				self.__list_of_event.remove(element)

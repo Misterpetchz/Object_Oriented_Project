@@ -25,16 +25,8 @@ export default function Event(){
             ))}
             </div>
             <div>
-                <h2>Add Event</h2>
-                <AddEventForm />
-            </div>
-            <div>
                 <h2>Modify Event</h2>
                 <ModifyEventForm />
-            </div>
-            <div>
-                <h2>Remove Event</h2>
-                <RemoveEventForm />
             </div>
         </div>
     )
