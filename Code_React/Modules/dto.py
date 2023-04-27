@@ -35,7 +35,7 @@ class ModifyEventDTO(BaseModel):
     event_name : str
     event_start : str
     event_end : str
-    discounted_percentage : int
+    discounted_percentage : float
     event_genre : str
 
 class QrCodeDTO(BaseModel):
