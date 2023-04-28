@@ -425,17 +425,24 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
 	access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTE)
 	access_token = Sys.creat_access_token(
 		data={"sub": user._email}, expires_delta=access_token_expires)
-	return {"access_token": access_token, "token_type": "bearer"}
+	if (isinstance(user, Customer)):
+		role = "Customer"
+	elif (isinstance(user, Admin)):
+		role = "Admin"
+	return {"access_token": access_token, "token_type": "bearer", "role" : role}
 
 
 @app.get("/users/me", tags=["user"])
 async def view_info(userid=Depends(Sys.get_current_user)):
-	return {"address" : userid._address,
-			"email ": userid._email,
-			"full_name" : userid._full_name,
-			"gender": userid._gender,
-			"tel": userid._tel,
-	}
+	if (isinstance(userid, Customer)):
+		return {"address" : userid._address,
+				"email ": userid._email,
+				"full_name" : userid._full_name,
+				"gender": userid._gender,
+				"tel": userid._tel,
+				}
+	elif (isinstance(userid, Admin)):
+		return {"role" : "admin"}
 
 @app.get("/user", tags=["user"])
 async def view_info(userid=Depends(Sys.get_current_user)):
@@ -549,10 +556,10 @@ async def remove_branch(branch_name):
 	shop.delete_branch(select_branch._branch_name)
 	return {"Remove Branch Success"}
 
-@app.get("/GetAllEvent/", tags=["event"])
-async def get_event():
-	return {"eventDis" : [{"event_name": x.event_name,
-						"genre": x.event_genre} for x in shop.list_of_event]}
+# @app.get("/GetAllEvent/", tags=["event"])
+# async def get_event():
+# 	return {"eventDis" : [{"event_name": x.event_name,
+# 						"genre": x.event_genre} for x in shop.list_of_event]}
 
 # we dont place to collect class bookshop
 @app.put("/ModifyEvent/", tags=["event"])

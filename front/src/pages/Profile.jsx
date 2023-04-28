@@ -16,7 +16,9 @@ export default function Profile() {
 
   const signOut = () => {
     localStorage.removeItem("access_token");
+    localStorage.removeItem("role");
     navigate("/");
+    window.location.reload(false)
   };
 
   return (

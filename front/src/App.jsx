@@ -11,7 +11,7 @@ import Catalog from './pages/Home';
 import Searchs from './pages/Search';
 import Admin from './pages/Admin';
 import Basket from './pages/Basket';
-import { RequireToken } from './auth'
+import { RequireRole, RequireToken, NotRequireTokenButton, RequireTokenButton, RequireRoleButton} from './auth';
 import axios from 'axios';
 import Book from './pages/Book';
 import EditProfile from './pages/EditProfile';
@@ -41,15 +41,14 @@ function App() {
     <BrowserRouter>
       <nav class='navbar'>
         <NavLink to="/">Home</NavLink>
-        <NavLink to="/login">Login</NavLink>
-        <NavLink to="/profile">Profile</NavLink>
-        <NavLink to="/contact">Contact</NavLink>
+        {NotRequireTokenButton() && <NavLink to="/login">Login</NavLink>}
+        {RequireTokenButton() && <NavLink to="/profile">Profile</NavLink>}
         <NavLink to="/search">Search</NavLink>
         <NavLink to="/branches/search">Search_B</NavLink>
         <NavLink to="/branches">Branches</NavLink>
         <NavLink to="/event">Event</NavLink>
         <NavLink to="/register">Register</NavLink>
-        <NavLink to="/admin">Admin</NavLink>
+        {RequireRoleButton() && <NavLink to="/admin">Admin</NavLink>}
         <NavLink to="/basket">Basket</NavLink>
         <NavLink to="/profile/credit_card">CreditCard</NavLink>
         <NavLink to="/profile/credit_card/edit">EditCreditCard</NavLink>
@@ -63,7 +62,9 @@ function App() {
         />
         <Route path='/search' element={<Searchs/>}/>
         <Route path='/register' element={<Register/>}/>
-        <Route path='/admin' element={<Admin/>}/>
+        <Route path='/admin' element={<RequireRole>
+                                      <Admin/>
+                                      </RequireRole>} /> 
 		    <Route path='/branches' element={<Branches />} />
 		    <Route path='*' element={<Error />} />
 		    <Route path='/branches/search' element={<SearchBranch/>}/>
