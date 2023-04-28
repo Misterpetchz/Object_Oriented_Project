@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams,useNavigate } from "react-router-dom";
 
-import SelectMethod from "./SelectMethodPayment";
+import SelectMethod from "../component/SelectMethodPayment";
 
 export default function Payment(){
 

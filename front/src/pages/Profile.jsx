@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import CreditCard from "./CreditCard";
 
 
 export default function Profile() {
@@ -26,7 +27,6 @@ export default function Profile() {
       <div style={{ marginTop: 20, minHeight: 700 }}>
         <h1>Profile page</h1>
         <p>Hello there, welcome to your profile page</p>
-
         <button onClick={signOut}>sign out</button>
         <ul>
           {user.full_name}
@@ -44,6 +44,9 @@ export default function Profile() {
           {user.address}
         </ul>
         <Link to="/editprofile" className="btn btn-primary">Edit</Link>
+      </div>
+      <div>
+          <CreditCard />
       </div>
     </>
   );

@@ -29,6 +29,7 @@ export default function EditCreditCard() {
 				.catch(function (error) {
 					console.log(error, "error");
 				});
+				navigate('/profile');
 		}
 	};
 	return (
