@@ -72,17 +72,23 @@ class Branch():
 
     def modify_branch(self, new_branch_name, new_open_time, new_location, new_tel, new_line_id, new_facebook_id, list_add_book, list_delete_book):
         if isinstance(new_branch_name, str):
-            self._branch_name = new_branch_name
+            if new_branch_name != '':
+                self._branch_name = new_branch_name
         if isinstance(new_open_time, str):
-            self._open_time = new_open_time
+            if new_open_time != '':
+                self._open_time = new_open_time
         if isinstance(new_location, str):
-            self._location = new_location
+            if new_location != '':
+                self._location = new_location
         if isinstance(new_tel, str):
-            self._tel = new_tel
+            if new_tel != '':
+                self._tel = new_tel
         if isinstance(new_line_id, str):
-            self._line_id = new_line_id
+            if new_line_id != '':
+                self._line_id = new_line_id
         if isinstance(new_facebook_id, str):
-            self._facebook_id = new_facebook_id
+            if new_facebook_id != '':
+                self._facebook_id = new_facebook_id
         if isinstance(list_add_book, list):
             for book in list_add_book:
                 if book not in self._product_in_stock:
