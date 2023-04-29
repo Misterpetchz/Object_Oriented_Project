@@ -4,8 +4,8 @@ import axios from "axios";
 import Branches from "./branch";
 import Event from "./Event";
 import CreditCard from "./CreditCard";
-import ModifyBookForm from "./ModifyBook";
-import RemoveBookForm from "./removeBook";
+import ModifyBookForm from "../component/ModifyBook";
+import RemoveBookForm from "../component/removeBook";
 
 
 export default function Admin(){
