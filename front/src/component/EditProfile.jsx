@@ -24,7 +24,8 @@ export default function EditProfile() {
         )
         .catch(function (error) {
           console.log(error, "error");
-        });
+        }
+        )
     },[])
 
   const editprofile = () => {

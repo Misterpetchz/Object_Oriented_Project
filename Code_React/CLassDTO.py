@@ -52,21 +52,20 @@ class Branchs(BaseModel):
     facebook_id : str
 
 class ModifyBookDTO(BaseModel):
-    cover:str|None
-    brief:str|None
-    creator:str|None
-    name:str|None
-    book_info:str|None
-    book_publisher:str|None
-    book_preview:str|None
-    critic_review:str|None
-    table_of_content:str|None
-    summary:str|None
-    genre:list[str]|None
-    date_created:str|None
-    rating:str|None
-    price:int|None
-    amount:int|None
+    cover: str
+    brief:str
+    creator:str
+    name:str
+    book_info:str
+    book_publisher:str
+    book_preview:str
+    critic_review:str
+    table_of_content:str
+    summary:str
+    genre:list
+    date_created:str
+    price:str
+    amount:str
 
 class CreditCards(BaseModel):
     card_num : str

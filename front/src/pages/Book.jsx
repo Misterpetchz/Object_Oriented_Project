@@ -64,14 +64,12 @@ function Book() {
         return(
             <div style={{ minHeight: 800, marginTop: 30 }}>
               <h1>Home</h1>
-                            <img src={book.cover} height="200px" />
+                            <img src={book.cover} alt={book.cover} height="200px" />
                             <span>{book.name} </span><br></br>
                             <span>{book.creator} </span><br></br>
                             <span>{book.old_price} </span><br></br>
                             <span>{book.new_price} </span><br></br>
-                            <span>{book.genre?.map((genre)=>(
-                                            <span>{genre}, </span>
-                                    ))} </span><br></br>
+                            <span>{book.genre?.join(', ')}</span><br /><br />
                             <span>{book.score} </span><br></br>
                             <span>{book.brief} </span><br></br>
                             <span>{book.available_branch?.map((branch)=>(

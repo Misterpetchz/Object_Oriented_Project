@@ -385,7 +385,7 @@ async def view_branch(name:str):
 @app.put("/books/{bookname}", tags=["books"])
 async def modify_book_to_catalog(bookname, data:ModifyBookDTO):
 	book = shop.find_book_by_name(bookname)
-	book.modify_book(data)
+	book.modify_book(data.cover,data.brief,data.creator,data.name,data.book_info,data.book_publisher,data.book_preview,data.critic_review,data.table_of_content,data.summary,data.genre,data.date_created,data.price,data.amount)
 	return {"status":"Success"}
 
 
@@ -433,17 +433,24 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
 	access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTE)
 	access_token = Sys.creat_access_token(
 		data={"sub": user._email}, expires_delta=access_token_expires)
-	return {"access_token": access_token, "token_type": "bearer"}
+	if (isinstance(user, Customer)):
+		role = "Customer"
+	elif (isinstance(user, Admin)):
+		role = "Admin"
+	return {"access_token": access_token, "token_type": "bearer", "role" : role}
 
 
 @app.get("/users/me", tags=["user"])
 async def view_info(userid=Depends(Sys.get_current_user)):
-	return {"address" : userid._address,
-			"email ": userid._email,
-			"full_name" : userid._full_name,
-			"gender": userid._gender,
-			"tel": userid._tel,
-	}
+	if (isinstance(userid, Customer)):
+		return {"address" : userid._address,
+				"email ": userid._email,
+				"full_name" : userid._full_name,
+				"gender": userid._gender,
+				"tel": userid._tel,
+				}
+	elif (isinstance(userid, Admin)):
+		return {"role" : "admin"}
 
 @app.get("/user", tags=["user"])
 async def view_info(userid=Depends(Sys.get_current_user)):
@@ -553,14 +560,13 @@ async def modify_branch(data : ModifyBranchDTO, branch_name):
 
 @app.delete("/RemoveBranch/{branch_name}", tags=["branch"])
 async def remove_branch(branch_name):
-	select_branch = shop.select_branch(branch_name)
-	shop.delete_branch(select_branch._branch_name)
+	shop.delete_branch(branch_name)
 	return {"Remove Branch Success"}
 
-@app.get("/GetAllEvent/", tags=["event"])
-async def get_event():
-	return {"eventDis" : [{"event_name": x.event_name,
-						"genre": x.event_genre} for x in shop.list_of_event]}
+# @app.get("/GetAllEvent/", tags=["event"])
+# async def get_event():
+# 	return {"eventDis" : [{"event_name": x.event_name,
+# 						"genre": x.event_genre} for x in shop.list_of_event]}
 
 # we dont place to collect class bookshop
 @app.put("/ModifyEvent/", tags=["event"])

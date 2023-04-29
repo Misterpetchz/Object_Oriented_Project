@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import axios from "axios";
-import SearchBar from "./SearchBar";
+import SearchBar from "../component/SearchBar";
 import {useNavigate} from "react-router-dom";
 
 export default function Searchs() {

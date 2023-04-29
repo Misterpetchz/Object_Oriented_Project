@@ -19,6 +19,7 @@ OAUTH2_SCHEME = OAuth2PasswordBearer(tokenUrl="token")
 class Token(BaseModel) :
 	access_token : str
 	token_type : str
+	role : str
 class TokenData(BaseModel) :
 	email : str or None = None
 

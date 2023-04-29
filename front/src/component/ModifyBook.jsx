@@ -14,12 +14,12 @@ export default function ModifyBookForm(){
     const [criticReview, setCriticReview] = useState('');
     const [tableOfContent, setTableOfContent] = useState('');
     const [summary, setSummary] = useState('');
-    const [genre, setGenre] = useState('');
+    const [genre, setGenre] = useState([]);
     const [dateCreated, setDateCreated] =  useState('')
     const [price, setPrice] = useState('');
     const [amount, setAmount] = useState('');
 
-    const genre_checkList = ["School", "Intense", "Shounen", "Drama", "Horror", "fantasy", "science", "history", "mystery", "thriller", "romance"];
+    const genre_checkList = ["School", "Intense", "Shounen", "Drama"];
 
     const handleCheckboxChange = (event) => {
         const item = event.target.name;
@@ -30,24 +30,33 @@ export default function ModifyBookForm(){
           setGenre(newCheckedItems);
     }
 
-    const modify_book = () => {
-        if(cover == '' ||
-        brief == '' ||
-        creator == '' ||
-        bookName == '' ||
-        bookInfo == '' ||
-        bookPublisher == '' ||
-        bookPreview == '' ||
-        criticReview == '' ||
-        tableOfContent == '' ||
-        summary == '' ||
-        genre == [] ||
-        dateCreated == '' ||
-        price == '' ||
-        amount == ''){
-            return ;
-        } else {
-            axios.put(`http://localhost:8000/books/${currentBook}`,{
+    const uploadImage = async (e) => {
+      const file = e.target.files[0];
+      const base64 = await convertBase64(file);
+      setCover(base64);
+    };
+
+    const convertBase64 = (file) => {
+      return new Promise((resolve, reject) => {
+        const fileReader = new FileReader();
+        fileReader.readAsDataURL(file);
+  
+        fileReader.onload = () => {
+          resolve(fileReader.result);
+        };
+  
+        fileReader.onerror = (error) => {
+          reject(error);
+        };
+      });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+    try {
+        
+        const response = await axios.put(`http://localhost:8000/books/${currentBook}`,{
                 cover: cover,
                 brief: brief,
                 creator: creator,
@@ -62,21 +71,18 @@ export default function ModifyBookForm(){
                 date_created: dateCreated,
                 price: price,
                 amount: amount
-            })
-            .then((result) => {
-                console.log(result);
-                window.location.reload();
+            });
+                
+            console.log('Response:', response.data);
+            window.location.reload();
+            }catch (error) {
+            console.error('Error:', error);
             }
-            )
-            .catch(function (error){
-                console.log(error, 'error');
-            })
-        }
-    };
+        };
     return (
-        <form>
+        <form onSubmit={handleSubmit}>
             <div>
-                <label>Book:</label>
+                <label>Old Book:</label>
                 <input
                     type="text"
                     onChange={(e) => setCurrentBook(e.target.value)}
@@ -85,9 +91,11 @@ export default function ModifyBookForm(){
             <div>
                 <label>Cover:</label>
                 <input
-                    type="text"
-                    onChange={(e) => setCover(e.target.value)}
-                    />
+                    type="file"
+                    onChange={(e) => {uploadImage(e);
+                    }
+                    }
+                  />
             </div>
             <div>
                 <label>Brief:</label>
@@ -175,18 +183,18 @@ export default function ModifyBookForm(){
             <div>
                 <label>Price:</label>
                 <input
-                    type="text"
+                    type="number"
                     onChange={(e) => setPrice(e.target.value)}
                     />
             </div>
             <div>
                 <label>Amount:</label>
                 <input
-                    type="text"
+                    type="number"
                     onChange={(e) => setAmount(e.target.value)}
                     />
             </div>
-            <button type="button" onClick={modify_book} >Modify</button>
+            <button type="submit" >Modify</button>
         </form>
     )
 }
