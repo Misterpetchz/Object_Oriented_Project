@@ -385,7 +385,7 @@ async def view_branch(name:str):
 @app.put("/books/{bookname}", tags=["books"])
 async def modify_book_to_catalog(bookname, data:ModifyBookDTO):
 	book = shop.find_book_by_name(bookname)
-	book.modify_book(data.cover,data.brief,data.creator,data.name,data.book_info,data.book_publisher,data.book_preview,data.critic_review,data.table_of_content,data.summary,data.genre,data.date_created,data.price,data.amount)
+	book.modify_book(data)
 	return {"status":"Success"}
 
 
@@ -560,7 +560,8 @@ async def modify_branch(data : ModifyBranchDTO, branch_name):
 
 @app.delete("/RemoveBranch/{branch_name}", tags=["branch"])
 async def remove_branch(branch_name):
-	shop.delete_branch(branch_name)
+	select_branch = shop.select_branch(branch_name)
+	shop.delete_branch(select_branch._branch_name)
 	return {"Remove Branch Success"}
 
 # @app.get("/GetAllEvent/", tags=["event"])
