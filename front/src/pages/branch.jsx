@@ -2,9 +2,9 @@ import React, { useState, useEffect} from 'react'
 import { Link } from 'react-router-dom'
 import { useLocation,  Route, Routes, useNavigate} from 'react-router-dom'
 import axios from 'axios'
-import AddBranchForm from './addBranch'
-import ModifyBranchForm from './modifyBranch'
-import RemoveBranch from './removeBranch'
+import AddBranchForm from '../component/addBranch'
+import ModifyBranchForm from '../component/modifyBranch'
+import RemoveBranch from '../component/removeBranch'
 
 
 function Branches(){

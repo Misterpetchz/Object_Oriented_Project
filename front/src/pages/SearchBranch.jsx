@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import axios from "axios";
-import SearchBar from "./SearchBar";
+import SearchBar from "../component/SearchBar";
 import { NavLink } from "react-router-dom";
 
 export default function SearchBranch() {

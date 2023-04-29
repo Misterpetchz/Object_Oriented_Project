@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router";
-import { fetchToken, setToken } from "../auth";
+import { fetchToken, setRole, setToken } from "../auth";
 import { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
@@ -23,7 +23,9 @@ export default function Login() {
         .then(function (response) {
           if (response.data.access_token) {
             setToken(response.data.access_token);
+            setRole(response.data.role)
             navigate("/profile");
+            window.location.reload(false);
           }
         })
         .catch(function (error) {

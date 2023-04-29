@@ -33,9 +33,7 @@ function Catalog() {
                                 <div><b><u>Author</u> : </b>{item.creator} </div>
                                 <div><del><b><u>Price</u> : </b>{item.old_price}</del></div>
                                 <div><b><u>Discounted</u> : </b>{item.new_price} </div>
-                                <div><b><u>Genre</u> : </b>{item.genre.map((genre)=>(
-                                        <span>{genre}, </span>
-                                ))} </div>
+                                <div><b><u>Genre</u> : </b>{item.genre.join(', ')}</div>
                                 <div><b><u>Rating</u> : </b>{item.score} </div>
                                 <div><b><u>Brief</u> : </b>{item.brief} </div>
                             </div>

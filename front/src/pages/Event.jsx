@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-import AddEventForm from "./addEvent";
-import ModifyEventForm from "./ModifyEvent";
-import RemoveEventForm from "./removeEvent";
+import AddEventForm from "../component/addEvent";
+import ModifyEventForm from "../component/ModifyEvent";
+import RemoveEventForm from "../component/removeEvent";
 
 export default function Event(){
 
