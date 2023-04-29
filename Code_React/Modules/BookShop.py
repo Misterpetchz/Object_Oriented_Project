@@ -4,7 +4,7 @@ from Modules.Book import Book
 class BookShop():
 	def __init__(self):
 		self.__list_of_branch = []
-		self.__available = []
+		self.__all_list_of_book = []
 
 	# Getter % Setter
 	@property
@@ -16,16 +16,12 @@ class BookShop():
 		self.__list_of_branch = new_branch
 
 	@property
-	def list_of_event(self):
-		return self.__list_of_event
+	def list_all_of_book(self):
+		return self.__all_list_of_book
 
-	@list_of_event.setter
-	def list_of_event(self, new_event):
-		self.__list_of_event = new_event
-
-	@property
-	def available(self):
-		return self.__available
+	@list_all_of_book.setter
+	def list_all_of_book(self,new_list):
+		self.__all_list_of_book = new_list
 
 	# Branch List
 	def add_branch(self, branch:Branch):
@@ -62,3 +58,18 @@ class BookShop():
 			if branch_name in element.branch_name:
 				available.append(element)
 		return available
+
+	#Catalog
+	def add_book(self, book):
+		self.__all_list_of_book.append(book)
+  
+	def find_book_by_name(self, name):
+		for i in self.list_all_of_book:
+			if name == i._name:
+				return i
+
+	def search_book(self, search_string):
+		self.__list_of_book = []
+		for element in self.__all_list_of_book:
+			if search_string in element._name:
+				self.__list_of_book.append(element)
