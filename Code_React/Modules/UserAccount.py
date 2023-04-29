@@ -30,8 +30,9 @@ class Admin(UserAccount):
 		self.__permission = permission
 		self._disabled = False
 
-	def modify_delete_branch(type, Branch):
-		pass
+	def edit_profile(self,email,password,full_name,gender,tel):
+		self.__email = email
+		
 
 	def add_branch(self, branch_list: BranchList, branch: Branch):
 		branch_list.list_of_branch.append(branch)
@@ -86,8 +87,16 @@ class Customer(UserAccount):
 				if elements == book:
 					lists.append(element)
 					return lists
-	def request_edit():
-		pass
+	def edit_profile(self,password,full_name,gender,tel,address,email_noti,sms_noti):
+		self._password = password
+		self._full_name = full_name
+		self._gender = gender 
+		self._tel = tel 
+		self._address = address
+		if email_noti != None:
+			self.email_notification = email_noti
+		if sms_noti != None:
+			self.sms_notification = sms_noti
 
 	def modify_credit_card_info(card_num,exp_date,cvc):
 		pass
