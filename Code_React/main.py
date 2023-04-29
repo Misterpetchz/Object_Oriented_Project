@@ -117,7 +117,7 @@ pookaneiei = Customer('pookantong.p@gmail.com',
 Sys.register(pookaneiei)
 Sys.register(pookaneiei1)
 
-batalog = Catalog()
+#shop = Catalog()
 
 pookan_admin555 = Admin("Pookan@gmail.com", Sys.get_password_hash("123"),
 						"Pookan", "Male", "488188561", [])
@@ -154,8 +154,8 @@ pookantong_book2 = Book(
 					999,
 					9
 					)
-batalog.add_book(pookantong_book1)
-batalog.add_book(pookantong_book2)
+shop.add_book(pookantong_book1)
+shop.add_book(pookantong_book2)
 nonthaburi1.add_product(pookantong_book1)
 nonthaburi1.add_product(pookantong_book2)
 bangkok.add_product(pookantong_book1)
@@ -175,7 +175,7 @@ event = EventDiscount("dan", datetime.date(2023, 3, 31),
 
 @app.get("/", tags=["books"])
 async def home():
-	event.event_dis(batalog)
+	event.event_dis(shop)
 	return {"catalog":[{"cover":x._cover,
 						"name":x._name,
 						"creator":x._creator,
@@ -184,12 +184,12 @@ async def home():
 						"genre":x._genre,
 						"score":f'{x._rating_score:.2f}',
 						"brief":x._brief}
-					for x in batalog.list_all_of_book if x._amount_in_stock != 0]}
+					for x in shop.list_all_of_book if x._amount_in_stock != 0]}
 
 @app.get("/books/{bookname}", tags=["books"])
 async def show_book(bookname:str | None = None):
-	event.event_dis(batalog)
-	book = batalog.find_book_by_name(bookname)
+	event.event_dis(shop)
+	book = shop.find_book_by_name(bookname)
 	if book == None:
 		raise HTTPException(status_code=404, detail="Book not found")
 	return {"cover":book._cover,
@@ -212,7 +212,7 @@ async def show_book(bookname:str | None = None):
 
 @app.get("/books/{bookname}/rating", tags=["books"])
 async def show_book_rating(bookname):
-	book = batalog.find_book_by_name(bookname)
+	book = shop.find_book_by_name(bookname)
 	return {"rating_score": f'{book._rating_score:.2f}',
 			"rating": [{"score_each_rating": x._book_rating,
 					"comment": x._book_comment} for x in book._rating]}
@@ -229,23 +229,23 @@ async def show_basket(current_user : Customer = Depends(Sys.get_current_user)):
 
 @app.put("/basket/add_amount/{bookname}", tags=["user"])
 async def add_amount(bookname:str, current_user : Customer = Depends(Sys.get_current_user)):
-	book = batalog.find_book_by_name(bookname)
+	book = shop.find_book_by_name(bookname)
 	current_user.add_amount(bookname,book)
 
 @app.put("/basket/reduce_amount/{bookname}", tags=["user"])
 async def reduce_amount(bookname:str, current_user : Customer = Depends(Sys.get_current_user)):
-	book = batalog.find_book_by_name(bookname)
+	book = shop.find_book_by_name(bookname)
 	current_user.reduce_amount(bookname,book)
 
 @app.delete("/basket/delete_item/{bookname}", tags=["user"])
 async def delete_amount(bookname:str, current_user : Customer = Depends(Sys.get_current_user)):
-	book = batalog.find_book_by_name(bookname)
+	book = shop.find_book_by_name(bookname)
 	current_user.delete_item(bookname,book)
 
 @app.post("/books/{bookname}/add_book_to_basket", tags=["user"])
 async def add_book_to_basket(bookname:str, amount:int, current_user : Customer = Depends(Sys.get_current_user)):
-	event.event_dis(batalog)
-	book = batalog.find_book_by_name(bookname)
+	event.event_dis(shop)
+	book = shop.find_book_by_name(bookname)
 	if book == None:
 		raise HTTPException(status_code=404, detail="Book not found")
 	for i in range(amount):
@@ -255,16 +255,16 @@ async def add_book_to_basket(bookname:str, amount:int, current_user : Customer =
 
 @app.post("/add_amount", tags=["user"])
 async def add_book_to_basket(book_item, current_user : Customer = Depends(Sys.get_current_user)):
-	event.event_dis(batalog)
-	book = batalog.find_book_by_name(book_item)
+	event.event_dis(shop)
+	book = shop.find_book_by_name(book_item)
 	current_user.add_amount(book_item, book)
 	return {"status":"Success"}
 
 
 @app.post("/reduce_amount", tags=["user"])
 async def add_book_to_basket(book_item, current_user : Customer = Depends(Sys.get_current_user)):
-	event.event_dis(batalog)
-	book = batalog.find_book_by_name(book_item)
+	event.event_dis(shop)
+	book = shop.find_book_by_name(book_item)
 	current_user.reduce_amount(book_item, book)
 	return {"status":"Success"}
 
@@ -281,7 +281,7 @@ async def make_order(current_user : Customer = Depends(Sys.get_current_user)):
 
 @app.post("/books/{bookname}/addrating", tags=["books"])
 async def add_rating(bookname, data: AddRatingDTO, current_user : Customer = Depends(Sys.get_current_user)):
-	book: Book = batalog.find_book_by_name(bookname)
+	book: Book = shop.find_book_by_name(bookname)
 	if current_user not in [x._user for x in book._rating]:
 		book.add_rating(Rating(data.score, data.comment, current_user))
 	return {"status": "Success"}
@@ -289,7 +289,7 @@ async def add_rating(bookname, data: AddRatingDTO, current_user : Customer = Dep
 
 @app.post("/addbook", tags=["books"])
 async def add_book_to_catalog(data: AddBookDTO):
-	batalog.add_book(Book(
+	shop.add_book(Book(
 			data.cover,
 			data.brief,
 			data.creator,
@@ -384,7 +384,7 @@ async def view_branch(name:str):
 
 @app.put("/books/{bookname}", tags=["books"])
 async def modify_book_to_catalog(bookname, data:ModifyBookDTO):
-	book = batalog.find_book_by_name(bookname)
+	book = shop.find_book_by_name(bookname)
 	book.modify_book(data)
 	return {"status":"Success"}
 
@@ -395,7 +395,14 @@ async def info_verification(data: EditProfile,id=Depends(Sys.get_current_user)):
 	if (id == None):
 		return {"Error-101": "Didn't find any account with this id"}
 	elif (isinstance(id, Customer)):
-		id._password = data.password or id._password
+		id.edit_profile(data.password or id._password,
+                  data.full_name or id._full_name,
+                  data.gender or id._gender,
+                  data.tel or id._tel,
+                  data.address or id._address,
+                  data.email_noti,
+                  data.sms_noti)
+		'''id._password = data.password or id._password
 		id._full_name = data.full_name or id._full_name
 		id._gender = data.gender or id._gender
 		id._tel = data.tel or id._tel
@@ -404,14 +411,15 @@ async def info_verification(data: EditProfile,id=Depends(Sys.get_current_user)):
 		# id._sms_notification = sms_noti if sms_noti != None else id._sms_notification
 		if data.email_noti != None:
 			id.email_notification = data.email_noti
-		if data.email_noti != None:
-			id.sms_notification = data.sms_noti
+		if data.sms_noti != None:
+			id.sms_notification = data.sms_noti'''
 		return {"status":"Success"}
 	elif (isinstance(id, Admin)):
-		id._password = data.password or id._password
+		id.edit_profile(data.password or id._password,data.full_name or id._full_name,data.gender or id._gender,data.tel or id._tel)
+		'''id._password = data.password or id._password
 		id._full_name = data.full_name or id._full_name
 		id._gender = data.gender or id._gender
-		id._tel = data.tel or id._tel
+		id._tel = data.tel or id._tel'''
 		return {"status":"Success"}
 
 
@@ -466,14 +474,14 @@ async def registration(data:RegisterDTO):
 
 @app.put("/remove_basket", tags=["user"])
 async def remove_from_basket(data:RemoveBookDTO, current_user : Customer = Depends(Sys.get_current_user)):
-	book = batalog.find_book_by_name(data.book_name)
+	book = shop.find_book_by_name(data.book_name)
 	current_user.remove_book_from_basket(data.index,book)
 	return {"status":"Success"}
 
 @app.post("/search", tags=["books"])
 async def search_book(name:str):
-	event.event_dis(batalog)
-	batalog.search_book(name)
+	event.event_dis(shop)
+	shop.search_book(name)
 	return {"searchlist":[{"cover":x._cover,
 						"name":x._name,
 						"creator":x._creator,
@@ -482,18 +490,18 @@ async def search_book(name:str):
 						"genre":x._genre,
 						"score":f'{x._rating_score:.2f}',
 						"brief":x._brief}
-					for x in batalog.list_of_book if x._amount_in_stock != 0]}
+					for x in shop.list_of_book if x._amount_in_stock != 0]}
 
 @app.put("/books/{bookname}", tags=["books"])
 async def modify_book_to_catalog(bookname, data:ModifyBookDTO):
-	book = batalog.find_book_by_name(bookname)
+	book = shop.find_book_by_name(bookname)
 	book.modify_book(data)
 	return {"status":"Success"}
 
 @app.delete("/books/{bookname}", tags=["books"])
 async def delete_book(bookname):
-	book = batalog.find_book_by_name(bookname)
-	batalog.remove_book(book)
+	book = shop.find_book_by_name(bookname)
+	shop.remove_book(book)
 	return {"status":"Success"}
 
 @app.get("/GetAllBranch/", tags=["branch"])
