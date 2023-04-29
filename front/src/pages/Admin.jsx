@@ -1,11 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import axios from "axios";
-import Branches from "./branch";
-import Event from "./Event";
-import CreditCard from "./CreditCard";
-import ModifyBookForm from "../component/ModifyBook";
-import RemoveBookForm from "../component/removeBook";
 
 
 export default function Admin(){
@@ -222,23 +217,6 @@ export default function Admin(){
                   </button>
                 </form>
               </div>
-              <div>
-                <h2>Modify Book</h2>
-                <ModifyBookForm />
-            </div>
-            <div>
-                <h2>Remove Book</h2>
-                <RemoveBookForm />
-            </div>
-              <div>
-                <h2>Branch</h2>
-                <Branches />
-              </div>
-              <div>
-                
-                <Event />
-              </div>
-
         </div>
         
       );

@@ -38,51 +38,33 @@ class Book :
     def modify_book(self,cover, brief, creator, name, book_info, book_publisher, book_preview, 
                  critic_review, table_of_content, summary, genre, date_created, price, amount):
         if isinstance(cover,str):
-            if cover != '':
-                self._cover = cover
+            self._cover = cover
         if isinstance(brief,str):
-            if brief != '':
-                self._brief = brief
+            self._brief = brief
         if isinstance(creator,str):
-            if creator != '':
-                self._creator = creator
+            self._creator = creator
         if isinstance(name,str):
-            if name != '':
-                self._name = name
+            self._name = name
         if isinstance(book_info,str):
-            if book_info != '':
-                self._book_info = book_info
+            self._book_info = book_info
         if isinstance(book_publisher,str):
-            if book_publisher != '':
-                self._book_publisher = book_publisher
+            self._book_publisher = book_publisher
         if isinstance(book_preview,str):
-            if book_preview != '':
-                self._book_preview = book_preview
+            self._book_preview = book_preview
         if isinstance(critic_review,str):
-            if critic_review != '':
-                self._critic_review = critic_review
+            self._critic_review = critic_review
         if isinstance(table_of_content,str):
-            if table_of_content != '':
-                self._table_of_content = table_of_content
+            self._table_of_content = table_of_content
         if isinstance(summary,str):
-            if summary != '':
-                self._summary = summary
-        if isinstance(genre, list):
-            for thing in genre:
-                if thing not in self._genre:
-                    self._genre.append(genre)
-            for old in self._genre:
-                if old not in genre:
-                    self._genre.remove(old)
+            self._summary = summary
+        if isinstance(genre,str):
+            self._genre = genre
         if isinstance(date_created,str):
-            if date_created != '':
-                self._date_created = date_created
-        if isinstance(price,str):
-            if price != '':
-                self._price = price
-        if isinstance(amount,str):
-            if amount != '':
-                self.amount = amount
+            self._date_created = date_created
+        if isinstance(price,int):
+            self._price = price
+        if isinstance(amount,int):
+            self.amount = amount
         
 class BookItem():
     def __init__(self, book):

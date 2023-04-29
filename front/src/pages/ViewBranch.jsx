@@ -24,7 +24,7 @@ function ViewBranch() {
             <div style={{ minHeight: 800, marginTop: 30 }}>
                 <div>
                   <span>Name : {branch.name} </span><br></br>
-                  <span>Open Time : {branch.open} </span><br></br>
+                  <span>Open Time : {branch.open_time} </span><br></br>
                   <span>Location : {branch.location} </span><br></br>
                   <span>Tel : {branch.tel} </span><br></br>
                   <span>Line ID : {branch.line_id} </span><br></br>
