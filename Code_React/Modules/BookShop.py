@@ -69,10 +69,11 @@ class BookShop():
 				return i
 
 	def search_book(self, search_string):
-		self.__list_of_book = []
+		list_of_book = []
 		for element in self.__all_list_of_book:
 			if search_string in element._name:
-				self.__list_of_book.append(element)
+				list_of_book.append(element)
+		return list_of_book
     
 	def remove_book(self, book):
 		for element in self.__all_list_of_book:

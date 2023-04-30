@@ -75,3 +75,14 @@ export function RequireRoleButton(){
         return false
     }
 }
+
+export function CustomerOnlyButton(){
+
+    let role = fetchRole()
+    if(role === 'Customer'){
+        return true
+    }
+    else{
+        return false
+    }
+}

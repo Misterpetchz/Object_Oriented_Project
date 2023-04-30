@@ -11,7 +11,7 @@ import Catalog from './pages/Home';
 import Searchs from './pages/Search';
 import Admin from './pages/Admin';
 import Basket from './pages/Basket';
-import { RequireRole, RequireToken, NotRequireTokenButton, RequireTokenButton, RequireRoleButton} from './auth';
+import { RequireRole, RequireToken, NotRequireTokenButton, RequireTokenButton, RequireRoleButton, CustomerOnlyButton} from './auth';
 import axios from 'axios';
 import Book from './pages/Book';
 import EditProfile from './component/EditProfile'
@@ -49,7 +49,7 @@ function App() {
         {/* <NavLink to="/event">Event</NavLink> */}
         {NotRequireTokenButton() && <NavLink to="/register">Register</NavLink>}
         {RequireRoleButton() && <NavLink to="/admin">Admin</NavLink>}
-        <NavLink to="/basket">Basket</NavLink>
+        {CustomerOnlyButton() && <NavLink to="/basket">Basket</NavLink>}
         {/* <NavLink to="/profile/credit_card">CreditCard</NavLink> */}
         {/* <NavLink to="/profile/credit_card/edit">EditCreditCard</NavLink> */}
       </nav>

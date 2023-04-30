@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import CreditCard from "./CreditCard";
+import {CustomerOnlyButton} from '../auth';
 
 
 export default function Profile() {
@@ -43,11 +44,11 @@ export default function Profile() {
         <ul>
           {user.address}
         </ul>
-        <Link to="/editprofile" className="btn btn-primary">Edit</Link>
+        {CustomerOnlyButton() && <Link to="/editprofile" className="btn btn-primary">Edit</Link>}
       </div>
-      <div>
+      {CustomerOnlyButton() && <div>
           <CreditCard />
-      </div>
+      </div>}
     </>
   );
 }
