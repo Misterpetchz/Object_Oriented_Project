@@ -2,6 +2,7 @@ import React from "react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams, useNavigate} from "react-router-dom";
+import {CustomerOnlyButton} from '../auth';
 
 function Book() {
 
@@ -76,16 +77,16 @@ function Book() {
                                             <span>{branch.name}, </span>
                                     ))} </span><br></br><br></br>
                             <div>
-                            <button type="button" onClick={add_book_to_basket}>
+                            {CustomerOnlyButton() &&<button type="button" onClick={add_book_to_basket}>
                                 Add Book to Basket
-                            </button>
+                            </button>}
                             </div>
                             <div>Over all Score {rating.rating_score} </div>
                             <div>{rating.rating?.map((rate)=>(
                                             <div>{rate.score_each_rating} {rate.comment}</div>
                                             
                                     ))} </div>
-                            <form>
+                            {CustomerOnlyButton() && <form>
                               <label style={{ marginRight: 10 }}>Comment</label>
                               <input
                                 type="text"
@@ -110,7 +111,7 @@ function Book() {
                               <button type="button" onClick={add_rating}>
                                 Post
                               </button>
-                            </form>           
+                            </form>}           
             </div>
 
           );

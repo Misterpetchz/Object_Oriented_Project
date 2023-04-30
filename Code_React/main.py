@@ -488,7 +488,7 @@ async def remove_from_basket(data:RemoveBookDTO, current_user : Customer = Depen
 @app.post("/search", tags=["books"])
 async def search_book(name:str):
 	event.event_dis(shop)
-	shop.search_book(name)
+	list_of_book = shop.search_book(name)
 	return {"searchlist":[{"cover":x._cover,
 						"name":x._name,
 						"creator":x._creator,
@@ -497,7 +497,7 @@ async def search_book(name:str):
 						"genre":x._genre,
 						"score":f'{x._rating_score:.2f}',
 						"brief":x._brief}
-					for x in shop.list_of_book if x._amount_in_stock != 0]}
+					for x in list_of_book if x._amount_in_stock != 0]}
 
 @app.put("/books/{bookname}", tags=["books"])
 async def modify_book_to_catalog(bookname, data:ModifyBookDTO):

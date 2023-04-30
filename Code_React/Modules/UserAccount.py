@@ -30,10 +30,6 @@ class Admin(UserAccount):
 		self.__permission = permission
 		self._disabled = False
 
-	def edit_profile(self,email,password,full_name,gender,tel):
-		self.__email = email
-		
-
 	def add_branch(self, branch_list: BranchList, branch: Branch):
 		branch_list.list_of_branch.append(branch)
 

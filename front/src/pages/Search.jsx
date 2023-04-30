@@ -24,7 +24,7 @@ export default function Searchs() {
             .then((result) => {
                 setSearchList(result.data.searchlist);
                 console.log(result)
-                }
+                },[]
             )
             .catch(function (error) {
               console.log(error, "error");

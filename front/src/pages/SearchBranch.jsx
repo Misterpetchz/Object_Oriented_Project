@@ -2,13 +2,17 @@ import React from "react";
 import { useState } from "react";
 import axios from "axios";
 import SearchBar from "../component/SearchBar";
-import { NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function SearchBranch() {
 
+    const Navigate = useNavigate()
     const [search_list_b, setSearchList_b] = useState([]);
 
     const clearResults = () => setQuotes([]);
+    const onPress = ((branch_name) => {
+      Navigate(`/branch/${branch_name}`)
+    });
 
     const searching = async search => {
         if (search == "") {
@@ -35,7 +39,7 @@ export default function SearchBranch() {
                     {search_list_b.map((item) => (
                         <li>
                             <div>
-                                    <span>{item.name} </span>
+                              <button onClick={() => onPress(item.name)}><span>{item.name} </span></button>
                             </div>
                         </li>
                     ))}
