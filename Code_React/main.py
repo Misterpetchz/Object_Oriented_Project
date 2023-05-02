@@ -1,5 +1,5 @@
-from fastapi import BackgroundTasks, FastAPI, Request ,Form,Response
-from fastapi.responses import HTMLResponse,RedirectResponse
+from fastapi import BackgroundTasks, FastAPI, Request, Form, Response
+from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from pathlib import Path
@@ -44,13 +44,12 @@ origins = {
 }
 
 app.add_middleware(
-CORSMiddleware,
-	allow_origins = origins,
-	allow_credentials =True,
-	allow_methods = ["*"],
-	allow_headers= ["*"],
+	CORSMiddleware,
+	allow_origins=origins,
+	allow_credentials=True,
+	allow_methods=["*"],
+	allow_headers=["*"],
 )
-
 
 
 shop = BookShop()
@@ -59,65 +58,68 @@ list_credit_card = []
 
 list_branch = BranchList()
 Sys = System()
+
+
 class Branchs(BaseModel):
-	branch_name : str
-	open_time : str
-	location : str
-	tel : str
-	line_id : str
-	facebook_id : str
+	branch_name: str
+	open_time: str
+	location: str
+	tel: str
+	line_id: str
+	facebook_id: str
+
 
 pookan_card = CreditCard("121231232",
-						"15-07-22",
-						"123")
+						 "15-07-22",
+						 "123")
 bangkok = Branch("Bangkok",
-				"6.00 - 22.00",
-				"Bangkok",
-				"0864615559",
-				"bookshop.bangkok",
-				"bangkok_bookshop",
-				)
+				 "6.00 - 22.00",
+				 "Bangkok",
+				 "0864615559",
+				 "bookshop.bangkok",
+				 "bangkok_bookshop",
+				 )
 nonthaburi1 = Branch("Nonthaburi",
-					"8:30-22:00",
-					"Nonthaburi",
-					"0811111111",
-					"seed_nonthaburi01",
-					"NonthaburiSE-ED",
-					)
+					 "8:30-22:00",
+					 "Nonthaburi",
+					 "0811111111",
+					 "seed_nonthaburi01",
+					 "NonthaburiSE-ED",
+					 )
 rangsit = Branch('rangsit',
-					'9:00-23:00',
-					'future park rangsit',
-					'0983868365',
-					'bookshop.rangsit',
-					'rangsit_bookshop',
-					)
+				 '9:00-23:00',
+				 'future park rangsit',
+				 '0983868365',
+				 'bookshop.rangsit',
+				 'rangsit_bookshop',
+				 )
 moon_branch = Branch('Moon',
-					'23:00 - 23:59',
-					'Moon',
-					'0995471568',
-					'bookshop.moon',
-					'moon_bookshop'
-					)
+					 '23:00 - 23:59',
+					 'Moon',
+					 '0995471568',
+					 'bookshop.moon',
+					 'moon_bookshop'
+					 )
 shop.add_branch(bangkok)
 shop.add_branch(nonthaburi1)
 shop.add_branch(rangsit)
 shop.add_branch(moon_branch)
 pookaneiei1 = Customer("pookan@gmail.com", Sys.get_password_hash("test1"),
-					"pookan", "Male", "0000000000", True, False, "LLL")
+					   "pookan", "Male", "0000000000", True, False, "LLL")
 pookaneiei2 = Customer("pookan2@gmail.com", Sys.get_password_hash("test1"),
-					"pookan", "Male", "0000000000", True, False, "LLL")
+					   "pookan", "Male", "0000000000", True, False, "LLL")
 pookaneiei = Customer('pookantong.p@gmail.com',
-				Sys.get_password_hash("test2"),
-				'PookanNaja',
-				'Male',
-				'0980231173',
-				True,
-				True,
-				'29/7 หมู่2 ตำบลบั้นเด้า อำเภอรถแห่ จังหวัดสก๊อย ประเทศหิวข้าว ดาวSun')
+					  Sys.get_password_hash("test2"),
+					  'PookanNaja',
+					  'Male',
+					  '0980231173',
+					  True,
+					  True,
+					  '29/7 หมู่2 ตำบลบั้นเด้า อำเภอรถแห่ จังหวัดสก๊อย ประเทศหิวข้าว ดาวSun')
 Sys.register(pookaneiei)
 Sys.register(pookaneiei1)
 
-#shop = Catalog()
+# shop = Catalog()
 
 pookan_admin555 = Admin("Pookan@gmail.com", Sys.get_password_hash("123"),
 						"Pookan", "Male", "488188561", [])
@@ -125,35 +127,35 @@ pookan_admin555 = Admin("Pookan@gmail.com", Sys.get_password_hash("123"),
 Sys.register(pookan_admin555)
 
 pookantong_book1 = Book(
-					'random.png',
-					'ในคืนที่โหดร้ายพระเอกตายแต่.....',
-					'Pookantong',
-					'Pookantong1',
-					'250 หน้า ปกแข็ง',
-					'BanDao',
-					'yamete!',
-					'critic review',
-					[],
-					'พระเอกตาย',
-					['Intense'],
-					'18/12/29999',
-					999,
-					10)
+	'random.png',
+	'ในคืนที่โหดร้ายพระเอกตายแต่.....',
+	'Pookantong',
+	'Pookantong1',
+	'250 หน้า ปกแข็ง',
+	'BanDao',
+	'yamete!',
+	'critic review',
+	[],
+	'พระเอกตาย',
+	['Intense'],
+	'18/12/29999',
+	999,
+	10)
 pookantong_book2 = Book(
-					'random2.png',
-					'ในคืนที่โหดร้ายนางเอกตายแต่.....',
-					'Pookantong',
-					'Pookantong2',
-					'999 หน้า ปกแข็ง',
-					'BanDao',
-					'yamete kudasai!',
-					'critic review',
-					[],
-					'นางเอกตาย',
-					['School','Shounen'], '18/12/29999',
-					999,
-					9
-					)
+	'random2.png',
+	'ในคืนที่โหดร้ายนางเอกตายแต่.....',
+	'Pookantong',
+	'Pookantong2',
+	'999 หน้า ปกแข็ง',
+	'BanDao',
+	'yamete kudasai!',
+	'critic review',
+	[],
+	'นางเอกตาย',
+	['School', 'Shounen'], '18/12/29999',
+	999,
+	9
+)
 shop.add_book(pookantong_book1)
 shop.add_book(pookantong_book2)
 nonthaburi1.add_product(pookantong_book1)
@@ -163,51 +165,53 @@ moon_branch.add_product(pookantong_book2)
 rangsit.add_product(pookantong_book1)
 rangsit.add_product(pookantong_book2)
 
-pookantong_book1.add_rating(Rating(10, "Bad ending, I don't like it", pookaneiei))
+pookantong_book1.add_rating(
+	Rating(10, "Bad ending, I don't like it", pookaneiei))
 pookantong_book1.add_rating(Rating(5, "OK, I don't like it", pookaneiei2))
-pookaneiei1.add_book_to_basket(BookItem(pookantong_book1),pookantong_book1)
-pookaneiei1.add_book_to_basket(BookItem(pookantong_book2),pookantong_book2)
-pookaneiei1.add_book_to_basket(BookItem(pookantong_book1),pookantong_book1)
+pookaneiei1.add_book_to_basket(BookItem(pookantong_book1), pookantong_book1)
+pookaneiei1.add_book_to_basket(BookItem(pookantong_book2), pookantong_book2)
+pookaneiei1.add_book_to_basket(BookItem(pookantong_book1), pookantong_book1)
 
 event = EventDiscount("dan", datetime.date(2023, 3, 31),
-					datetime.date(2023, 4, 30), 0.9, 'Shounen')
+					  datetime.date(2023, 4, 30), 0.9, 'Shounen')
 
 
 @app.get("/", tags=["books"])
 async def home():
 	event.event_dis(shop)
-	return {"catalog":[{"cover":x.cover,
-						"name":x.name,
-						"creator":x.creator,
-						"old_price":x.price,
-						"new_price":x.new_price,
-						"genre":x.genre,
-						"score":f'{x.rating_score:.2f}',
-						"brief":x.brief}
-					for x in shop.list_all_of_book if x.stock_amount != 0]}
+	return {"catalog": [{"cover": x.cover,
+						 "name": x.name,
+						 "creator": x.creator,
+						 "old_price": x.price,
+						 "new_price": x.new_price,
+						 "genre": x.genre,
+						 "score": f'{x.rating_score:.2f}',
+						 "brief": x.brief}
+						for x in shop.list_all_of_book if x.stock_amount != 0]}
+
 
 @app.get("/books/{bookname}", tags=["books"])
-async def show_book(bookname:str | None = None):
+async def show_book(bookname: str | None = None):
 	event.event_dis(shop)
 	book = shop.find_book_by_name(bookname)
 	if book == None:
 		raise HTTPException(status_code=404, detail="Book not found")
-	return {"cover":book.cover,
-			"name":book.name,
-			"creator":book.creator,
-			"info":book.book_info,
-			"publisher":book.book_publisher,
-			"preview":book.book_preview,
-			"critic_review":book.critic_review,
-			"table_of_content":book.table_of_content,
-			"summary":book.summary,
-			"date_created":book.date_created,
-			"old_price":book.price,
-			"new_price":book.new_price,
-			"genre":book.genre,
-			"score":f'{book.rating_score:.2f}',
-			"brief":book.brief,
-			"available_branch":[x.branch_name for x in shop.search_available_branch(book)]}
+	return {"cover": book.cover,
+			"name": book.name,
+			"creator": book.creator,
+			"info": book.book_info,
+			"publisher": book.book_publisher,
+			"preview": book.book_preview,
+			"critic_review": book.critic_review,
+			"table_of_content": book.table_of_content,
+			"summary": book.summary,
+			"date_created": book.date_created,
+			"old_price": book.price,
+			"new_price": book.new_price,
+			"genre": book.genre,
+			"score": f'{book.rating_score:.2f}',
+			"brief": book.brief,
+			"available_branch": [x.branch_name for x in shop.search_available_branch(book)]}
 
 
 @app.get("/books/{bookname}/rating", tags=["books"])
@@ -215,72 +219,78 @@ async def show_book_rating(bookname):
 	book = shop.find_book_by_name(bookname)
 	return {"rating_score": f'{book.rating_score:.2f}',
 			"rating": [{"score_each_rating": x.book_rating,
-					"comment": x.book_comment} for x in book.rating]}
+						"comment": x.book_comment} for x in book.rating]}
+
 
 @app.get("/basket", tags=["user"])
-async def show_basket(current_user : Customer = Depends(Sys.get_current_user)):
-	return {"basket":[{"cover":x.cover,
-						"name":x.name,
-						"price":x.price,
-						"genre":x.genre,
-						"amount":x.amount
+async def show_basket(current_user: Customer = Depends(Sys.get_current_user)):
+	return {"basket": [{"cover": x.cover,
+						"name": x.name,
+						"price": x.price,
+						"genre": x.genre,
+						"amount": x.amount
 						}
-					for x in current_user.basket.book_item]}
+					   for x in current_user.basket.book_item]}
+
 
 @app.put("/basket/add_amount/{bookname}", tags=["user"])
-async def add_amount(bookname:str, current_user : Customer = Depends(Sys.get_current_user)):
+async def add_amount(bookname: str, current_user: Customer = Depends(Sys.get_current_user)):
 	book = shop.find_book_by_name(bookname)
-	current_user.add_amount(bookname,book)
+	current_user.add_amount(bookname, book)
+
 
 @app.put("/basket/reduce_amount/{bookname}", tags=["user"])
-async def reduce_amount(bookname:str, current_user : Customer = Depends(Sys.get_current_user)):
+async def reduce_amount(bookname: str, current_user: Customer = Depends(Sys.get_current_user)):
 	book = shop.find_book_by_name(bookname)
-	current_user.reduce_amount(bookname,book)
+	current_user.reduce_amount(bookname, book)
+
 
 @app.delete("/basket/delete_item/{bookname}", tags=["user"])
-async def delete_amount(bookname:str, current_user : Customer = Depends(Sys.get_current_user)):
+async def delete_amount(bookname: str, current_user: Customer = Depends(Sys.get_current_user)):
 	book = shop.find_book_by_name(bookname)
-	current_user.delete_item(bookname,book)
+	current_user.delete_item(bookname, book)
+
 
 @app.post("/books/{bookname}/add_book_to_basket", tags=["user"])
-async def add_book_to_basket(bookname:str, amount:int, current_user : Customer = Depends(Sys.get_current_user)):
+async def add_book_to_basket(bookname: str, amount: int, current_user: Customer = Depends(Sys.get_current_user)):
 	event.event_dis(shop)
 	book = shop.find_book_by_name(bookname)
 	if book == None:
 		raise HTTPException(status_code=404, detail="Book not found")
 	for i in range(amount):
-		current_user.add_book_to_basket(BookItem(book),book)
-	return {"status":"Success"}
+		current_user.add_book_to_basket(BookItem(book), book)
+	return {"status": "Success"}
 
 
 @app.post("/add_amount", tags=["user"])
-async def add_book_to_basket(book_item, current_user : Customer = Depends(Sys.get_current_user)):
+async def add_book_to_basket(book_item, current_user: Customer = Depends(Sys.get_current_user)):
 	event.event_dis(shop)
 	book = shop.find_book_by_name(book_item)
 	current_user.add_amount(book_item, book)
-	return {"status":"Success"}
+	return {"status": "Success"}
 
 
 @app.post("/reduce_amount", tags=["user"])
-async def add_book_to_basket(book_item, current_user : Customer = Depends(Sys.get_current_user)):
+async def add_book_to_basket(book_item, current_user: Customer = Depends(Sys.get_current_user)):
 	event.event_dis(shop)
 	book = shop.find_book_by_name(book_item)
 	current_user.reduce_amount(book_item, book)
-	return {"status":"Success"}
+	return {"status": "Success"}
+
 
 @app.get("/make_order", tags=["user"])
-async def make_order(current_user : Customer = Depends(Sys.get_current_user)):
+async def make_order(current_user: Customer = Depends(Sys.get_current_user)):
 	current_user.make_order(Order(current_user.basket.book_item,
-								current_user.order_id,
-								True,
-								current_user.basket.price,
-								current_user.full_name))
+								  current_user.order_id,
+								  True,
+								  current_user.basket.price,
+								  current_user.full_name))
 	current_user.basket.book_item = []
-	return {"payment_id" : current_user.payment_id}
+	return {"payment_id": current_user.payment_id}
 
 
 @app.post("/books/{bookname}/addrating", tags=["books"])
-async def add_rating(bookname, data: AddRatingDTO, current_user : Customer = Depends(Sys.get_current_user)):
+async def add_rating(bookname, data: AddRatingDTO, current_user: Customer = Depends(Sys.get_current_user)):
 	book: Book = shop.find_book_by_name(bookname)
 	if current_user not in [x.user for x in book.rating]:
 		book.add_rating(Rating(data.score, data.comment, current_user))
@@ -290,20 +300,20 @@ async def add_rating(bookname, data: AddRatingDTO, current_user : Customer = Dep
 @app.post("/addbook", tags=["books"])
 async def add_book_to_catalog(data: AddBookDTO):
 	shop.add_book(Book(
-			data.cover,
-			data.brief,
-			data.creator,
-			data.name,
-			data.book_info,
-			data.book_publisher,
-			data.book_preview,
-			data.critic_review,
-			data.table_of_content,
-			data.summary,
-			data.genre,
-			data.date_created,
-			data.price,
-			data.amount)
+		data.cover,
+		data.brief,
+		data.creator,
+		data.name,
+		data.book_info,
+		data.book_publisher,
+		data.book_preview,
+		data.critic_review,
+		data.table_of_content,
+		data.summary,
+		data.genre,
+		data.date_created,
+		data.price,
+		data.amount)
 	)
 	return {"status": "Success"}
 
@@ -318,18 +328,21 @@ async def add_branch_to_branch_list(data: AddBranchDTO):
 				data.facebook_id))
 	return {"status": "Success"}
 '''
+
+
 @app.get("/CreditCard/", tags=["user"])
-async def print_credit_card(current_user = Depends(Sys.get_current_user)):
-	if (isinstance(current_user, Customer) and current_user.credit_card != None) :
+async def print_credit_card(current_user=Depends(Sys.get_current_user)):
+	if (isinstance(current_user, Customer) and current_user.credit_card != None):
 		card = current_user.credit_card
-		return {"credit_card_num" : card.card_num,
-				"credit_card_exp" : card.expire_date,
-				"credit_card_cvc" : card.cvc}
-	else :
-		return {"status" : "Error"}
+		return {"credit_card_num": card.card_num,
+				"credit_card_exp": card.expire_date,
+				"credit_card_cvc": card.cvc}
+	else:
+		return {"status": "Error"}
+
 
 @app.post("/CreditCard/add", tags=["user"])
-async def add_credit_card(credit_card: CreditCards, current_user = Depends(Sys.get_current_user)):
+async def add_credit_card(credit_card: CreditCards, current_user=Depends(Sys.get_current_user)):
 	current_user.add_credit_card(CreditCard(credit_card.card_num,
 											credit_card.expire_date,
 											credit_card.cvc))
@@ -339,69 +352,70 @@ async def add_credit_card(credit_card: CreditCards, current_user = Depends(Sys.g
 
 
 @app.put("/Creditcard/edit", tags=["user"])
-async def modify_credit_card(credit_card: CreditCards, current_user = Depends(Sys.get_current_user)):
+async def modify_credit_card(credit_card: CreditCards, current_user=Depends(Sys.get_current_user)):
 	if (bool(re.match(r"[0-9]{2}/[0-9]{2}", credit_card.expire_date))
-	and bool(re.match(r"[0-9]{16}", credit_card.card_num))
-	and bool(re.match(r"[0-9]{3}", credit_card.cvc))) :
-		if (current_user.credit_card == None) :
+		and bool(re.match(r"[0-9]{16}", credit_card.card_num))
+			and bool(re.match(r"[0-9]{3}", credit_card.cvc))):
+		if (current_user.credit_card == None):
 			current_user.add_credit_card(CreditCard(credit_card.card_num,
 													credit_card.expire_date,
 													credit_card.cvc))
-		else :
+		else:
 			current_user.credit_card.modify_credit_card_info(
 				credit_card.card_num, credit_card.expire_date, credit_card.cvc)
 		return {"status": "Success"}
-	else :
+	else:
 		return {"status": "Error"}
 
 
 @app.post("/branch/search/", tags=["branch"])
-async def search_branch(name:str):
-	return {"branch":[{"name":x.branch_name,
-						"open":x.open_time,
-						"location":x.location,
-						"tel":x.tel,
-						"line_id":x.line_id,
-						"facebook_id":x.facebook_id,
-						"product":x.product_in_stock
+async def search_branch(name: str):
+	return {"branch": [{"name": x.branch_name,
+						"open": x.open_time,
+						"location": x.location,
+						"tel": x.tel,
+						"line_id": x.line_id,
+						"facebook_id": x.facebook_id,
+						"product": x.product_in_stock
 						}
-					for x in shop.search_branch(name)]}
- 
+					   for x in shop.search_branch(name)]}
+
+
 @app.get("/branch/{name}", tags=["branch"])
-async def view_branch(name:str):
-    x = shop.select_branch(name)
-    if x == None:
-        raise HTTPException(status_code=404, detail="Branch not found")
-    return {"name":x.branch_name,
-			"open":x.open_time,
-			"location":x.location,
-			"tel":x.tel,
-			"line_id":x.line_id,
-			"facebook_id":x.facebook_id,
-			"product":x.product_in_stock
+async def view_branch(name: str):
+	x = shop.select_branch(name)
+	if x == None:
+		raise HTTPException(status_code=404, detail="Branch not found")
+	return {"name": x.branch_name,
+			"open": x.open_time,
+			"location": x.location,
+			"tel": x.tel,
+			"line_id": x.line_id,
+			"facebook_id": x.facebook_id,
+			"product": x.product_in_stock
 			}
 
 
 @app.put("/books/{bookname}", tags=["books"])
-async def modify_book_to_catalog(bookname, data:ModifyBookDTO):
+async def modify_book_to_catalog(bookname, data: ModifyBookDTO):
 	book = shop.find_book_by_name(bookname)
-	book.modify_book(data.cover,data.brief,data.creator,data.name,data.book_info,data.book_publisher,data.book_preview,data.critic_review,data.table_of_content,data.summary,data.genre,data.date_created,data.price,data.amount)
-	return {"status":"Success"}
-
+	book.modify_book(data.cover, data.brief, data.creator, data.name, data.book_info, data.book_publisher, data.book_preview,
+					 data.critic_review, data.table_of_content, data.summary, data.genre, data.date_created, data.price, data.amount)
+	return {"status": "Success"}
 
 
 @app.put("/users/edit", tags=["user"])
-async def info_verification(data: EditProfile,id=Depends(Sys.get_current_user)):
+async def info_verification(data: EditProfile, id=Depends(Sys.get_current_user)):
 	if (id == None):
 		return {"Error-101": "Didn't find any account with this id"}
 	elif (isinstance(id, Customer)):
 		id.edit_profile(data.password or id.password,
-                  data.full_name or id.full_name,
-                  data.gender or id.gender,
-                  data.tel or id.tel,
-                  data.address or id.address,
-                  data.email_noti,
-                  data.sms_noti)
+						data.full_name or id.full_name,
+						data.gender or id.gender,
+						data.tel or id.tel,
+						data.address or id.address,
+						data.email_noti,
+						data.sms_noti)
 		'''id._password = data.password or id._password
 		id._full_name = data.full_name or id._full_name
 		id._gender = data.gender or id._gender
@@ -413,15 +427,15 @@ async def info_verification(data: EditProfile,id=Depends(Sys.get_current_user)):
 			id.email_notification = data.email_noti
 		if data.sms_noti != None:
 			id.sms_notification = data.sms_noti'''
-		return {"status":"Success"}
+		return {"status": "Success"}
 	elif (isinstance(id, Admin)):
-		id.edit_profile(data.password or id.password,data.full_name or id.full_name,data.gender or id.gender,data.tel or id.tel)
+		id.edit_profile(data.password or id.password, data.full_name or id.full_name,
+						data.gender or id.gender, data.tel or id.tel)
 		'''id._password = data.password or id._password
 		id._full_name = data.full_name or id._full_name
 		id._gender = data.gender or id._gender
 		id._tel = data.tel or id._tel'''
-		return {"status":"Success"}
-
+		return {"status": "Success"}
 
 
 @app.post("/token", response_model=Token, tags=["user"])
@@ -437,35 +451,37 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
 		role = "Customer"
 	elif (isinstance(user, Admin)):
 		role = "Admin"
-	return {"access_token": access_token, "token_type": "bearer", "role" : role}
+	return {"access_token": access_token, "token_type": "bearer", "role": role}
 
 
 @app.get("/users/me", tags=["user"])
 async def view_info(userid=Depends(Sys.get_current_user)):
 	if (isinstance(userid, Customer)):
-		return {"address" : userid.address,
+		return {"address": userid.address,
 				"email ": userid.email,
-				"full_name" : userid.full_name,
+				"full_name": userid.full_name,
 				"gender": userid.gender,
 				"tel": userid.tel,
 				}
 	elif (isinstance(userid, Admin)):
-		return {"role" : "admin"}
+		return {"role": "admin"}
+
 
 @app.get("/user", tags=["user"])
 async def view_info(userid=Depends(Sys.get_current_user)):
-	return {"address" : userid.address,
-			"full_name" : userid.full_name,
+	return {"address": userid.address,
+			"full_name": userid.full_name,
 			"gender": userid.gender,
 			"tel": userid.tel,
 			"email_noti": userid.email_notification,
 			"sms_noti": userid.sms_notification
-	}
+			}
+
 
 @app.post("/users/registration", tags=["user"])
-async def registration(data:RegisterDTO):
+async def registration(data: RegisterDTO):
 	if data.email in [x.email for x in Sys.User_DB]:
-		return {"status":"Reject"}
+		return {"status": "Reject"}
 	input_dict = {}
 	input_dict['_email'] = data.email
 	input_dict['_password'] = Sys.get_password_hash(data.password)
@@ -475,78 +491,87 @@ async def registration(data:RegisterDTO):
 	input_dict['_address'] = data.address
 	input_dict['__email_notification'] = data.email_noti
 	input_dict['__sms_notification'] = data.sms_noti
-	Sys.register(Customer(input_dict["_email"], input_dict["_password"], input_dict["_full_name"], input_dict["_gender"], input_dict["_tel"], input_dict["__email_notification"], input_dict["__sms_notification"], input_dict["_address"]))
+	Sys.register(Customer(input_dict["_email"], input_dict["_password"], input_dict["_full_name"], input_dict["_gender"],
+				 input_dict["_tel"], input_dict["__email_notification"], input_dict["__sms_notification"], input_dict["_address"]))
 
-	return {"status":"Success"}
+	return {"status": "Success"}
+
 
 @app.put("/remove_basket", tags=["user"])
-async def remove_from_basket(data:RemoveBookDTO, current_user : Customer = Depends(Sys.get_current_user)):
+async def remove_from_basket(data: RemoveBookDTO, current_user: Customer = Depends(Sys.get_current_user)):
 	book = shop.find_book_by_name(data.book_name)
-	current_user.remove_book_from_basket(data.index,book)
-	return {"status":"Success"}
+	current_user.remove_book_from_basket(data.index, book)
+	return {"status": "Success"}
+
 
 @app.post("/search", tags=["books"])
-async def search_book(name:str):
+async def search_book(name: str):
 	event.event_dis(shop)
 	list_of_book = shop.search_book(name)
-	return {"searchlist":[{"cover":x.cover,
-						"name":x.name,
-						"creator":x.creator,
-						"old_price":x.price,
-						"new_price":x.new_price,
-						"genre":x.genre,
-						"score":f'{x.rating_score:.2f}',
-						"brief":x.brief}
-					for x in list_of_book if x.stock_amount != 0]}
+	return {"searchlist": [{"cover": x.cover,
+							"name": x.name,
+							"creator": x.creator,
+							"old_price": x.price,
+							"new_price": x.new_price,
+							"genre": x.genre,
+							"score": f'{x.rating_score:.2f}',
+							"brief": x.brief}
+						   for x in list_of_book if x.stock_amount != 0]}
+
 
 @app.put("/books/{bookname}", tags=["books"])
-async def modify_book_to_catalog(bookname, data:ModifyBookDTO):
+async def modify_book_to_catalog(bookname, data: ModifyBookDTO):
 	book = shop.find_book_by_name(bookname)
 	book.modify_book(data)
-	return {"status":"Success"}
+	return {"status": "Success"}
+
 
 @app.delete("/books/{bookname}", tags=["books"])
 async def delete_book(bookname):
 	book = shop.find_book_by_name(bookname)
 	shop.remove_book(book)
-	return {"status":"Success"}
+	return {"status": "Success"}
+
 
 @app.get("/GetAllBranch/", tags=["branch"])
 async def get_branch():
-	return {"name" : [{"branch_name" :x.branch_name} for x in shop.list_of_branch] }
+	return {"name": [{"branch_name": x.branch_name} for x in shop.list_of_branch]}
 
-@app.post("/AddBookToBranch/{branch_name}", tags=["branch"])
-async def add_book_to_stock(branch_name, data:AddBookDTO):
-	select_branch = shop.select_branch(branch_name)
-	select_branch.add_book_to_stock(Book(
-						data.cover,
-						data.brief,
-						data.creator,
-						data.name,
-						data.book_info,
-						data.book_publisher,
-						data.book_preview,
-						data.critic_review,
-						data.table_of_content,
-						data.summary,
-						data.genre,
-						data.date_created,
-						data.price,
-						data.amount))
+
+@app.get("/get_add_book_to_branch/")
+async def get_book_stock(book_name):
+	return shop.check_stock(book_name)
+
+
+@app.post("/AddBookToBranch/", tags=["branch"])
+async def add_book_to_stock(data: AddBookToBranch):
+	select_branch = shop.select_branch(data.branch_name)
+	select_book = shop.find_book_by_name(data.book_name)
+	select_branch.add_book_to_stock(select_book)
 	return {"Add to stock Success"}
 
+
+@app.delete('/RemoveBookFromBranch/{branch_name}/{book_name}', tags=['branch'])
+async def remove_book_from_stock(branch_name, book_name):
+	select_branch = shop.select_branch(branch_name)
+	select_book = select_branch.find_book_in_stock(book_name)
+	select_branch.remove_book_from_stock(select_book)
+	return {"Remove from stock success"}
+
+
 @app.post("/AddBranch")
-async def add_branch(data:AddBranchDTO):
+async def add_branch(data: AddBranchDTO):
 	shop.add_branch(Branch(data.branch_name,
-				data.open_time,
-				data.location,
-				data.tel,
-				data.line_id,
-				data.facebook_id))
+						   data.open_time,
+						   data.location,
+						   data.tel,
+						   data.line_id,
+						   data.facebook_id))
 	return {"Add Branch Success"}
 
+
 @app.put("/ModifyBranch/{branch_name}", tags=["branch"])
-async def modify_branch(data : ModifyBranchDTO, branch_name):
+async def modify_branch(data: ModifyBranchDTO, branch_name):
 	select_branch = shop.select_branch(branch_name)
 	select_branch.modify_branch(data.branch_name,
 								data.open_time,
@@ -557,6 +582,7 @@ async def modify_branch(data : ModifyBranchDTO, branch_name):
 								[],
 								[])
 	return {"Modify Success"}
+
 
 @app.delete("/RemoveBranch/{branch_name}", tags=["branch"])
 async def remove_branch(branch_name):
@@ -569,66 +595,76 @@ async def remove_branch(branch_name):
 # 						"genre": x.event_genre} for x in shop.list_of_event]}
 
 # we dont place to collect class bookshop
+
+
 @app.put("/ModifyEvent/", tags=["event"])
-async def modify_event(data : ModifyEventDTO):
+async def modify_event(data: ModifyEventDTO):
 	# loop check in bigger class
 	event.modify_event(data.event_name,
-							data.event_start,
-							data.event_end,
-							data.discounted_percentage,
-							data.event_genre)
+					   data.event_start,
+					   data.event_end,
+					   data.discounted_percentage,
+					   data.event_genre)
 	return {"Modify Success"}
 
+
 @app.get("/make_order", tags=["user"])
-async def make_order(current_user : Customer = Depends(Sys.get_current_user)):
+async def make_order(current_user: Customer = Depends(Sys.get_current_user)):
 	current_user.make_order(Order(current_user.basket.book_item,
-								current_user.order_id,
-								True,
-								current_user.basket.price,
-								current_user.full_name))
+								  current_user.order_id,
+								  True,
+								  current_user.basket.price,
+								  current_user.full_name))
 	current_user.basket.book_item = []
-	return {"payment_id" : current_user.payment_id}
+	return {"payment_id": current_user.payment_id}
+
 
 @app.get('/payment/{id}')
-async def get_payment(id, current_user = Depends(Sys.get_current_user), payment_type:str = None):
+async def get_payment(id, current_user=Depends(Sys.get_current_user), payment_type: str = None):
 	if id == current_user.payment_id:
 		if payment_type is None:
 			return current_user.order
 		elif payment_type.lower() == 'qrcode':
-			return {"payment" : current_user.make_payment(payment_type) }
+			return {"payment": current_user.make_payment(payment_type)}
 		elif payment_type.lower() == 'creditcard':
 			# return info credit card
 			current_user.make_payment(payment_type)
-			return {"payment" : {'card_num' : current_user.credit_card.card_num,
-								'expire_date' : current_user.credit_card.expire_date}}
+			return {"payment": {'card_num': current_user.credit_card.card_num,
+								'expire_date': current_user.credit_card.expire_date}}
 
 # Check Status api
+
+
 @app.get('/payment_status/{id}')
-async def check_payment(id, current_user = Depends(Sys.get_current_user)):
+async def check_payment(id, current_user=Depends(Sys.get_current_user)):
 	if id == current_user.payment_id:
 		if current_user.payment.status == 'paid':
 			current_user.add_order_to_order_list(current_user.order)
 			current_user.update_order_id()
 			current_user.reset_payment()
-			return {"status" : 'paid'}
+			return {"status": 'paid'}
 		elif current_user.payment.status == None:
-			return {"status" : None}
+			return {"status": None}
 		# return {"status" : current_user.payment.status}
 
 # Bank api
+
+
 @app.post('/payment_status/{id}')
-async def fake_bank(id, status:str = None):
+async def fake_bank(id, status: str = None):
 	user = Sys.find_user_by_payment_id(id)
 	user.payment.check_status(status)
 
 # Order List after Payment Success
+
+
 @app.get('/order_list/')
-async def show_order_list(current_user = Depends(Sys.get_current_user)):
-	return {'order_list' : current_user.order_list}
+async def show_order_list(current_user=Depends(Sys.get_current_user)):
+	return {'order_list': current_user.order_list}
 
 
-async def get_current_active_user(current_user = Depends(Sys.get_current_user)) :
+async def get_current_active_user(current_user=Depends(Sys.get_current_user)):
 	# print(current_user.__dict__)
-	if current_user._disabled :
+	if current_user._disabled:
 		raise HTTPException(status_code=400, detail="Inactive User")
 	return current_user

@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
-function Error(){
-    return (
-        <div>This is the Error Page</div>
-    )
+function Error() {
+	return <div>This is the Error Page</div>;
 }
 
-export default Error
+export default Error;

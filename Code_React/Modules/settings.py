@@ -16,12 +16,15 @@ ACCESS_TOKEN_EXPIRE_MINUTE = 30
 PWD_CONTEXT = CryptContext(schemes=["bcrypt"], deprecated="auto")
 OAUTH2_SCHEME = OAuth2PasswordBearer(tokenUrl="token")
 
-class Token(BaseModel) :
-	access_token : str
-	token_type : str
-	role : str
-class TokenData(BaseModel) :
-	email : str or None = None
+
+class Token(BaseModel):
+	access_token: str
+	token_type: str
+	role: str
+
+
+class TokenData(BaseModel):
+	email: str or None = None
 
 # ! Legacy Code (Break the OOP Principal) DO NOT USE!!
 # def	InstanceFinder(classType, attribute, Target) :
@@ -30,9 +33,10 @@ class TokenData(BaseModel) :
 # 			return (obj)
 # 	return (None);
 
-def	ClassInstancePacker(classType) :
+
+def ClassInstancePacker(classType):
 	instance_list = []
-	for obj in gc.get_objects() :
-		if isinstance(obj, classType) :
+	for obj in gc.get_objects():
+		if isinstance(obj, classType):
 			instance_list.append(obj)
 	return (instance_list)

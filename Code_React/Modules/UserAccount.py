@@ -1,4 +1,4 @@
-	# ? Module
+# ? Module
 from Modules.Basket import Basket
 from Modules.Catalog import Catalog
 from Modules.Book import *
@@ -20,40 +20,45 @@ class UserAccount:
 		self._full_name = full_name
 		self._gender = gender
 		self._tel = tel
-  
+
 	@property
 	def email(self):
 		return self._email
+
 	@email.setter
-	def email(self,new_email):
+	def email(self, new_email):
 		self._email = new_email
-  
+
 	@property
 	def password(self):
 		return self._password
+
 	@password.setter
-	def password(self,new_password):
+	def password(self, new_password):
 		self._password = new_password
-  
+
 	@property
 	def full_name(self):
 		return self._full_name
+
 	@full_name.setter
-	def full_name(self,new_name):
+	def full_name(self, new_name):
 		self._full_name = new_name
-  
+
 	@property
 	def gender(self):
 		return self._gender
+
 	@gender.setter
-	def gender(self,new_gender):
+	def gender(self, new_gender):
 		self._gender = new_gender
-  
+
 	@property
 	def tel(self):
 		return self._tel
+
 	@tel.setter
-	def tel(self,new_tel):
+	def tel(self, new_tel):
 		self._tel = new_tel
 
 # Inheritance from UserAccount
@@ -67,7 +72,7 @@ class Admin(UserAccount):
 
 	def add_branch(self, branch_list: BranchList, branch: Branch):
 		branch_list.list_of_branch.append(branch)
-  
+
 	def add_book(self, book, catalog: Catalog):
 		if isinstance(book, BookItem):
 			catalog.list_of_book.append(book)
@@ -81,8 +86,8 @@ class Customer(UserAccount):
 	def __init__(self, email, password, fullname, gender, tel, email_noti, sms_noti, address):
 		super().__init__(email, password, fullname, gender, tel)
 		self.__address = address
-		self.__email_notification = email_noti #bool
-		self.__sms_notification = sms_noti #bool
+		self.__email_notification = email_noti  # bool
+		self.__sms_notification = sms_noti  # bool
 		self.__basket = Basket()
 		self._disabled = False
 		self.__order_list = []
@@ -92,8 +97,8 @@ class Customer(UserAccount):
 		self.__payment = None
 		self.__payment_id = None
 
-	def search_book(self, search_string, catalog:Catalog):
-		lists=[]
+	def search_book(self, search_string, catalog: Catalog):
+		lists = []
 		for element in catalog.list_of_book:
 			if search_string in element._name:
 				lists.append(element)
@@ -106,20 +111,22 @@ class Customer(UserAccount):
 				if elements == book:
 					lists.append(element)
 					return lists
-	def edit_profile(self,password,full_name,gender,tel,address,email_noti,sms_noti):
+
+	def edit_profile(self, password, full_name, gender, tel, address, email_noti, sms_noti):
 		self._password = password
 		self._full_name = full_name
-		self._gender = gender 
-		self._tel = tel 
+		self._gender = gender
+		self._tel = tel
 		self.__address = address
 		if email_noti != None:
 			self.email_notification = email_noti
 		if sms_noti != None:
 			self.sms_notification = sms_noti
+
 	def add_credit_card(self, credit_card):
 		self.__credit_card = credit_card
-	
-	def add_book_to_basket(self, book_item, book:Book):
+
+	def add_book_to_basket(self, book_item, book: Book):
 		if book.stock_amount > 0:
 			for i in self.__basket.book_item:
 				if i.name.lower() == book_item.name.lower():
@@ -132,30 +139,30 @@ class Customer(UserAccount):
 				book.stock_amount -= 1
 				self.__basket.price += book_item.price
 
-	def reduce_amount(self,book_item,book:Book):
+	def reduce_amount(self, book_item, book: Book):
 		for item in self.basket.book_item:
 			if book_item == item.name:
 				item.amount = item.amount-1
-				book.stock_amount +=1
+				book.stock_amount += 1
 				self.basket.price -= item.price
 				if item.amount == 0:
 					self.basket.book_item.remove(item)
 
-	def add_amount(self,book_item,book:Book):
+	def add_amount(self, book_item, book: Book):
 		if book.stock_amount > 0:
 			for item in self.basket.book_item:
 				if book_item == item.name:
 					item.amount = item.amount+1
-					book.stock_amount -=1
+					book.stock_amount -= 1
 					self.basket.price += item.price
 
-	def delete_item(self,book_item,book:Book):
+	def delete_item(self, book_item, book: Book):
 		for item in self.basket.book_item:
 			if book_item == item.name:
 				book.stock_amount += item.amount
 				self.basket.book_item.remove(item)
 
-	def generate_seed(self, payment_id:str):
+	def generate_seed(self, payment_id: str):
 		payment_id = hashlib.sha256(payment_id.encode())
 		self.__payment_id = payment_id.hexdigest()
 
@@ -180,6 +187,7 @@ class Customer(UserAccount):
 			# elif self.__credit_card:
 			#     return {'credit_card' : self.__payment}
 	# ? GETTER // SETTER ############################################################
+
 	def add_order_to_order_list(self, order):
 		self.__order_list.append(order)
 
@@ -194,27 +202,35 @@ class Customer(UserAccount):
 	@property
 	def address(self):
 		return self.__address
+
 	@address.setter
-	def address(self,new_address):
+	def address(self, new_address):
 		self.__address = new_address
+
 	@property
 	def basket(self):
 		return self.__basket
+
 	@property
 	def order_list(self):
 		return self.__order_list
+
 	@property
 	def order_id(self):
 		return self.__order_id
+
 	@property
 	def email_notification(self):
 		return self.__email_notification
+
 	@property
 	def sms_notification(self):
 		return self.__sms_notification
+
 	@email_notification.setter
 	def email_notification(self, value):
 		self.__email_notification = value
+
 	@sms_notification.setter
 	def sms_notification(self, value):
 		self.__sms_notification = value
@@ -235,6 +251,7 @@ class Customer(UserAccount):
 	def credit_card(self):
 		return self.__credit_card
 	#################################################################################
-	def toJSON(self) :
+
+	def toJSON(self):
 		return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
 		pass
