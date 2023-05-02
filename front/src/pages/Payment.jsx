@@ -9,11 +9,12 @@ export default function Payment(){
     const Navigate = useNavigate()
     const { id } = useParams();
     const [order, setOrder] = useState('');
+    const [delay, setDelay] = useState(false)
 
     useEffect(() => {
         axios.get(`http://localhost:8000/payment/${id}`)
         .then(response => {
-            setOrder(response.data)
+            setOrder(response.data);
         },)
         .catch(function (error) {
             console.log(error, "error");
@@ -24,7 +25,12 @@ export default function Payment(){
                 Navigate(`/order_list`)
             }
         })
-    },[])
+        const timeoutId = setTimeout(() => {
+            setDelay(!delay);
+          }, 1000);
+      
+        return () => clearTimeout(timeoutId);
+    },[delay]);
 
 
     return (

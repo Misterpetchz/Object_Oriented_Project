@@ -7,6 +7,7 @@ function Basket() {
 
     const navigate = useNavigate();
     const [basket, setBasket] = useState([]);
+    const [click, setClick] = useState(false)
 
     useEffect(() => {
         axios
@@ -18,7 +19,7 @@ function Basket() {
             .catch(function (error) {
               console.log(error, "error");
             });
-        },[])
+        },[click])
 
     const make_order = () => {
         axios
@@ -35,8 +36,9 @@ function Basket() {
         axios
             .put(`http://localhost:8000/basket/add_amount/${bookname}`)
             .then(() => {
-                location.reload();
-            })
+                setClick(!click)
+                }
+            )
             .catch(function (error) {
                 console.log(error, "error");
             });
@@ -46,8 +48,9 @@ function Basket() {
         axios
             .put(`http://localhost:8000/basket/reduce_amount/${bookname}`)
             .then(() => {
-                location.reload();
-            })
+                setClick(!click)
+                }
+            )
             .catch(function (error) {
                 console.log(error, "error");
             });
@@ -57,8 +60,9 @@ function Basket() {
         axios
         .delete(`http://localhost:8000/basket/delete_item/${bookname}`)
         .then(() => {
-            location.reload();
-        })
+            setClick(!click)
+            }
+        )
         .catch(function (error) {
             console.log(error, "error");
         });
@@ -70,7 +74,7 @@ function Basket() {
             <div>
                 <span>{basket?.map((book)=>(
                                 <div>
-                                    <div>{book.cover} </div>
+                                    <div><img src={book.cover} alt={book.cover} height="200px" /></div>
                                     <div>{book.name} </div>
                                     <div>{book.price} </div>
                                     <div>{book.genre} </div>

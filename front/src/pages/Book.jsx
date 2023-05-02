@@ -65,7 +65,7 @@ function Book() {
         return(
             <div style={{ minHeight: 800, marginTop: 30 }}>
               <h1>Home</h1>
-                            <img src={book.cover} alt={book.cover} height="200px" />
+                        <div><img src={book.cover} alt={book.cover} height="200px" /></div>
                             <span>{book.name} </span><br></br>
                             <span>{book.creator} </span><br></br>
                             <span>{book.old_price} </span><br></br>

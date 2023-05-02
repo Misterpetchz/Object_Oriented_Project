@@ -198,7 +198,7 @@ export default function Admin(){
                     <div>
                     <label style={{ marginRight: 10 }}>Date Created</label>
                     <input
-                    type="text"
+                    type="date"
                     onChange={(e) => setAddDateCreated(e.target.value)}
                   />
                     </div>

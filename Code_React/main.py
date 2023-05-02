@@ -611,6 +611,8 @@ async def check_payment(id, current_user = Depends(Sys.get_current_user)):
 			current_user.update_order_id()
 			current_user.reset_payment()
 			return {"status" : 'paid'}
+		elif current_user.payment.status == None:
+			return {"status" : None}
 		# return {"status" : current_user.payment.status}
 
 # Bank api
