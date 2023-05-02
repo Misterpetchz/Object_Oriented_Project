@@ -24,8 +24,8 @@ class Book:
 
 	def __repr__(self) -> str:
 		return self.__name
-	##################################################################################################################
-		# GETTER/SETTER#
+
+# + Getter / Setter {START}
 
 	@property
 	def cover(self):
@@ -163,12 +163,15 @@ class Book:
 	def rating_score(self, new_score):
 		self.__rating_score = new_score
 
-	##################################################################################################################
+# + Getter / Setter {END}
+
+# Description : Calculate new total rating score based on all rating score
 	def add_rating(self, rating: Rating):
 		self.__rating.append(rating)
 		self.__rating_score = sum(
 			[x.book_rating for x in self.__rating])/len(self.__rating)
 
+# Description : Modify book infomation
 	def modify_book(self, cover, brief, creator, name, book_info, book_publisher, book_preview,
 					critic_review, table_of_content, summary, genre, date_created, price, amount):
 		if isinstance(cover, str):
@@ -230,8 +233,8 @@ class BookItem():
 		self.__amount = 1
 		self.__price = book.new_price
 
-	#################################################################################################################
-		# GETTER/SETTER#
+# + Getter / Setter {START}
+
 	@property
 	def cover(self):
 		return self.__cover
@@ -291,4 +294,5 @@ class BookItem():
 	@property
 	def price(self):
 		return self.__price
-	################################################################################################################
+
+# + Getter / Setter {END}

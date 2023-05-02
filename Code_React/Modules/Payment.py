@@ -17,10 +17,15 @@ class ViaCreditCard(Payment):
 		super().__init__(amount, date)
 		self.__status = None
 
+# + Getter / Setter {START}
+
 	@property
 	def status(self):
 		return self.__status
 
+# + Getter / Setter {END}
+
+# Description : Check payment status of the the check (pseudo function)
 	def check_status(self, status):
 		if status == 'paid':
 			self.__status = 'paid'
@@ -34,6 +39,8 @@ class ViaQrCode(Payment):
 		self.__status = None
 		self.__qr = None
 
+# + Getter / Setter {START}
+
 	@property
 	def qr(self):
 		return self.__qr
@@ -42,6 +49,9 @@ class ViaQrCode(Payment):
 	def status(self):
 		return self.__status
 
+# + Getter / Setter {END}
+
+# Description : print qrcode image from base64
 	def generate_qr_code(self):
 		promptpay_number = "0890767442"
 		payload = qrcode.generate_payload(promptpay_number, self._amount)
@@ -50,13 +60,11 @@ class ViaQrCode(Payment):
 		img.save(buffered, format='PNG')
 		img_bytes = buffered.getvalue()
 		self.__qr = base64.b64encode(img_bytes).decode('utf-8')
-		# self.__qr = base64.b64encode(qr_image_data)
 		return self.__qr
 
+# Description : Check payment status of the the check (pseudo function)
 	def check_status(self, status):
 		if status.lower() == 'paid':
 			self.__status = 'paid'
-			# return self.__status
 		else:
 			self.__status = 'reject'
-			# return self.__status

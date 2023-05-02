@@ -1,6 +1,7 @@
 from Modules.Book import Book
 from Modules.EventDiscount import EventDiscount
 
+# Legacy : Everything in this is exist in BookShop the code also seem outdated. waiting for deletion....
 
 class Catalog():
 	def __init__(self):

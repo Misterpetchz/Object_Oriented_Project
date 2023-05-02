@@ -11,8 +11,7 @@ class Branch():
 		self.__facebook_id = facebook_id
 		self.__product_in_stock = []
 
-	def add_product(self, book):
-		self.__product_in_stock.append(book)
+# + Getter / Setter {START}
 
 	@property
 	def branch_name(self):
@@ -70,6 +69,14 @@ class Branch():
 	def product_in_stock(self, a):
 		self.__product_in_stock = a
 
+# + Getter / Setter {END}
+
+# Description : Add book to list of book in stock
+# * DUPLICATE FUNCTION : 01
+	def add_product(self, book):
+		self.__product_in_stock.append(book)
+
+# Description : Modify Branch Information
 	def modify_branch(self, new_branch_name, new_open_time, new_location, new_tel, new_line_id, new_facebook_id, list_add_book, list_delete_book):
 		if isinstance(new_branch_name, str):
 			if new_branch_name != '':
@@ -97,15 +104,19 @@ class Branch():
 			for book in list_delete_book:
 				self.__product_in_stock.remove(book)
 
+# Description : Add book to list of book in stock
+# * DUPLICATE FUNCTION : 01
 	def add_book_to_stock(self, book: Book):
 		if book not in self.__product_in_stock:
 			self._product_in_stock.append(book)
 
+# Description : Return book in stock that has the same name as input string
 	def find_book_in_stock(self, book_name):
 		for book in self._product_in_stock:
 			if book_name == book._name:
 				return book
 
+# Description : Remove book from stock if the instance of the book are the same as input instance
 	def remove_book_from_stock(self, book: Book):
 		if book in self._product_in_stock:
 			self._product_in_stock.remove(book)

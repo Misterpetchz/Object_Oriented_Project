@@ -12,21 +12,31 @@ class EventDiscount():
 		self.__discounted_percentage = discounted_percentage
 		self.__event_genre = event_genre
 
-	def get_event_name(self):
+# + Getter / Setter {START}
+
+	@property
+	def event_name(self):
 		return self.__event_name
 
-	def get_event_genre(self):
+	@property
+	def event_genre(self):
 		return self.__event_genre
 
-	def get_event_start(self):
+	@property
+	def event_start(self):
 		return self.__event_start
 
-	def get_event_end(self):
+	@property
+	def event_end(self):
 		return self.__event_end
 
-	def get_event_percentage(self):
-		return self.__event_start
+	@property
+	def discounted_percentage(self):
+		return self.__discounted_percentage
 
+# + Getter / Setter {END}
+
+# Description : Modify event
 	def modify_event(self, new_name, new_start, new_end, new_percentage, new_genre):
 		if isinstance(new_name, str):
 			self.__event_name = new_name
@@ -39,16 +49,12 @@ class EventDiscount():
 		if isinstance(new_end, str):
 			self.__event_genre = new_genre
 
+# Description : Apply discount to all book in database
 	def event_dis(self, catalog):
 		for i in catalog.list_all_of_book:
 			if self.__event_genre in i.genre:
 				self.apply_discount(i)
 
+# Description : Method to calculate discounted price
 	def apply_discount(self, book):
 		book.new_price = math.floor(book.price * self.__discounted_percentage)
-
-	event_name = property(get_event_name)
-	event_genre = property(get_event_genre)
-	event_start = property(get_event_start)
-	event_end = property(get_event_end)
-	discounted_percentage = property(get_event_percentage)

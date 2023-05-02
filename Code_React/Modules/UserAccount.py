@@ -21,6 +21,8 @@ class UserAccount:
 		self._gender = gender
 		self._tel = tel
 
+# + Getter / Setter {START}
+
 	@property
 	def email(self):
 		return self._email
@@ -61,7 +63,7 @@ class UserAccount:
 	def tel(self, new_tel):
 		self._tel = new_tel
 
-# Inheritance from UserAccount
+# + Getter / Setter {END}
 
 
 class Admin(UserAccount):
@@ -70,13 +72,18 @@ class Admin(UserAccount):
 		self.__permission = permission
 		self._disabled = False
 
+# Description : Add new branch to the branch list
+# * Already exist within BookShop
 	def add_branch(self, branch_list: BranchList, branch: Branch):
 		branch_list.list_of_branch.append(branch)
 
+# Description : Add the book to the database
+# * Already exist within BookShop
 	def add_book(self, book, catalog: Catalog):
 		if isinstance(book, BookItem):
 			catalog.list_of_book.append(book)
 
+# Description : Add event to the database
 	def add_event(self, book: BookItem, event_discount: EventDiscount):
 		if isinstance(event_discount, EventDiscount):
 			book.event_discount.append(event_discount)
@@ -97,107 +104,7 @@ class Customer(UserAccount):
 		self.__payment = None
 		self.__payment_id = None
 
-	def search_book(self, search_string, catalog: Catalog):
-		lists = []
-		for element in catalog.list_of_book:
-			if search_string in element._name:
-				lists.append(element)
-				return lists
-
-	def search_available_branch(self, book, all_branch):
-		lists = []
-		for element in all_branch.list_of_branch:
-			for elements in element._product_in_stock:
-				if elements == book:
-					lists.append(element)
-					return lists
-
-	def edit_profile(self, password, full_name, gender, tel, address, email_noti, sms_noti):
-		self._password = password
-		self._full_name = full_name
-		self._gender = gender
-		self._tel = tel
-		self.__address = address
-		if email_noti != None:
-			self.email_notification = email_noti
-		if sms_noti != None:
-			self.sms_notification = sms_noti
-
-	def add_credit_card(self, credit_card):
-		self.__credit_card = credit_card
-
-	def add_book_to_basket(self, book_item, book: Book):
-		if book.stock_amount > 0:
-			for i in self.__basket.book_item:
-				if i.name.lower() == book_item.name.lower():
-					i.amount = i.amount + 1
-					book.stock_amount -= 1
-					self.__basket.price += book_item.price
-					return None
-			else:
-				self.__basket.add_book(book_item)
-				book.stock_amount -= 1
-				self.__basket.price += book_item.price
-
-	def reduce_amount(self, book_item, book: Book):
-		for item in self.basket.book_item:
-			if book_item == item.name:
-				item.amount = item.amount-1
-				book.stock_amount += 1
-				self.basket.price -= item.price
-				if item.amount == 0:
-					self.basket.book_item.remove(item)
-
-	def add_amount(self, book_item, book: Book):
-		if book.stock_amount > 0:
-			for item in self.basket.book_item:
-				if book_item == item.name:
-					item.amount = item.amount+1
-					book.stock_amount -= 1
-					self.basket.price += item.price
-
-	def delete_item(self, book_item, book: Book):
-		for item in self.basket.book_item:
-			if book_item == item.name:
-				book.stock_amount += item.amount
-				self.basket.book_item.remove(item)
-
-	def generate_seed(self, payment_id: str):
-		payment_id = hashlib.sha256(payment_id.encode())
-		self.__payment_id = payment_id.hexdigest()
-
-	def make_order(self, order):
-		if len(self.__basket.book_item) > 0 and self.__payment == None:
-			# self.__order_list.append(order)
-			# self.__order_id += 1
-			self.__order = order
-			self.generate_seed(self._email + str(self.__order_id))
-
-	def make_payment(self, payment_type):
-		current_date = datetime.date.today()
-		format_date = current_date.strftime('%d-%m-%Y')
-		if payment_type.lower() == 'qrcode':
-			self.__payment = ViaQrCode(self.__basket.price, format_date)
-			return self.__payment.generate_qr_code()
-
-		elif payment_type.lower() == 'creditcard':
-			self.__payment = ViaCreditCard(self.__basket.price, format_date)
-			# if self.__credit_card == None:
-			#     return {'credit_card' : None}
-			# elif self.__credit_card:
-			#     return {'credit_card' : self.__payment}
-	# ? GETTER // SETTER ############################################################
-
-	def add_order_to_order_list(self, order):
-		self.__order_list.append(order)
-
-	def update_order_id(self):
-		self.__order_id += 1
-
-	def reset_payment(self):
-		self.__payment = None
-		self.__payment_id = None
-		self.__order = None
+# + Getter / Setter {START}
 
 	@property
 	def address(self):
@@ -250,8 +157,131 @@ class Customer(UserAccount):
 	@property
 	def credit_card(self):
 		return self.__credit_card
-	#################################################################################
 
+# + Getter / Setter {END}
+
+# Description : Return list of book with the input string in its name
+	def search_book(self, search_string, catalog: Catalog):
+		lists = []
+		for element in catalog.list_of_book:
+			if search_string in element._name:
+				lists.append(element)
+				return lists
+
+# Description : Search for the branch that has book as the same name as input
+# * ??? : Already existed within BookShop class also why should this mathod in the customer
+	def search_available_branch(self, book, all_branch):
+		lists = []
+		for element in all_branch.list_of_branch:
+			for elements in element._product_in_stock:
+				if elements == book:
+					lists.append(element)
+					return lists
+
+# Description : Edit some of the customer information
+	def edit_profile(self, password, full_name, gender, tel, address, email_noti, sms_noti):
+		self._password = password
+		self._full_name = full_name
+		self._gender = gender
+		self._tel = tel
+		self.__address = address
+		if email_noti != None:
+			self.email_notification = email_noti
+		if sms_noti != None:
+			self.sms_notification = sms_noti
+
+# Description : Add credit card for the customer
+	def add_credit_card(self, credit_card):
+		self.__credit_card = credit_card
+
+# Description : Add book to to the basket
+# * Also shouldn't be here
+	def add_book_to_basket(self, book_item, book: Book):
+		if book.stock_amount > 0:
+			for i in self.__basket.book_item:
+				if i.name.lower() == book_item.name.lower():
+					i.amount = i.amount + 1
+					book.stock_amount -= 1
+					self.__basket.price += book_item.price
+					return None
+			else:
+				self.__basket.add_book(book_item)
+				book.stock_amount -= 1
+				self.__basket.price += book_item.price
+
+# Description : Reduce amount of the book in the basket
+# * Also shouldn't be here
+	def reduce_amount(self, book_item, book: Book):
+		for item in self.basket.book_item:
+			if book_item == item.name:
+				item.amount = item.amount-1
+				book.stock_amount += 1
+				self.basket.price -= item.price
+				if item.amount == 0:
+					self.basket.book_item.remove(item)
+
+# Description : Increase amount of the book in the basket
+# * Also shouldn't be here
+	def add_amount(self, book_item, book: Book):
+		if book.stock_amount > 0:
+			for item in self.basket.book_item:
+				if book_item == item.name:
+					item.amount = item.amount+1
+					book.stock_amount -= 1
+					self.basket.price += item.price
+
+# Description : Clear the selected book from the basket
+# * Also shouldn't be here
+	def delete_item(self, book_item, book: Book):
+		for item in self.basket.book_item:
+			if book_item == item.name:
+				book.stock_amount += item.amount
+				self.basket.book_item.remove(item)
+
+# Description : Generate payment seed
+# * Also shouldn't be here
+	def generate_seed(self, payment_id: str):
+		payment_id = hashlib.sha256(payment_id.encode())
+		self.__payment_id = payment_id.hexdigest()
+
+# Description : Make order with the item in the basket
+# * Also shouldn't be here
+	def make_order(self, order):
+		if len(self.__basket.book_item) > 0 and self.__payment == None:
+			# self.__order_list.append(order)
+			# self.__order_id += 1
+			self.__order = order
+			self.generate_seed(self._email + str(self.__order_id))
+
+# Description : Make payment for the order
+# * Also shouldn't be here
+	def make_payment(self, payment_type):
+		current_date = datetime.date.today()
+		format_date = current_date.strftime('%d-%m-%Y')
+		if payment_type.lower() == 'qrcode':
+			self.__payment = ViaQrCode(self.__basket.price, format_date)
+			return self.__payment.generate_qr_code()
+		elif payment_type.lower() == 'creditcard':
+			self.__payment = ViaCreditCard(self.__basket.price, format_date)
+
+# Description : Make order with the item in the basket
+# * Also shouldn't be here
+	def add_order_to_order_list(self, order):
+		self.__order_list.append(order)
+
+# Description : ?????
+# ! Waiting for explanation
+	def update_order_id(self):
+		self.__order_id += 1
+
+# Description : Reset target payment back to none so you can make another payment
+# * Also shouldn't be here
+	def reset_payment(self):
+		self.__payment = None
+		self.__payment_id = None
+		self.__order = None
+
+# Description : Print user data into json form
 	def toJSON(self):
 		return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
 		pass

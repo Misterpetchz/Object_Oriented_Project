@@ -6,6 +6,8 @@ class Order:
 		self.__total = total
 		self.__user = user
 
+# + Getter / Setter {START}
+
 	@property
 	def get_item(self):
 		return self.__purchased_item
@@ -13,3 +15,5 @@ class Order:
 	@property
 	def total(self):
 		return self.__total
+
+# + Getter / Setter {END}

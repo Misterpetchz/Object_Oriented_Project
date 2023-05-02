@@ -1,3 +1,6 @@
+
+# Legacy : Unused. Waiting for deletion...
+
 class Coupon():
 	def __init__(self, id, expire_date, discount_amount, basket):
 		self._id = id

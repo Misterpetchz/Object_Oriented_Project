@@ -7,8 +7,8 @@ class CreditCard:
 		self.__expire_date = expire_date
 		self.__cvc = cvc
 
-	##################################################################################################################
-		# GETTER/SETTER
+# + Getter / Setter {START}
+
 	@property
 	def card_num(self):
 		return self.__card_num
@@ -33,7 +33,9 @@ class CreditCard:
 	def cvc(self, new_cvc):
 		self.__cvc = new_cvc
 
-	##################################################################################################################
+# + Getter / Setter {END}
+
+# Description : Modify credit card info
 	def modify_credit_card_info(self, new_card_num, new_expire_date, new_cvc):
 		if isinstance(new_card_num, str):
 			self.card_num = new_card_num

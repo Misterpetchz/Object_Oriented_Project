@@ -6,8 +6,7 @@ class Basket:
 		self.__book_item = []
 		self.__price = 0
 
-	def add_book(self, book):
-		self.__book_item.append(book)
+# + Getter / Setter {START}
 
 	@property
 	def book_item(self):
@@ -24,3 +23,9 @@ class Basket:
 	@price.setter
 	def price(self, new_price):
 		self.__price = new_price
+
+# + Getter / Setter {END}
+
+# Description : Add book to basket
+	def add_book(self, book):
+		self.__book_item.append(book)

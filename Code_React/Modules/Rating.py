@@ -4,6 +4,8 @@ class Rating:
 		self.__book_comment = book_comment
 		self.__user = user
 
+# + Getter / Setter {START}
+
 	@property
 	def book_rating(self):
 		return self.__book_rating
@@ -15,3 +17,5 @@ class Rating:
 	@property
 	def user(self):
 		return self.__user
+
+# + Getter / Setter {END}

@@ -176,6 +176,14 @@ event = EventDiscount("dan", datetime.date(2023, 3, 31),
 					  datetime.date(2023, 4, 30), 0.9, 'Shounen')
 
 
+# Description : Check the current user
+async def get_current_active_user(current_user=Depends(Sys.get_current_user)):
+	if current_user._disabled:
+		raise HTTPException(status_code=400, detail="Inactive User")
+	return current_user
+
+
+# Description : Home page of the website suppose to show some the book that are in stock
 @app.get("/", tags=["books"])
 async def home():
 	event.event_dis(shop)
@@ -190,6 +198,7 @@ async def home():
 						for x in shop.list_all_of_book if x.stock_amount != 0]}
 
 
+# Description : Check the details of the selected book
 @app.get("/books/{bookname}", tags=["books"])
 async def show_book(bookname: str | None = None):
 	event.event_dis(shop)
@@ -214,6 +223,7 @@ async def show_book(bookname: str | None = None):
 			"available_branch": [x.branch_name for x in shop.search_available_branch(book)]}
 
 
+# Description : Rating page of the book suppose to have a comment and rating
 @app.get("/books/{bookname}/rating", tags=["books"])
 async def show_book_rating(bookname):
 	book = shop.find_book_by_name(bookname)
@@ -222,6 +232,7 @@ async def show_book_rating(bookname):
 						"comment": x.book_comment} for x in book.rating]}
 
 
+# Description : Show all your item in basket
 @app.get("/basket", tags=["user"])
 async def show_basket(current_user: Customer = Depends(Sys.get_current_user)):
 	return {"basket": [{"cover": x.cover,
@@ -233,24 +244,30 @@ async def show_basket(current_user: Customer = Depends(Sys.get_current_user)):
 					   for x in current_user.basket.book_item]}
 
 
+# Description : Add amount to the existing book in the basket
+# * DUPLICATE FUNCTION : 02
 @app.put("/basket/add_amount/{bookname}", tags=["user"])
 async def add_amount(bookname: str, current_user: Customer = Depends(Sys.get_current_user)):
 	book = shop.find_book_by_name(bookname)
 	current_user.add_amount(bookname, book)
 
 
+# Description : Reduce amount to the existing book in the basket
+# * DUPLICATE FUNCTION : 03
 @app.put("/basket/reduce_amount/{bookname}", tags=["user"])
 async def reduce_amount(bookname: str, current_user: Customer = Depends(Sys.get_current_user)):
 	book = shop.find_book_by_name(bookname)
 	current_user.reduce_amount(bookname, book)
 
 
+# Description : Delete the existing book in the basket
 @app.delete("/basket/delete_item/{bookname}", tags=["user"])
 async def delete_amount(bookname: str, current_user: Customer = Depends(Sys.get_current_user)):
 	book = shop.find_book_by_name(bookname)
 	current_user.delete_item(bookname, book)
 
 
+# Description : Add book instance to the basket
 @app.post("/books/{bookname}/add_book_to_basket", tags=["user"])
 async def add_book_to_basket(bookname: str, amount: int, current_user: Customer = Depends(Sys.get_current_user)):
 	event.event_dis(shop)
@@ -262,6 +279,8 @@ async def add_book_to_basket(bookname: str, amount: int, current_user: Customer 
 	return {"status": "Success"}
 
 
+# Description : Add amount to the existing book in the basket
+# * DUPLICATE FUNCTION : 02
 @app.post("/add_amount", tags=["user"])
 async def add_book_to_basket(book_item, current_user: Customer = Depends(Sys.get_current_user)):
 	event.event_dis(shop)
@@ -270,6 +289,8 @@ async def add_book_to_basket(book_item, current_user: Customer = Depends(Sys.get
 	return {"status": "Success"}
 
 
+# Description : Reduce amount to the existing book in the basket
+# * DUPLICATE FUNCTION : 03
 @app.post("/reduce_amount", tags=["user"])
 async def add_book_to_basket(book_item, current_user: Customer = Depends(Sys.get_current_user)):
 	event.event_dis(shop)
@@ -278,6 +299,7 @@ async def add_book_to_basket(book_item, current_user: Customer = Depends(Sys.get
 	return {"status": "Success"}
 
 
+# Description : Make order from the current user
 @app.get("/make_order", tags=["user"])
 async def make_order(current_user: Customer = Depends(Sys.get_current_user)):
 	current_user.make_order(Order(current_user.basket.book_item,
@@ -289,6 +311,7 @@ async def make_order(current_user: Customer = Depends(Sys.get_current_user)):
 	return {"payment_id": current_user.payment_id}
 
 
+# Description : Add rating to the book
 @app.post("/books/{bookname}/addrating", tags=["books"])
 async def add_rating(bookname, data: AddRatingDTO, current_user: Customer = Depends(Sys.get_current_user)):
 	book: Book = shop.find_book_by_name(bookname)
@@ -297,6 +320,8 @@ async def add_rating(bookname, data: AddRatingDTO, current_user: Customer = Depe
 	return {"status": "Success"}
 
 
+# Description : Add the book to database
+# ! Doesn't protect in case of customer use it
 @app.post("/addbook", tags=["books"])
 async def add_book_to_catalog(data: AddBookDTO):
 	shop.add_book(Book(
@@ -317,19 +342,8 @@ async def add_book_to_catalog(data: AddBookDTO):
 	)
 	return {"status": "Success"}
 
-'''
-@app.post("/addbranch", tags=["branch"])
-async def add_branch_to_branch_list(data: AddBranchDTO):
-	shop.add_branch(Branch(data.branch_name,
-				data.open_time,
-				data.location,
-				data.tel,
-				data.line_id,
-				data.facebook_id))
-	return {"status": "Success"}
-'''
 
-
+# Description : return the data of the credit card stored in customer instance
 @app.get("/CreditCard/", tags=["user"])
 async def print_credit_card(current_user=Depends(Sys.get_current_user)):
 	if (isinstance(current_user, Customer) and current_user.credit_card != None):
@@ -341,6 +355,8 @@ async def print_credit_card(current_user=Depends(Sys.get_current_user)):
 		return {"status": "Error"}
 
 
+# Description : Add credit card to the customer
+# Legacy Don't use use edit instead
 @app.post("/CreditCard/add", tags=["user"])
 async def add_credit_card(credit_card: CreditCards, current_user=Depends(Sys.get_current_user)):
 	current_user.add_credit_card(CreditCard(credit_card.card_num,
@@ -348,9 +364,8 @@ async def add_credit_card(credit_card: CreditCards, current_user=Depends(Sys.get
 											credit_card.cvc))
 	return {"status": "Success"}
 
-# loop to get credit card object
 
-
+# Description : Add credit card to the customer overwrite if one already exist
 @app.put("/Creditcard/edit", tags=["user"])
 async def modify_credit_card(credit_card: CreditCards, current_user=Depends(Sys.get_current_user)):
 	if (bool(re.match(r"[0-9]{2}/[0-9]{2}", credit_card.expire_date))
@@ -368,6 +383,7 @@ async def modify_credit_card(credit_card: CreditCards, current_user=Depends(Sys.
 		return {"status": "Error"}
 
 
+# Description : Search the branch with the input string in its name
 @app.post("/branch/search/", tags=["branch"])
 async def search_branch(name: str):
 	return {"branch": [{"name": x.branch_name,
@@ -381,6 +397,7 @@ async def search_branch(name: str):
 					   for x in shop.search_branch(name)]}
 
 
+# Description : View the info of the selected branch
 @app.get("/branch/{name}", tags=["branch"])
 async def view_branch(name: str):
 	x = shop.select_branch(name)
@@ -396,6 +413,7 @@ async def view_branch(name: str):
 			}
 
 
+# Description : View the info of the selected book
 @app.put("/books/{bookname}", tags=["books"])
 async def modify_book_to_catalog(bookname, data: ModifyBookDTO):
 	book = shop.find_book_by_name(bookname)
@@ -404,6 +422,7 @@ async def modify_book_to_catalog(bookname, data: ModifyBookDTO):
 	return {"status": "Success"}
 
 
+# Description : Edit the information of the user
 @app.put("/users/edit", tags=["user"])
 async def info_verification(data: EditProfile, id=Depends(Sys.get_current_user)):
 	if (id == None):
@@ -416,28 +435,14 @@ async def info_verification(data: EditProfile, id=Depends(Sys.get_current_user))
 						data.address or id.address,
 						data.email_noti,
 						data.sms_noti)
-		'''id._password = data.password or id._password
-		id._full_name = data.full_name or id._full_name
-		id._gender = data.gender or id._gender
-		id._tel = data.tel or id._tel
-		id._address = data.address or id._address
-		# id._email_notification = email_noti if email_noti != None else id._email_notification
-		# id._sms_notification = sms_noti if sms_noti != None else id._sms_notification
-		if data.email_noti != None:
-			id.email_notification = data.email_noti
-		if data.sms_noti != None:
-			id.sms_notification = data.sms_noti'''
 		return {"status": "Success"}
 	elif (isinstance(id, Admin)):
 		id.edit_profile(data.password or id.password, data.full_name or id.full_name,
 						data.gender or id.gender, data.tel or id.tel)
-		'''id._password = data.password or id._password
-		id._full_name = data.full_name or id._full_name
-		id._gender = data.gender or id._gender
-		id._tel = data.tel or id._tel'''
 		return {"status": "Success"}
 
 
+# Description : Check the username and password and call the function to create token for user
 @app.post("/token", response_model=Token, tags=["user"])
 async def login(form_data: OAuth2PasswordRequestForm = Depends()):
 	user = Sys.authenticate_user(form_data.username, form_data.password)
@@ -454,6 +459,7 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
 	return {"access_token": access_token, "token_type": "bearer", "role": role}
 
 
+# Description : View current user info
 @app.get("/users/me", tags=["user"])
 async def view_info(userid=Depends(Sys.get_current_user)):
 	if (isinstance(userid, Customer)):
@@ -467,6 +473,7 @@ async def view_info(userid=Depends(Sys.get_current_user)):
 		return {"role": "admin"}
 
 
+# Legacy : Use view_info above instead
 @app.get("/user", tags=["user"])
 async def view_info(userid=Depends(Sys.get_current_user)):
 	return {"address": userid.address,
@@ -478,6 +485,7 @@ async def view_info(userid=Depends(Sys.get_current_user)):
 			}
 
 
+# Description : Register the user
 @app.post("/users/registration", tags=["user"])
 async def registration(data: RegisterDTO):
 	if data.email in [x.email for x in Sys.User_DB]:
@@ -497,6 +505,7 @@ async def registration(data: RegisterDTO):
 	return {"status": "Success"}
 
 
+# Description : Find the book by its name and remove the existing copy of it from the basket
 @app.put("/remove_basket", tags=["user"])
 async def remove_from_basket(data: RemoveBookDTO, current_user: Customer = Depends(Sys.get_current_user)):
 	book = shop.find_book_by_name(data.book_name)
@@ -504,6 +513,7 @@ async def remove_from_basket(data: RemoveBookDTO, current_user: Customer = Depen
 	return {"status": "Success"}
 
 
+# Description : Search for the book by its name
 @app.post("/search", tags=["books"])
 async def search_book(name: str):
 	event.event_dis(shop)
@@ -519,6 +529,7 @@ async def search_book(name: str):
 						   for x in list_of_book if x.stock_amount != 0]}
 
 
+# Description : View the book info by its name
 @app.put("/books/{bookname}", tags=["books"])
 async def modify_book_to_catalog(bookname, data: ModifyBookDTO):
 	book = shop.find_book_by_name(bookname)
@@ -526,6 +537,7 @@ async def modify_book_to_catalog(bookname, data: ModifyBookDTO):
 	return {"status": "Success"}
 
 
+# Description : Delete the book by its name
 @app.delete("/books/{bookname}", tags=["books"])
 async def delete_book(bookname):
 	book = shop.find_book_by_name(bookname)
@@ -533,16 +545,19 @@ async def delete_book(bookname):
 	return {"status": "Success"}
 
 
+# Description : SHow all branch
 @app.get("/GetAllBranch/", tags=["branch"])
 async def get_branch():
 	return {"name": [{"branch_name": x.branch_name} for x in shop.list_of_branch]}
 
 
+# Description : Return list of branch with the input book in stock
 @app.get("/get_add_book_to_branch/")
 async def get_book_stock(book_name):
 	return shop.check_stock(book_name)
 
 
+# Description : Add book to the branch stock
 @app.post("/AddBookToBranch/", tags=["branch"])
 async def add_book_to_stock(data: AddBookToBranch):
 	select_branch = shop.select_branch(data.branch_name)
@@ -551,6 +566,7 @@ async def add_book_to_stock(data: AddBookToBranch):
 	return {"Add to stock Success"}
 
 
+# Description : Delete book from the branch stock
 @app.delete('/RemoveBookFromBranch/{branch_name}/{book_name}', tags=['branch'])
 async def remove_book_from_stock(branch_name, book_name):
 	select_branch = shop.select_branch(branch_name)
@@ -559,6 +575,7 @@ async def remove_book_from_stock(branch_name, book_name):
 	return {"Remove from stock success"}
 
 
+# Description : Add new branch
 @app.post("/AddBranch")
 async def add_branch(data: AddBranchDTO):
 	shop.add_branch(Branch(data.branch_name,
@@ -570,6 +587,7 @@ async def add_branch(data: AddBranchDTO):
 	return {"Add Branch Success"}
 
 
+# Description : Modify branch infomation
 @app.put("/ModifyBranch/{branch_name}", tags=["branch"])
 async def modify_branch(data: ModifyBranchDTO, branch_name):
 	select_branch = shop.select_branch(branch_name)
@@ -584,22 +602,16 @@ async def modify_branch(data: ModifyBranchDTO, branch_name):
 	return {"Modify Success"}
 
 
+# Description : Remove branch from existance *BEGONE*
 @app.delete("/RemoveBranch/{branch_name}", tags=["branch"])
 async def remove_branch(branch_name):
 	shop.delete_branch(branch_name)
 	return {"Remove Branch Success"}
 
-# @app.get("/GetAllEvent/", tags=["event"])
-# async def get_event():
-# 	return {"eventDis" : [{"event_name": x.event_name,
-# 						"genre": x.event_genre} for x in shop.list_of_event]}
 
-# we dont place to collect class bookshop
-
-
+# Description : Modify ongoing event
 @app.put("/ModifyEvent/", tags=["event"])
 async def modify_event(data: ModifyEventDTO):
-	# loop check in bigger class
 	event.modify_event(data.event_name,
 					   data.event_start,
 					   data.event_end,
@@ -608,6 +620,7 @@ async def modify_event(data: ModifyEventDTO):
 	return {"Modify Success"}
 
 
+# Description : Make order of the existing item in basket used by customer
 @app.get("/make_order", tags=["user"])
 async def make_order(current_user: Customer = Depends(Sys.get_current_user)):
 	current_user.make_order(Order(current_user.basket.book_item,
@@ -619,6 +632,7 @@ async def make_order(current_user: Customer = Depends(Sys.get_current_user)):
 	return {"payment_id": current_user.payment_id}
 
 
+# Description : Make a payment for the existing order, choosing from credit card or qrcode
 @app.get('/payment/{id}')
 async def get_payment(id, current_user=Depends(Sys.get_current_user), payment_type: str = None):
 	if id == current_user.payment_id:
@@ -627,14 +641,12 @@ async def get_payment(id, current_user=Depends(Sys.get_current_user), payment_ty
 		elif payment_type.lower() == 'qrcode':
 			return {"payment": current_user.make_payment(payment_type)}
 		elif payment_type.lower() == 'creditcard':
-			# return info credit card
 			current_user.make_payment(payment_type)
 			return {"payment": {'card_num': current_user.credit_card.card_num,
 								'expire_date': current_user.credit_card.expire_date}}
 
-# Check Status api
 
-
+# Description : Check payment status
 @app.get('/payment_status/{id}')
 async def check_payment(id, current_user=Depends(Sys.get_current_user)):
 	if id == current_user.payment_id:
@@ -645,26 +657,16 @@ async def check_payment(id, current_user=Depends(Sys.get_current_user)):
 			return {"status": 'paid'}
 		elif current_user.payment.status == None:
 			return {"status": None}
-		# return {"status" : current_user.payment.status}
-
-# Bank api
 
 
+# Description : Pseudo code switch the payment status from unpaid to paid
 @app.post('/payment_status/{id}')
 async def fake_bank(id, status: str = None):
 	user = Sys.find_user_by_payment_id(id)
 	user.payment.check_status(status)
 
-# Order List after Payment Success
 
-
+# Description : View current list of order
 @app.get('/order_list/')
 async def show_order_list(current_user=Depends(Sys.get_current_user)):
 	return {'order_list': current_user.order_list}
-
-
-async def get_current_active_user(current_user=Depends(Sys.get_current_user)):
-	# print(current_user.__dict__)
-	if current_user._disabled:
-		raise HTTPException(status_code=400, detail="Inactive User")
-	return current_user
