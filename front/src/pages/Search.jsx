@@ -39,7 +39,7 @@ export default function Searchs() {
                 <ul>
                     {search_list.map((item) => (
                         <p class='book'>
-                        <img class='book_img' src='{item.cover}'></img><br></br>
+                        <img class='book_img' src={item.cover}></img><br></br>
                         <div class='book_detail'>
                             <button onClick={() => navigate(`/books/${item.name}`)}><b><u>Book name</u> : </b>{item.name} </button>
                             <div><b><u>Author</u> : </b>{item.creator} </div>

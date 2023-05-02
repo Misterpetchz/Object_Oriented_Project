@@ -43,7 +43,7 @@ function AddBranchForm() {
       <div>
         <label htmlFor="openTime">Open Time:</label>
         <input
-          type="text"
+          type="time"
           id="openTime"
           value={openTime}
           onChange={(e) => setOpenTime(e.target.value)}

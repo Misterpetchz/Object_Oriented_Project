@@ -42,14 +42,14 @@ export default function ModifyEventForm(){
             <div>
                 <label>Start : </label>
                 <input
-                    type="text"
+                    type="date"
                     onChange={(e) => setEventStart(e.target.value)}
                     />
             </div>
             <div>
                 <label>End : </label>
                 <input
-                    type="text"
+                    type="date"
                     onChange={(e) => setEventEnd(e.target.value)}
                     />
             </div>

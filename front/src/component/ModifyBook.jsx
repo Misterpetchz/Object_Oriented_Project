@@ -176,7 +176,7 @@ export default function ModifyBookForm(){
             <div>
                 <label>Date Created:</label>
                 <input
-                    type="text"
+                    type="date"
                     onChange={(e) => setDateCreated(e.target.value)}
                     />
             </div>

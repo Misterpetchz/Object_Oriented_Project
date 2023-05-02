@@ -107,7 +107,7 @@ export default function Admin(){
 
       return (
         <div style={{ minHeight: 800, marginTop: 30 }}>
-          <h1>Register page</h1>
+          <h2>Add Book</h2>
               <div>
                 <form>
                     <div>
