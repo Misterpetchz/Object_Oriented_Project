@@ -29,26 +29,20 @@ class BookShop():
 
 	def delete_branch(self, branch_name:str):
 		for element in self.__list_of_branch:
-			if branch_name == element._branch_name:
+			if branch_name == element.branch_name:
 				self.__list_of_branch.remove(element)
 
 	def select_branch(self, branch_name):
 		for element in self.__list_of_branch:
-			if branch_name == element._branch_name:
+			if branch_name == element.branch_name:
 				select_branch = element
 				return select_branch
-
-	def get_specific_branch(self,Branch):
-		for element in self.__list_of_branch:
-			if Branch == element._branch_name:
-				self.select_branch = element
-				return self.select_branch
 
 	def search_available_branch(self, book_name):
 		self.__available = []
 		for element in self.__list_of_branch:
-			for elements in element._product_in_stock:
-				if book_name == elements._name :
+			for elements in element.product_in_stock:
+				if book_name == elements.name :
 					self.__available.append(element)
 		return self.__available
 
@@ -65,13 +59,13 @@ class BookShop():
   
 	def find_book_by_name(self, name):
 		for i in self.list_all_of_book:
-			if name == i._name:
+			if name == i.name:
 				return i
 
 	def search_book(self, search_string):
 		list_of_book = []
 		for element in self.__all_list_of_book:
-			if search_string in element._name:
+			if search_string in element.name:
 				list_of_book.append(element)
 		return list_of_book
     
