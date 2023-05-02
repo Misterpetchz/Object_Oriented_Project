@@ -176,15 +176,15 @@ event = EventDiscount("dan", datetime.date(2023, 3, 31),
 @app.get("/", tags=["books"])
 async def home():
 	event.event_dis(shop)
-	return {"catalog":[{"cover":x._cover,
-						"name":x._name,
-						"creator":x._creator,
-						"old_price":x._price,
-						"new_price":x._new_price,
-						"genre":x._genre,
-						"score":f'{x._rating_score:.2f}',
-						"brief":x._brief}
-					for x in shop.list_all_of_book if x._amount_in_stock != 0]}
+	return {"catalog":[{"cover":x.cover,
+						"name":x.name,
+						"creator":x.creator,
+						"old_price":x.price,
+						"new_price":x.new_price,
+						"genre":x.genre,
+						"score":f'{x.rating_score:.2f}',
+						"brief":x.brief}
+					for x in shop.list_all_of_book if x.stock_amount != 0]}
 
 @app.get("/books/{bookname}", tags=["books"])
 async def show_book(bookname:str | None = None):
@@ -192,38 +192,38 @@ async def show_book(bookname:str | None = None):
 	book = shop.find_book_by_name(bookname)
 	if book == None:
 		raise HTTPException(status_code=404, detail="Book not found")
-	return {"cover":book._cover,
-			"name":book._name,
-			"creator":book._creator,
-			"info":book._book_info,
-			"publisher":book._book_publisher,
-			"preview":book._book_preview,
-			"critic_review":book._critic_review,
-			"table_of_content":book._table_of_content,
-			"summary":book._summary,
-			"date_created":book._date_created,
-			"old_price":book._price,
-			"new_price":book._new_price,
-			"genre":book._genre,
-			"score":f'{book._rating_score:.2f}',
-			"brief":book._brief,
-			"available_branch":[x._branch_name for x in shop.search_available_branch(book)]}
+	return {"cover":book.cover,
+			"name":book.name,
+			"creator":book.creator,
+			"info":book.book_info,
+			"publisher":book.book_publisher,
+			"preview":book.book_preview,
+			"critic_review":book.critic_review,
+			"table_of_content":book.table_of_content,
+			"summary":book.summary,
+			"date_created":book.date_created,
+			"old_price":book.price,
+			"new_price":book.new_price,
+			"genre":book.genre,
+			"score":f'{book.rating_score:.2f}',
+			"brief":book.brief,
+			"available_branch":[x.branch_name for x in shop.search_available_branch(book)]}
 
 
 @app.get("/books/{bookname}/rating", tags=["books"])
 async def show_book_rating(bookname):
 	book = shop.find_book_by_name(bookname)
-	return {"rating_score": f'{book._rating_score:.2f}',
-			"rating": [{"score_each_rating": x._book_rating,
-					"comment": x._book_comment} for x in book._rating]}
+	return {"rating_score": f'{book.rating_score:.2f}',
+			"rating": [{"score_each_rating": x.book_rating,
+					"comment": x.book_comment} for x in book.rating]}
 
 @app.get("/basket", tags=["user"])
 async def show_basket(current_user : Customer = Depends(Sys.get_current_user)):
-	return {"basket":[{"cover":x._cover,
-						"name":x._name,
-						"price":x._price,
-						"genre":x._genre,
-						"amount":x._amount
+	return {"basket":[{"cover":x.cover,
+						"name":x.name,
+						"price":x.price,
+						"genre":x.genre,
+						"amount":x.amount
 						}
 					for x in current_user.basket.book_item]}
 
@@ -274,7 +274,7 @@ async def make_order(current_user : Customer = Depends(Sys.get_current_user)):
 								current_user.order_id,
 								True,
 								current_user.basket.price,
-								current_user._full_name))
+								current_user.full_name))
 	current_user.basket.book_item = []
 	return {"payment_id" : current_user.payment_id}
 
@@ -282,7 +282,7 @@ async def make_order(current_user : Customer = Depends(Sys.get_current_user)):
 @app.post("/books/{bookname}/addrating", tags=["books"])
 async def add_rating(bookname, data: AddRatingDTO, current_user : Customer = Depends(Sys.get_current_user)):
 	book: Book = shop.find_book_by_name(bookname)
-	if current_user not in [x._user for x in book._rating]:
+	if current_user not in [x.user for x in book.rating]:
 		book.add_rating(Rating(data.score, data.comment, current_user))
 	return {"status": "Success"}
 
@@ -395,11 +395,11 @@ async def info_verification(data: EditProfile,id=Depends(Sys.get_current_user)):
 	if (id == None):
 		return {"Error-101": "Didn't find any account with this id"}
 	elif (isinstance(id, Customer)):
-		id.edit_profile(data.password or id._password,
-                  data.full_name or id._full_name,
-                  data.gender or id._gender,
-                  data.tel or id._tel,
-                  data.address or id._address,
+		id.edit_profile(data.password or id.password,
+                  data.full_name or id.full_name,
+                  data.gender or id.gender,
+                  data.tel or id.tel,
+                  data.address or id.address,
                   data.email_noti,
                   data.sms_noti)
 		'''id._password = data.password or id._password
@@ -415,7 +415,7 @@ async def info_verification(data: EditProfile,id=Depends(Sys.get_current_user)):
 			id.sms_notification = data.sms_noti'''
 		return {"status":"Success"}
 	elif (isinstance(id, Admin)):
-		id.edit_profile(data.password or id._password,data.full_name or id._full_name,data.gender or id._gender,data.tel or id._tel)
+		id.edit_profile(data.password or id.password,data.full_name or id.full_name,data.gender or id.gender,data.tel or id.tel)
 		'''id._password = data.password or id._password
 		id._full_name = data.full_name or id._full_name
 		id._gender = data.gender or id._gender
@@ -432,7 +432,7 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
 							detail="Incorrect Username or Password", headers={"WWW-Authenticate": "Bearer"})
 	access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTE)
 	access_token = Sys.creat_access_token(
-		data={"sub": user._email}, expires_delta=access_token_expires)
+		data={"sub": user.email}, expires_delta=access_token_expires)
 	if (isinstance(user, Customer)):
 		role = "Customer"
 	elif (isinstance(user, Admin)):
@@ -443,28 +443,28 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
 @app.get("/users/me", tags=["user"])
 async def view_info(userid=Depends(Sys.get_current_user)):
 	if (isinstance(userid, Customer)):
-		return {"address" : userid._address,
-				"email ": userid._email,
-				"full_name" : userid._full_name,
-				"gender": userid._gender,
-				"tel": userid._tel,
+		return {"address" : userid.address,
+				"email ": userid.email,
+				"full_name" : userid.full_name,
+				"gender": userid.gender,
+				"tel": userid.tel,
 				}
 	elif (isinstance(userid, Admin)):
 		return {"role" : "admin"}
 
 @app.get("/user", tags=["user"])
 async def view_info(userid=Depends(Sys.get_current_user)):
-	return {"address" : userid._address,
-			"full_name" : userid._full_name,
-			"gender": userid._gender,
-			"tel": userid._tel,
+	return {"address" : userid.address,
+			"full_name" : userid.full_name,
+			"gender": userid.gender,
+			"tel": userid.tel,
 			"email_noti": userid.email_notification,
 			"sms_noti": userid.sms_notification
 	}
 
 @app.post("/users/registration", tags=["user"])
 async def registration(data:RegisterDTO):
-	if data.email in [x._email for x in Sys.User_DB]:
+	if data.email in [x.email for x in Sys.User_DB]:
 		return {"status":"Reject"}
 	input_dict = {}
 	input_dict['_email'] = data.email
@@ -489,15 +489,15 @@ async def remove_from_basket(data:RemoveBookDTO, current_user : Customer = Depen
 async def search_book(name:str):
 	event.event_dis(shop)
 	list_of_book = shop.search_book(name)
-	return {"searchlist":[{"cover":x._cover,
-						"name":x._name,
-						"creator":x._creator,
-						"old_price":x._price,
-						"new_price":x._new_price,
-						"genre":x._genre,
-						"score":f'{x._rating_score:.2f}',
-						"brief":x._brief}
-					for x in list_of_book if x._amount_in_stock != 0]}
+	return {"searchlist":[{"cover":x.cover,
+						"name":x.name,
+						"creator":x.creator,
+						"old_price":x.price,
+						"new_price":x.new_price,
+						"genre":x.genre,
+						"score":f'{x.rating_score:.2f}',
+						"brief":x.brief}
+					for x in list_of_book if x.stock_amount != 0]}
 
 @app.put("/books/{bookname}", tags=["books"])
 async def modify_book_to_catalog(bookname, data:ModifyBookDTO):
@@ -513,7 +513,7 @@ async def delete_book(bookname):
 
 @app.get("/GetAllBranch/", tags=["branch"])
 async def get_branch():
-	return {"name" : [{"branch_name" :x._branch_name} for x in shop.list_of_branch] }
+	return {"name" : [{"branch_name" :x.branch_name} for x in shop.list_of_branch] }
 
 @app.post("/AddBookToBranch/{branch_name}", tags=["branch"])
 async def add_book_to_stock(branch_name, data:AddBookDTO):
@@ -585,7 +585,7 @@ async def make_order(current_user : Customer = Depends(Sys.get_current_user)):
 								current_user.order_id,
 								True,
 								current_user.basket.price,
-								current_user._full_name))
+								current_user.full_name))
 	current_user.basket.book_item = []
 	return {"payment_id" : current_user.payment_id}
 

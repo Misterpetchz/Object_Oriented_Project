@@ -35,11 +35,11 @@ class EventDiscount():
         
     def event_dis(self, catalog):
         for i in catalog.list_all_of_book:
-            if self.__event_genre in i._genre:
+            if self.__event_genre in i.genre:
                 self.apply_discount(i)
                 
     def apply_discount(self, book):
-        book._new_price = math.floor(book._price * self.__discounted_percentage)
+        book.new_price = math.floor(book.price * self.__discounted_percentage)
 
     event_name = property(get_event_name)
     event_genre = property(get_event_genre)

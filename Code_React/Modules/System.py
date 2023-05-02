@@ -4,7 +4,7 @@ from datetime import datetime
 
 class System :
     def __init__(self) :
-        self.User_DB = []
+        self.__User_DB = []
 
     def verify_password(plain_password, hashed_password) :
         return PWD_CONTEXT.verify(plain_password, hashed_password)
@@ -13,7 +13,7 @@ class System :
         return PWD_CONTEXT.hash(password)
 
     def get_user(self, username : str) :
-        for i in self.User_DB :
+        for i in self.__User_DB :
             if i._email == username :
                 return i
 		# user = InstanceFinder(Customer, "_email", username)
@@ -43,7 +43,7 @@ class System :
         return encode_jwt
 
     def register(self, customer):
-        self.User_DB.append(customer)
+        self.__User_DB.append(customer)
 
 
     async def get_current_user(self, token : str = Depends(OAUTH2_SCHEME)) :
@@ -62,6 +62,13 @@ class System :
         return user
 
     def find_user_by_payment_id(self, id):
-        for user in self.User_DB:
+        for user in self.__User_DB:
             if id == user.payment_id :
                 return user
+            
+    @property
+    def User_DB(self):
+        return self.__User_DB
+    @User_DB.setter
+    def User_DB(self,new):
+        self.User_DB = new
