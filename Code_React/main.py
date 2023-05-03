@@ -450,7 +450,7 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
 async def view_info(userid=Depends(Sys.get_current_user)):
 	if (isinstance(userid, Customer)):
 		return {"address": userid.address,
-				"email ": userid.email,
+				"email": userid.email,
 				"full_name": userid.full_name,
 				"gender": userid.gender,
 				"tel": userid.tel,
@@ -623,7 +623,10 @@ async def make_order(current_user: Customer = Depends(Sys.get_current_user)):
 async def get_payment(id, current_user=Depends(Sys.get_current_user), payment_type: str = None):
 	if id == current_user.payment_id:
 		if payment_type is None:
-			return current_user.order
+			return {"order": [{"name": book.name,
+								"price": book.price,
+								"amount": book.amount} for book in current_user.order.get_item],
+					"total":current_user.order.total}
 		elif payment_type.lower() == 'qrcode':
 			return {"payment": current_user.make_payment(payment_type)}
 		elif payment_type.lower() == 'creditcard':
@@ -636,7 +639,9 @@ async def get_payment(id, current_user=Depends(Sys.get_current_user), payment_ty
 @app.get('/payment_status/{id}')
 async def check_payment(id, current_user=Depends(Sys.get_current_user)):
 	if id == current_user.payment_id:
-		if current_user.payment.status == 'paid':
+		if current_user.payment == None:
+			return {"status": None}
+		elif current_user.payment.status == 'paid':
 			current_user.add_order_to_order_list(current_user.order)
 			current_user.update_order_id()
 			current_user.reset_payment()
@@ -655,4 +660,6 @@ async def fake_bank(id, status: str = None):
 # Description : View current list of order
 @app.get('/order_list/')
 async def show_order_list(current_user=Depends(Sys.get_current_user)):
-	return {'order_list': current_user.order_list}
+	return {'order_list': [{"purchased_item":[{"cover":book.cover,
+                                            	"name":book.name} for book in order.get_item],
+							'total':order.total} for order in current_user.order_list]}
