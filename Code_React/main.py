@@ -127,7 +127,7 @@ pookan_admin555 = Admin("Pookan@gmail.com", Sys.get_password_hash("123"),
 Sys.register(pookan_admin555)
 
 pookantong_book1 = Book(
-	'https://scontent.fbkk7-2.fna.fbcdn.net/v/t1.6435-9/125317852_1006701349810671_7985413238749674312_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=ej6tX8xaZvIAX8HUO1i&_nc_ht=scontent.fbkk7-2.fna&oh=00_AfCt8hpk8KREf_wJTHOjqva8LQA9O073aS4dVjNFdh2NGw&oe=64793DD0',
+	'random.png',
 	'ในคืนที่โหดร้ายพระเอกตายแต่.....',
 	'Pookantong',
 	'Pookantong1',
@@ -142,7 +142,7 @@ pookantong_book1 = Book(
 	999,
 	10)
 pookantong_book2 = Book(
-	'https://scontent.fbkk7-2.fna.fbcdn.net/v/t1.6435-9/79869824_452894658968633_8166842294293495808_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=83FfcmtO2L4AX9MEax3&_nc_ht=scontent.fbkk7-2.fna&oh=00_AfA2yBRLbOjbxNytKccOkuSYv4F1900xz24K2hH1eyevAQ&oe=64795098',
+	'random2.png',
 	'ในคืนที่โหดร้ายนางเอกตายแต่.....',
 	'Pookantong',
 	'Pookantong2',
@@ -409,9 +409,7 @@ async def view_branch(name: str):
 			"tel": x.tel,
 			"line_id": x.line_id,
 			"facebook_id": x.facebook_id,
-			"product": [{
-						"name": book.name
-						} for book in x.product_in_stock]
+			"product": x.product_in_stock
 			}
 
 

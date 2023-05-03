@@ -72,17 +72,6 @@ class Admin(UserAccount):
 		self.__permission = permission
 		self._disabled = False
 
-# Description : Add new branch to the branch list
-# * Already exist within BookShop
-	def add_branch(self, branch_list: BranchList, branch: Branch):
-		branch_list.list_of_branch.append(branch)
-
-# Description : Add the book to the database
-# * Already exist within BookShop
-	def add_book(self, book, catalog: Catalog):
-		if isinstance(book, BookItem):
-			catalog.list_of_book.append(book)
-
 # Description : Add event to the database
 	def add_event(self, book: BookItem, event_discount: EventDiscount):
 		if isinstance(event_discount, EventDiscount):
@@ -167,16 +156,6 @@ class Customer(UserAccount):
 			if search_string in element._name:
 				lists.append(element)
 				return lists
-
-# Description : Search for the branch that has book as the same name as input
-# * ??? : Already existed within BookShop class also why should this mathod in the customer
-	def search_available_branch(self, book, all_branch):
-		lists = []
-		for element in all_branch.list_of_branch:
-			for elements in element._product_in_stock:
-				if elements == book:
-					lists.append(element)
-					return lists
 
 # Description : Edit some of the customer information
 	def edit_profile(self, password, full_name, gender, tel, address, email_noti, sms_noti):
