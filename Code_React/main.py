@@ -341,7 +341,7 @@ async def add_credit_card(credit_card: CreditCards, current_user=Depends(Sys.get
 @app.put("/Creditcard/edit", tags=["user"])
 async def modify_credit_card(credit_card: CreditCards, current_user=Depends(Sys.get_current_user)):
 	if (bool(re.match(r"^[0-9]{2}/[0-9]{2}$", credit_card.expire_date))
-		and bool(re.match(r"^[0-9]{16}$", credit_card.card_num))
+			and bool(re.match(r"^[0-9]{16}$", credit_card.card_num))
 			and bool(re.match(r"^[0-9]{3}$", credit_card.cvc))):
 		if (current_user.credit_card == None):
 			current_user.add_credit_card(CreditCard(credit_card.card_num,
@@ -462,19 +462,20 @@ async def view_info(userid=Depends(Sys.get_current_user)):
 async def registration(data: RegisterDTO):
 	if data.email in [x.email for x in Sys.User_DB]:
 		return {"status": "Reject"}
-	input_dict = {}
-	input_dict['_email'] = data.email
-	input_dict['_password'] = Sys.get_password_hash(data.password)
-	input_dict['_full_name'] = data.full_name
-	input_dict['_gender'] = data.gender
-	input_dict['_tel'] = data.tel
-	input_dict['_address'] = data.address
-	input_dict['__email_notification'] = data.email_noti
-	input_dict['__sms_notification'] = data.sms_noti
-	Sys.register(Customer(input_dict["_email"], input_dict["_password"], input_dict["_full_name"], input_dict["_gender"],
-				 input_dict["_tel"], input_dict["__email_notification"], input_dict["__sms_notification"], input_dict["_address"]))
+	elif bool(re.match(r"[a-zA-Z0-9]+[@]{1}.+$", data.email)) and bool(re.match(r"^.{6}.+$", data.password)) and bool(re.match(r"^[A-Z]{1}[a-z]+[ ]{1}[A-Z]{1}[a-z]+$", data.full_name)):
+		input_dict = {}
+		input_dict['_email'] = data.email
+		input_dict['_password'] = Sys.get_password_hash(data.password)
+		input_dict['_full_name'] = data.full_name
+		input_dict['_gender'] = data.gender
+		input_dict['_tel'] = data.tel
+		input_dict['_address'] = data.address
+		input_dict['__email_notification'] = data.email_noti
+		input_dict['__sms_notification'] = data.sms_noti
+		Sys.register(Customer(input_dict["_email"], input_dict["_password"], input_dict["_full_name"], input_dict["_gender"],
+							  input_dict["_tel"], input_dict["__email_notification"], input_dict["__sms_notification"], input_dict["_address"]))
 
-	return {"status": "Success"}
+		return {"status": "Success"}
 
 
 # Description : Find the book by its name and remove the existing copy of it from the basket
