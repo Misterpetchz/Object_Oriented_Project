@@ -30,7 +30,9 @@ export default function Profile() {
 	};
 
 	const go_to_order = () =>{
-		navigate(`/payment/${fetchPayment()}`)
+		if (fetchPayment() != null){
+			navigate(`/payment/${fetchPayment()}`)
+		}
 	}
 
 	return (
