@@ -542,9 +542,9 @@ async def delete_book(bookname):
 	shop.remove_book(book)
 	return {"status": "Success"}
 
-@app.delete("/clear_basket/", tags=["books"])
-async def clear_basket(current_user: Customer = Depends(Sys.get_current_user)):
-	current_user.basket.clear_basket(shop)
+@app.delete("/clear_item/", tags=["books"])
+async def clear_item(current_user: Customer = Depends(Sys.get_current_user)):
+	current_user.basket.clear_item(shop)
 	return {"status": "Success"}
 
 

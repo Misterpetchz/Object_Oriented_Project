@@ -64,7 +64,7 @@ class Basket:
 				self.__price -= item.price * item.amount
 				self.__book_item.remove(item)
 
-	def clear_basket(self,bookshop):
+	def clear_item(self,bookshop):
 		for item in self.__book_item:
 			for book in bookshop.list_all_of_book:
 				if item.name == book.name:

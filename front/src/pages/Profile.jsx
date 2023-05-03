@@ -20,7 +20,7 @@ export default function Profile() {
 
 	const signOut = () => {
 		axios
-			.delete(`http://localhost:8000/clear_basket/`)
+			.delete(`http://localhost:8000/clear_item/`)
 			.then((result) => {
 				clear_basket();
 			});
