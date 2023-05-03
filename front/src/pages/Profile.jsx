@@ -29,12 +29,12 @@ export default function Profile() {
 			<div class = 'profile'>
 				<h1>Profile page</h1>
 				<p>Hello there, welcome to your profile page</p>
-				<button onClick={signOut}>sign out</button>
-				<ul>{user.full_name}</ul>
-				<ul>{user.email}</ul>
-				<ul>{user.gender}</ul>
-				<ul>{user.tel}</ul>
-				<ul>{user.address}</ul>
+				<button onClick={signOut}>sign out</button><br/><br/>
+				<span>Full name : {user.full_name}</span><br/><br/>
+				<span>Email : {user.email}</span><br/><br/>
+				<span>Gender : {user.gender}</span><br/><br/>
+				<span>Tel : {user.tel}</span><br/><br/>
+				<span>Address : {user.address}</span><br/><br/>
 				{CustomerOnlyButton() && (
 					<Link to="/editprofile" className="btn btn-primary">
 						Edit

@@ -30,11 +30,10 @@ export default function CreditCard() {
 		return (
 			<>
 				<div style={{ marginTop: 20, minHeight: 700 }}>
-					<h1>Credit Card Test</h1>
-					<p>Testy, Test?</p>
-					<ul>{credit_card.credit_card_num}</ul>
-					<ul>{credit_card.credit_card_exp}</ul>
-					<ul>{credit_card.credit_card_cvc}</ul>
+					<h1>Credit Card</h1>
+					<span>Card number : {credit_card.credit_card_num}</span><br/><br/>
+					<span>Expire date : {credit_card.credit_card_exp}</span><br/><br/>
+					<span>CVC : {credit_card.credit_card_cvc}</span><br/><br/>
 					<Link to="/profile/credit_card/edit" className="btn btn-primary">
 						Edit Card
 					</Link>
