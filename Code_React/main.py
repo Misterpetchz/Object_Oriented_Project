@@ -449,7 +449,7 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
 async def view_info(userid=Depends(Sys.get_current_user)):
 	if (isinstance(userid, Customer)):
 		return {"address": userid.address,
-				"email ": userid.email,
+				"email": userid.email,
 				"full_name": userid.full_name,
 				"gender": userid.gender,
 				"tel": userid.tel,
@@ -605,7 +605,6 @@ async def make_order(current_user: Customer = Depends(Sys.get_current_user)):
 								  True,
 								  current_user.basket.price,
 								  current_user.full_name))
-	current_user.basket.book_item = []
 	return {"payment_id": current_user.payment_id}
 
 
