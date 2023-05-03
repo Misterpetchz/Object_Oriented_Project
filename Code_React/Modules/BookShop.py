@@ -46,7 +46,6 @@ class BookShop():
 				return select_branch
 
 # Description : Search for the branch that has book as the same name as input
-# * DUPLICATE FUNCTION : 01
 	def search_available_branch(self, book_name):
 		available = []
 		for element in self.__list_of_branch:
@@ -86,12 +85,3 @@ class BookShop():
 		for element in self.__all_list_of_book:
 			if book == element:
 				self.__all_list_of_book.remove(element)
-
-# Description : Return list of branch that has book which have input string in it
-# * DUPLICATE FUNCTION : 01
-	def check_stock(self, book_name):
-		list = []
-		for branch in self.__list_of_branch:
-			if book_name in [book.name for book in branch.product_in_stock]:
-				list.append(branch)
-		return list

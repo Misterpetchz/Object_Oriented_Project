@@ -1,6 +1,3 @@
-from Modules.Catalog import *
-
-
 class Basket:
 	def __init__(self):
 		self.__book_item = []
@@ -29,8 +26,8 @@ class Basket:
 # Description : Add book to basket
 	def add_book(self, book):
 		self.__book_item.append(book)
-  
-	def add_book_to_basket(self, book_item, book: Book):
+
+	def add_book_to_basket(self, book_item, book):
 		if book.stock_amount > 0:
 			for i in self.__book_item:
 				if i.name.lower() == book_item.name.lower():
@@ -43,7 +40,7 @@ class Basket:
 				book.stock_amount -= 1
 				self.__price += book_item.price
 
-	def reduce_amount(self, book_item, book: Book):
+	def reduce_amount(self, book_item, book):
 		for item in self.__book_item:
 			if book_item == item.name:
 				item.amount = item.amount-1
@@ -52,7 +49,7 @@ class Basket:
 				if item.amount == 0:
 					self.__book_item.remove(item)
 
-	def add_amount(self, book_item, book: Book):
+	def add_amount(self, book_item, book):
 		if book.stock_amount > 0:
 			for item in self.__book_item:
 				if book_item == item.name:
@@ -60,7 +57,7 @@ class Basket:
 					book.stock_amount -= 1
 					self.__price += item.price
 
-	def delete_item(self, book_item, book: Book):
+	def delete_item(self, book_item, book):
 		for item in self.__book_item:
 			if book_item == item.name:
 				book.stock_amount += item.amount
