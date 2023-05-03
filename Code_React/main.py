@@ -244,22 +244,6 @@ async def show_basket(current_user: Customer = Depends(Sys.get_current_user)):
 					   for x in current_user.basket.book_item]}
 
 
-# Description : Add amount to the existing book in the basket
-# * DUPLICATE FUNCTION : 02
-@app.put("/basket/add_amount/{bookname}", tags=["user"])
-async def add_amount(bookname: str, current_user: Customer = Depends(Sys.get_current_user)):
-	book = shop.find_book_by_name(bookname)
-	current_user.add_amount(bookname, book)
-
-
-# Description : Reduce amount to the existing book in the basket
-# * DUPLICATE FUNCTION : 03
-@app.put("/basket/reduce_amount/{bookname}", tags=["user"])
-async def reduce_amount(bookname: str, current_user: Customer = Depends(Sys.get_current_user)):
-	book = shop.find_book_by_name(bookname)
-	current_user.reduce_amount(bookname, book)
-
-
 # Description : Delete the existing book in the basket
 @app.delete("/basket/delete_item/{bookname}", tags=["user"])
 async def delete_amount(bookname: str, current_user: Customer = Depends(Sys.get_current_user)):
@@ -297,18 +281,6 @@ async def add_book_to_basket(book_item, current_user: Customer = Depends(Sys.get
 	book = shop.find_book_by_name(book_item)
 	current_user.reduce_amount(book_item, book)
 	return {"status": "Success"}
-
-
-# Description : Make order from the current user
-@app.get("/make_order", tags=["user"])
-async def make_order(current_user: Customer = Depends(Sys.get_current_user)):
-	current_user.make_order(Order(current_user.basket.book_item,
-								  current_user.order_id,
-								  True,
-								  current_user.basket.price,
-								  current_user.full_name))
-	current_user.basket.book_item = []
-	return {"payment_id": current_user.payment_id}
 
 
 # Description : Add rating to the book
