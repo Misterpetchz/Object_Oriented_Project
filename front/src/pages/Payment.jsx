@@ -4,6 +4,11 @@ import { useParams, useNavigate } from "react-router-dom";
 
 import SelectMethod from "../component/SelectMethodPayment";
 
+
+export const setPayment = (payment_id) => {
+	localStorage.setItem("payment_local_id", payment_id); // make up your own token
+};
+
 export default function Payment() {
 	const Navigate = useNavigate();
 	const { id } = useParams();
@@ -31,6 +36,14 @@ export default function Payment() {
 		return () => clearTimeout(timeoutId);
 	}, [delay]);
 
+	const cancel_order= () =>{
+		setPayment(null)
+		axios.delete(`http://localhost:8000/cancel_order/`)
+		.then(
+			Navigate(`/`)
+			)
+	}
+
 	return (
 		<div>
 			<h2>Order</h2>
@@ -46,6 +59,9 @@ export default function Payment() {
 			</div>
 			<div>
 				<SelectMethod />
+			</div>
+			<div>
+					<button onClick={cancel_order}>Cancel Order</button>
 			</div>
 		</div>
 	);

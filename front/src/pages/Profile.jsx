@@ -6,9 +6,23 @@ import CreditCard from "./CreditCard";
 import { CustomerOnlyButton } from "../auth";
 import "../css/profile.css";
 
+export const fetchPayment = () => {
+	return localStorage.getItem("payment_local_id");
+};
+
+export function RequirePaymentButton() {
+	let payment_local_id = fetchPayment();
+	if (!payment_local_id) {
+		return false;
+	} else {
+		return true;
+	}
+}
+
 export default function Profile() {
 	const navigate = useNavigate();
 	const [user, setUser] = useState("");
+
 
 	useEffect(() => {
 		axios.get("http://localhost:8000/users/me").then((response) => {
@@ -23,6 +37,10 @@ export default function Profile() {
 		navigate("/");
 		window.location.reload(false);
 	};
+
+	const go_to_order = () =>{
+		navigate(`/payment/${fetchPayment()}`)
+	}
 
 	return (
 		<>
@@ -40,6 +58,8 @@ export default function Profile() {
 						Edit
 					</Link>
 				)}
+				{RequirePaymentButton() && <div><button onClick={go_to_order}>Order</button></div>}
+				
 			</div>
 			{CustomerOnlyButton() && (
 				<div class = 'profile'>

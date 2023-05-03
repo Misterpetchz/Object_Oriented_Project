@@ -653,3 +653,7 @@ async def show_order_list(current_user=Depends(Sys.get_current_user)):
 	return {'order_list': [{"purchased_item":[{"cover":book.cover,
                                             	"name":book.name} for book in order.get_item],
 							'total':order.total} for order in current_user.order_list]}
+ 
+@app.delete('/cancel_order')
+async def cancel_order(current_user=Depends(Sys.get_current_user)):
+	current_user.cancel_order(shop)
