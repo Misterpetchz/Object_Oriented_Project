@@ -126,7 +126,7 @@ pookan_admin555 = Admin("Pookan@gmail.com", Sys.get_password_hash("123"),
 Sys.register(pookan_admin555)
 
 pookantong_book1 = Book(
-	'random.png',
+	'https://scontent.fbkk7-2.fna.fbcdn.net/v/t1.6435-9/125317852_1006701349810671_7985413238749674312_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=ej6tX8xaZvIAX8HUO1i&_nc_ht=scontent.fbkk7-2.fna&oh=00_AfCt8hpk8KREf_wJTHOjqva8LQA9O073aS4dVjNFdh2NGw&oe=64793DD0',
 	'ในคืนที่โหดร้ายพระเอกตายแต่.....',
 	'Pookantong',
 	'Pookantong1',
@@ -141,7 +141,7 @@ pookantong_book1 = Book(
 	999,
 	10)
 pookantong_book2 = Book(
-	'random2.png',
+	'https://scontent.fbkk7-2.fna.fbcdn.net/v/t1.6435-9/79869824_452894658968633_8166842294293495808_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=83FfcmtO2L4AX9MEax3&_nc_ht=scontent.fbkk7-2.fna&oh=00_AfA2yBRLbOjbxNytKccOkuSYv4F1900xz24K2hH1eyevAQ&oe=64795098',
 	'ในคืนที่โหดร้ายนางเอกตายแต่.....',
 	'Pookantong',
 	'Pookantong2',
@@ -167,9 +167,9 @@ rangsit.add_product(pookantong_book2)
 pookantong_book1.add_rating(
 	Rating(10, "Bad ending, I don't like it", pookaneiei))
 pookantong_book1.add_rating(Rating(5, "OK, I don't like it", pookaneiei2))
-pookaneiei1.add_book_to_basket(BookItem(pookantong_book1), pookantong_book1)
-pookaneiei1.add_book_to_basket(BookItem(pookantong_book2), pookantong_book2)
-pookaneiei1.add_book_to_basket(BookItem(pookantong_book1), pookantong_book1)
+pookaneiei1.basket.add_book_to_basket(BookItem(pookantong_book1), pookantong_book1)
+pookaneiei1.basket.add_book_to_basket(BookItem(pookantong_book2), pookantong_book2)
+pookaneiei1.basket.add_book_to_basket(BookItem(pookantong_book1), pookantong_book1)
 
 event = EventDiscount("dan", datetime.date(2023, 3, 31),
 					  datetime.date(2023, 4, 30), 0.9, 'Shounen')
@@ -248,7 +248,7 @@ async def show_basket(current_user: Customer = Depends(Sys.get_current_user)):
 @app.put("/basket/add_amount/{bookname}", tags=["user"])
 async def add_amount(bookname: str, current_user: Customer = Depends(Sys.get_current_user)):
 	book = shop.find_book_by_name(bookname)
-	current_user.add_amount(bookname, book)
+	current_user.basket.add_amount(bookname, book)
 
 
 # Description : Reduce amount to the existing book in the basket
@@ -256,14 +256,14 @@ async def add_amount(bookname: str, current_user: Customer = Depends(Sys.get_cur
 @app.put("/basket/reduce_amount/{bookname}", tags=["user"])
 async def reduce_amount(bookname: str, current_user: Customer = Depends(Sys.get_current_user)):
 	book = shop.find_book_by_name(bookname)
-	current_user.reduce_amount(bookname, book)
+	current_user.basket.reduce_amount(bookname, book)
 
 
 # Description : Delete the existing book in the basket
 @app.delete("/basket/delete_item/{bookname}", tags=["user"])
 async def delete_amount(bookname: str, current_user: Customer = Depends(Sys.get_current_user)):
 	book = shop.find_book_by_name(bookname)
-	current_user.delete_item(bookname, book)
+	current_user.basket.delete_item(bookname, book)
 
 
 # Description : Add book instance to the basket
@@ -274,7 +274,7 @@ async def add_book_to_basket(bookname: str, amount: int, current_user: Customer 
 	if book == None:
 		raise HTTPException(status_code=404, detail="Book not found")
 	for i in range(amount):
-		current_user.add_book_to_basket(BookItem(book), book)
+		current_user.basket.add_book_to_basket(BookItem(book), book)
 	return {"status": "Success"}
 
 
