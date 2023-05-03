@@ -9,6 +9,7 @@ import "../css/profile.css";
 export default function Profile() {
 	const navigate = useNavigate();
 	const [user, setUser] = useState("");
+	const [bookname, setBookName] = useState("");
 
 	useEffect(() => {
 		axios.get("http://localhost:8000/users/me").then((response) => {
@@ -18,10 +19,20 @@ export default function Profile() {
 	}, []);
 
 	const signOut = () => {
+		axios
+			.delete(`http://localhost:8000/clear_basket/`)
+			.then((result) => {
+				clear_basket();
+			});
+		
+	};
+
+	const clear_basket = () => {
 		localStorage.removeItem("access_token");
 		localStorage.removeItem("role");
 		navigate("/");
 		window.location.reload(false);
+
 	};
 
 	return (

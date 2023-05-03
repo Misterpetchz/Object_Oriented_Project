@@ -465,6 +465,7 @@ async def view_info(userid=Depends(Sys.get_current_user)):
 				"full_name": userid.full_name,
 				"gender": userid.gender,
 				"tel": userid.tel,
+				"basket" : [{"book_item": x.name} for x in userid.basket.book_item]
 				}
 	elif (isinstance(userid, Admin)):
 		return {"role": "admin"}
@@ -539,6 +540,11 @@ async def modify_book_to_catalog(bookname, data: ModifyBookDTO):
 async def delete_book(bookname):
 	book = shop.find_book_by_name(bookname)
 	shop.remove_book(book)
+	return {"status": "Success"}
+
+@app.delete("/clear_basket/", tags=["books"])
+async def clear_basket(current_user: Customer = Depends(Sys.get_current_user)):
+	current_user.basket.clear_basket(shop)
 	return {"status": "Success"}
 
 
