@@ -4,6 +4,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import CreditCard from "./CreditCard";
 import { CustomerOnlyButton } from "../auth";
+import "../css/profile.css";
 
 export default function Profile() {
 	const navigate = useNavigate();
@@ -25,7 +26,7 @@ export default function Profile() {
 
 	return (
 		<>
-			<div style={{ marginTop: 20, minHeight: 700 }}>
+			<div class = 'profile'>
 				<h1>Profile page</h1>
 				<p>Hello there, welcome to your profile page</p>
 				<button onClick={signOut}>sign out</button>
@@ -41,7 +42,7 @@ export default function Profile() {
 				)}
 			</div>
 			{CustomerOnlyButton() && (
-				<div>
+				<div class = 'profile'>
 					<CreditCard />
 				</div>
 			)}

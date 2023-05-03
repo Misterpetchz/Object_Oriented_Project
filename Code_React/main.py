@@ -4,13 +4,11 @@ from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from pathlib import Path
 from fastapi.responses import FileResponse, HTMLResponse
-from Modules.Catalog import Catalog
 from Modules.EventDiscount import EventDiscount
 from Modules.Book import *
 from Modules.UserAccount import *
 from Modules.System import *
 from Modules.settings import *
-from Modules.BranchList import BranchList
 from Modules.Branch import Branch
 from Modules.Order import Order
 from Modules.CreditCard import CreditCard
@@ -157,12 +155,12 @@ pookantong_book2 = Book(
 )
 shop.add_book(pookantong_book1)
 shop.add_book(pookantong_book2)
-nonthaburi1.add_product(pookantong_book1)
-nonthaburi1.add_product(pookantong_book2)
-bangkok.add_product(pookantong_book1)
-moon_branch.add_product(pookantong_book2)
-rangsit.add_product(pookantong_book1)
-rangsit.add_product(pookantong_book2)
+nonthaburi1.add_book_to_stock(pookantong_book1)
+nonthaburi1.add_book_to_stock(pookantong_book2)
+bangkok.add_book_to_stock(pookantong_book1)
+moon_branch.add_book_to_stock(pookantong_book2)
+rangsit.add_book_to_stock(pookantong_book1)
+rangsit.add_book_to_stock(pookantong_book2)
 
 pookantong_book1.add_rating(
 	Rating(10, "Bad ending, I don't like it", pookaneiei))
