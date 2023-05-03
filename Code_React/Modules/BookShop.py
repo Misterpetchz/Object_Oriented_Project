@@ -1,12 +1,14 @@
 from Modules.Branch import Branch
 from Modules.EventDiscount import EventDiscount
 from Modules.Book import Book
+import math
 
 
 class BookShop():
-	def __init__(self):
+	def __init__(self,event_discount):
 		self.__list_of_branch = []
 		self.__all_list_of_book = []
+		self.__event = event_discount
 
 # + Getter / Setter {START}
 
@@ -25,6 +27,13 @@ class BookShop():
 	@list_all_of_book.setter
 	def list_all_of_book(self, new_list):
 		self.__all_list_of_book = new_list
+  
+	@property
+	def event(self):
+		return self.__event
+	@event.setter
+	def event(self,new_event):
+		self.__event = new_event
 
 # + Getter / Setter {END}
 
@@ -66,6 +75,7 @@ class BookShop():
 # Description : Add new book to the database
 	def add_book(self, book):
 		self.__all_list_of_book.append(book)
+		self.apply_discount()
 
 # Description : Find book that has EXACTLY the same name as input
 	def find_book_by_name(self, name):
@@ -95,3 +105,9 @@ class BookShop():
 			if book_name in [book.name for book in branch.product_in_stock]:
 				list.append(branch)
 		return list
+
+# Description : Apply discount to all book in database
+	def apply_discount(self):
+		for i in self.__all_list_of_book:
+			if self.__event.event_genre in i.genre:
+				i.new_price = math.floor(int(i.price) * self.__event.discounted_percentage)
