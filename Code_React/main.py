@@ -168,9 +168,6 @@ rangsit.add_product(pookantong_book2)
 pookantong_book1.add_rating(
 	Rating(10, "Bad ending, I don't like it", pookaneiei))
 pookantong_book1.add_rating(Rating(5, "OK, I don't like it", pookaneiei2))
-pookaneiei1.add_book_to_basket(BookItem(pookantong_book1), pookantong_book1)
-pookaneiei1.add_book_to_basket(BookItem(pookantong_book2), pookantong_book2)
-pookaneiei1.add_book_to_basket(BookItem(pookantong_book1), pookantong_book1)
 
 event = EventDiscount("dan", datetime.date(2023, 3, 31),
 					  datetime.date(2023, 4, 30), 0.9, 'Shounen')
@@ -259,29 +256,46 @@ async def add_book_to_basket(bookname: str, amount: int, current_user: Customer 
 	if book == None:
 		raise HTTPException(status_code=404, detail="Book not found")
 	for i in range(amount):
-		current_user.add_book_to_basket(BookItem(book), book)
+		current_user.add_book_to_basket(BookItem(
+											book.cover,
+											book.brief,
+											book.creator,
+											book.name,
+											book.book_info,
+											book.book_publisher,
+											book.book_preview,
+											book.critic_review,
+											book.table_of_content,
+											book.summary,
+											book.genre,
+											book.date_created,
+											book.price,
+											book.stock_amount,
+           									1), book)
 	return {"status": "Success"}
 
 
 # Description : Add amount to the existing book in the basket
 # * DUPLICATE FUNCTION : 02
-@app.post("/add_amount", tags=["user"])
-async def add_book_to_basket(book_item, current_user: Customer = Depends(Sys.get_current_user)):
-	event.event_dis(shop)
-	book = shop.find_book_by_name(book_item)
-	current_user.add_amount(book_item, book)
-	return {"status": "Success"}
+@app.put("/basket/add_amount/{bookname}", tags=["user"])
+async def add_amount(bookname: str, current_user: Customer = Depends(Sys.get_current_user)):
+	book = shop.find_book_by_name(bookname)
+	current_user.basket.add_amount(bookname, book)
 
 
 # Description : Reduce amount to the existing book in the basket
 # * DUPLICATE FUNCTION : 03
-@app.post("/reduce_amount", tags=["user"])
-async def add_book_to_basket(book_item, current_user: Customer = Depends(Sys.get_current_user)):
-	event.event_dis(shop)
-	book = shop.find_book_by_name(book_item)
-	current_user.reduce_amount(book_item, book)
-	return {"status": "Success"}
+@app.put("/basket/reduce_amount/{bookname}", tags=["user"])
+async def reduce_amount(bookname: str, current_user: Customer = Depends(Sys.get_current_user)):
+	book = shop.find_book_by_name(bookname)
+	current_user.basket.reduce_amount(bookname, book)
 
+
+# Description : Delete the existing book in the basket
+@app.delete("/basket/delete_item/{bookname}", tags=["user"])
+async def delete_amount(bookname: str, current_user: Customer = Depends(Sys.get_current_user)):
+	book = shop.find_book_by_name(bookname)
+	current_user.basket.delete_item(bookname, book)
 
 # Description : Add rating to the book
 @app.post("/books/{bookname}/addrating", tags=["books"])
