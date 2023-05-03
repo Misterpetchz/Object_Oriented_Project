@@ -49,7 +49,7 @@ export default function Profile() {
 						Edit
 					</Link>
 				)}
-				{RequirePaymentButton() && <div><button onClick={go_to_order}>Order</button></div>}
+				<div><button onClick={go_to_order}>Order</button></div>
 				
 			</div>
 			{CustomerOnlyButton() && (
