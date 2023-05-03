@@ -169,12 +169,12 @@ pookantong_book2 = Book(
                        )
 batalog.add_book(pookantong_book1)
 batalog.add_book(pookantong_book2)
-nonthaburi1.add_product(pookantong_book1)
-nonthaburi1.add_product(pookantong_book2)
+nonthaburi1.add_book_to_stock(pookantong_book1)
+nonthaburi1.add_book_to_stock(pookantong_book2)
 # bangkok.add_product(pookantong_book1)
-moon_branch.add_product(pookantong_book2)
-rangsit.add_product(pookantong_book1)
-rangsit.add_product(pookantong_book2)
+moon_branch.add_book_to_stock(pookantong_book2)
+rangsit.add_book_to_stock(pookantong_book1)
+rangsit.add_book_to_stock(pookantong_book2)
 
 
 
