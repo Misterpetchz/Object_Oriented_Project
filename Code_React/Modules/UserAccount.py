@@ -149,14 +149,6 @@ class Customer(UserAccount):
 
 # + Getter / Setter {END}
 
-# Description : Return list of book with the input string in its name
-	def search_book(self, search_string, catalog: Catalog):
-		lists = []
-		for element in catalog.list_of_book:
-			if search_string in element._name:
-				lists.append(element)
-				return lists
-
 # Description : Edit some of the customer information
 	def edit_profile(self, password, full_name, gender, tel, address, email_noti, sms_noti):
 		self._password = password

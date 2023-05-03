@@ -34,17 +34,15 @@ export default function Payment() {
 	return (
 		<div>
 			<h2>Order</h2>
-			{order &&
-				order._purchased_item &&
-				order._purchased_item.map((item) => (
+			{order&&order.order.map((item) => (
 					<div>
-						<p>Name : {item._name}</p>
-						<p>Price : {item._price}</p>
-						<p>Amount : {item._amount}</p>
+						<p>Name : {item.name}</p>
+						<p>Price : {item.price}</p>
+						<p>Amount : {item.amount}</p>
 					</div>
 				))}
 			<div>
-				<p>Total : {order._total}</p>
+				<p>Total : {order.total}</p>
 			</div>
 			<div>
 				<SelectMethod />
