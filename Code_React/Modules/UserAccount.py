@@ -1,7 +1,9 @@
 # ? Module
 from Modules.Basket import Basket
+from Modules.Catalog import Catalog
 from Modules.Book import *
 from Modules.Branch import Branch
+from Modules.BranchList import BranchList
 from Modules.Order import Order
 from Modules.Rating import Rating
 from Modules.EventDiscount import EventDiscount
@@ -147,6 +149,14 @@ class Customer(UserAccount):
 
 # + Getter / Setter {END}
 
+# Description : Return list of book with the input string in its name
+	def search_book(self, search_string, catalog: Catalog):
+		lists = []
+		for element in catalog.list_of_book:
+			if search_string in element._name:
+				lists.append(element)
+				return lists
+
 # Description : Edit some of the customer information
 	def edit_profile(self, password, full_name, gender, tel, address, email_noti, sms_noti):
 		self._password = password
@@ -163,6 +173,50 @@ class Customer(UserAccount):
 	def add_credit_card(self, credit_card):
 		self.__credit_card = credit_card
 
+# Description : Add book to to the basket
+# * Also shouldn't be here
+	def add_book_to_basket(self, book_item, book: Book):
+		if book.stock_amount > 0:
+			for i in self.__basket.book_item:
+				if i.name.lower() == book_item.name.lower():
+					i.amount = i.amount + 1
+					book.stock_amount -= 1
+					self.__basket.price += book_item.price
+					return None
+			else:
+				self.__basket.add_book(book_item)
+				book.stock_amount -= 1
+				self.__basket.price += book_item.price
+
+# Description : Reduce amount of the book in the basket
+# * Also shouldn't be here
+	def reduce_amount(self, book_item, book: Book):
+		for item in self.basket.book_item:
+			if book_item == item.name:
+				item.amount = item.amount-1
+				book.stock_amount += 1
+				self.basket.price -= item.price
+				if item.amount == 0:
+					self.basket.book_item.remove(item)
+
+# Description : Increase amount of the book in the basket
+# * Also shouldn't be here
+	def add_amount(self, book_item, book: Book):
+		if book.stock_amount > 0:
+			for item in self.basket.book_item:
+				if book_item == item.name:
+					item.amount = item.amount+1
+					book.stock_amount -= 1
+					self.basket.price += item.price
+
+# Description : Clear the selected book from the basket
+# * Also shouldn't be here
+	def delete_item(self, book_item, book: Book):
+		for item in self.basket.book_item:
+			if book_item == item.name:
+				book.stock_amount += item.amount
+				self.basket.book_item.remove(item)
+
 # Description : Generate payment seed
 # * Also shouldn't be here
 	def generate_seed(self, payment_id: str):
@@ -172,10 +226,11 @@ class Customer(UserAccount):
 # Description : Make order with the item in the basket
 # * Also shouldn't be here
 	def make_order(self, order):
-		if len(self.__basket.book_item) > 0 and self.__payment == None and self.__order == None:
+		if len(self.__basket.book_item) > 0 and self.__payment == None:
+			# self.__order_list.append(order)
+			# self.__order_id += 1
 			self.__order = order
 			self.generate_seed(self._email + str(self.__order_id))
-			self.__basket.clear_basket()
 
 # Description : Make payment for the order
 # * Also shouldn't be here
@@ -183,10 +238,10 @@ class Customer(UserAccount):
 		current_date = datetime.date.today()
 		format_date = current_date.strftime('%d-%m-%Y')
 		if payment_type.lower() == 'qrcode':
-			self.__payment = ViaQrCode(self.__order.total, format_date)
+			self.__payment = ViaQrCode(self.__basket.price, format_date)
 			return self.__payment.generate_qr_code()
 		elif payment_type.lower() == 'creditcard':
-			self.__payment = ViaCreditCard(self.__order.total, format_date)
+			self.__payment = ViaCreditCard(self.__basket.price, format_date)
 
 # Description : Make order with the item in the basket
 # * Also shouldn't be here
@@ -204,13 +259,6 @@ class Customer(UserAccount):
 		self.__payment = None
 		self.__payment_id = None
 		self.__order = None
-  
-	def cancel_order(self, book_shop):
-		for book in self.__order.get_item:
-			books = book_shop.find_book_by_name(book.name)
-			books.stock_amount += book.amount
-		self.reset_payment()
-		self.__order_id -= 1
 
 # Description : Print user data into json form
 	def toJSON(self):

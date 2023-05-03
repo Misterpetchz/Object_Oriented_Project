@@ -71,6 +71,11 @@ class Branch():
 
 # + Getter / Setter {END}
 
+# Description : Add book to list of book in stock
+# * DUPLICATE FUNCTION : 01
+	def add_product(self, book):
+		self.__product_in_stock.append(book)
+
 # Description : Modify Branch Information
 	def modify_branch(self, new_branch_name, new_open_time, new_location, new_tel, new_line_id, new_facebook_id, list_add_book, list_delete_book):
 		if isinstance(new_branch_name, str):
@@ -91,8 +96,16 @@ class Branch():
 		if isinstance(new_facebook_id, str):
 			if new_facebook_id != '':
 				self.__facebook_id = new_facebook_id
+		if isinstance(list_add_book, list):
+			for book in list_add_book:
+				if book not in self.__product_in_stock:
+					self.__product_in_stock.append(book)
+		if isinstance(list_delete_book, list):
+			for book in list_delete_book:
+				self.__product_in_stock.remove(book)
 
 # Description : Add book to list of book in stock
+# * DUPLICATE FUNCTION : 01
 	def add_book_to_stock(self, book: Book):
 		if book not in self.__product_in_stock:
 			self.__product_in_stock.append(book)

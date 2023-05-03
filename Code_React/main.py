@@ -4,11 +4,13 @@ from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from pathlib import Path
 from fastapi.responses import FileResponse, HTMLResponse
+from Modules.Catalog import Catalog
 from Modules.EventDiscount import EventDiscount
 from Modules.Book import *
 from Modules.UserAccount import *
 from Modules.System import *
 from Modules.settings import *
+from Modules.BranchList import BranchList
 from Modules.Branch import Branch
 from Modules.Order import Order
 from Modules.CreditCard import CreditCard
@@ -54,6 +56,7 @@ shop = BookShop()
 User_DB = []
 list_credit_card = []
 
+list_branch = BranchList()
 Sys = System()
 
 
@@ -155,19 +158,19 @@ pookantong_book2 = Book(
 )
 shop.add_book(pookantong_book1)
 shop.add_book(pookantong_book2)
-nonthaburi1.add_book_to_stock(pookantong_book1)
-nonthaburi1.add_book_to_stock(pookantong_book2)
-bangkok.add_book_to_stock(pookantong_book1)
-moon_branch.add_book_to_stock(pookantong_book2)
-rangsit.add_book_to_stock(pookantong_book1)
-rangsit.add_book_to_stock(pookantong_book2)
+nonthaburi1.add_product(pookantong_book1)
+nonthaburi1.add_product(pookantong_book2)
+bangkok.add_product(pookantong_book1)
+moon_branch.add_product(pookantong_book2)
+rangsit.add_product(pookantong_book1)
+rangsit.add_product(pookantong_book2)
 
 pookantong_book1.add_rating(
 	Rating(10, "Bad ending, I don't like it", pookaneiei))
 pookantong_book1.add_rating(Rating(5, "OK, I don't like it", pookaneiei2))
-pookaneiei1.basket.add_book_to_basket(BookItem(pookantong_book1), pookantong_book1)
-pookaneiei1.basket.add_book_to_basket(BookItem(pookantong_book2), pookantong_book2)
-pookaneiei1.basket.add_book_to_basket(BookItem(pookantong_book1), pookantong_book1)
+pookaneiei1.add_book_to_basket(BookItem(pookantong_book1), pookantong_book1)
+pookaneiei1.add_book_to_basket(BookItem(pookantong_book2), pookantong_book2)
+pookaneiei1.add_book_to_basket(BookItem(pookantong_book1), pookantong_book1)
 
 event = EventDiscount("dan", datetime.date(2023, 3, 31),
 					  datetime.date(2023, 4, 30), 0.9, 'Shounen')
@@ -246,7 +249,7 @@ async def show_basket(current_user: Customer = Depends(Sys.get_current_user)):
 @app.put("/basket/add_amount/{bookname}", tags=["user"])
 async def add_amount(bookname: str, current_user: Customer = Depends(Sys.get_current_user)):
 	book = shop.find_book_by_name(bookname)
-	current_user.basket.add_amount(bookname, book)
+	current_user.add_amount(bookname, book)
 
 
 # Description : Reduce amount to the existing book in the basket
@@ -254,14 +257,14 @@ async def add_amount(bookname: str, current_user: Customer = Depends(Sys.get_cur
 @app.put("/basket/reduce_amount/{bookname}", tags=["user"])
 async def reduce_amount(bookname: str, current_user: Customer = Depends(Sys.get_current_user)):
 	book = shop.find_book_by_name(bookname)
-	current_user.basket.reduce_amount(bookname, book)
+	current_user.reduce_amount(bookname, book)
 
 
 # Description : Delete the existing book in the basket
 @app.delete("/basket/delete_item/{bookname}", tags=["user"])
 async def delete_amount(bookname: str, current_user: Customer = Depends(Sys.get_current_user)):
 	book = shop.find_book_by_name(bookname)
-	current_user.basket.delete_item(bookname, book)
+	current_user.delete_item(bookname, book)
 
 
 # Description : Add book instance to the basket
@@ -272,7 +275,7 @@ async def add_book_to_basket(bookname: str, amount: int, current_user: Customer 
 	if book == None:
 		raise HTTPException(status_code=404, detail="Book not found")
 	for i in range(amount):
-		current_user.basket.add_book_to_basket(BookItem(book), book)
+		current_user.add_book_to_basket(BookItem(book), book)
 	return {"status": "Success"}
 
 
@@ -294,6 +297,18 @@ async def add_book_to_basket(book_item, current_user: Customer = Depends(Sys.get
 	book = shop.find_book_by_name(book_item)
 	current_user.reduce_amount(book_item, book)
 	return {"status": "Success"}
+
+
+# Description : Make order from the current user
+@app.get("/make_order", tags=["user"])
+async def make_order(current_user: Customer = Depends(Sys.get_current_user)):
+	current_user.make_order(Order(current_user.basket.book_item,
+								  current_user.order_id,
+								  True,
+								  current_user.basket.price,
+								  current_user.full_name))
+	current_user.basket.book_item = []
+	return {"payment_id": current_user.payment_id}
 
 
 # Description : Add rating to the book
@@ -449,11 +464,10 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
 async def view_info(userid=Depends(Sys.get_current_user)):
 	if (isinstance(userid, Customer)):
 		return {"address": userid.address,
-				"email": userid.email,
+				"email ": userid.email,
 				"full_name": userid.full_name,
 				"gender": userid.gender,
 				"tel": userid.tel,
-				"basket" : [{"book_item": x.name} for x in userid.basket.book_item]
 				}
 	elif (isinstance(userid, Admin)):
 		return {"role": "admin"}
@@ -530,16 +544,17 @@ async def delete_book(bookname):
 	shop.remove_book(book)
 	return {"status": "Success"}
 
-@app.delete("/clear_item/", tags=["books"])
-async def clear_item(current_user: Customer = Depends(Sys.get_current_user)):
-	current_user.basket.clear_item(shop)
-	return {"status": "Success"}
-
 
 # Description : SHow all branch
 @app.get("/GetAllBranch/", tags=["branch"])
 async def get_branch():
 	return {"name": [{"branch_name": x.branch_name} for x in shop.list_of_branch]}
+
+
+# Description : Return list of branch with the input book in stock
+@app.get("/get_add_book_to_branch/")
+async def get_book_stock(book_name):
+	return shop.check_stock(book_name)
 
 
 # Description : Add book to the branch stock
@@ -581,7 +596,9 @@ async def modify_branch(data: ModifyBranchDTO, branch_name):
 								data.location,
 								data.tel,
 								data.line_id,
-								data.facebook_id)
+								data.facebook_id,
+								[],
+								[])
 	return {"Modify Success"}
 
 
@@ -611,6 +628,7 @@ async def make_order(current_user: Customer = Depends(Sys.get_current_user)):
 								  True,
 								  current_user.basket.price,
 								  current_user.full_name))
+	current_user.basket.book_item = []
 	return {"payment_id": current_user.payment_id}
 
 
@@ -619,11 +637,8 @@ async def make_order(current_user: Customer = Depends(Sys.get_current_user)):
 async def get_payment(id, current_user=Depends(Sys.get_current_user), payment_type: str = None):
 	if id == current_user.payment_id:
 		if payment_type is None:
-			return {"order": [{"name": book.name,
-								"price": book.price,
-								"amount": book.amount} for book in current_user.order.get_item],
-					"total":current_user.order.total}
-		if payment_type.lower() == 'qrcode':
+			return current_user.order
+		elif payment_type.lower() == 'qrcode':
 			return {"payment": current_user.make_payment(payment_type)}
 		elif payment_type.lower() == 'creditcard':
 			current_user.make_payment(payment_type)
@@ -635,9 +650,7 @@ async def get_payment(id, current_user=Depends(Sys.get_current_user), payment_ty
 @app.get('/payment_status/{id}')
 async def check_payment(id, current_user=Depends(Sys.get_current_user)):
 	if id == current_user.payment_id:
-		if current_user.payment == None:
-			return {"status": None}
-		elif current_user.payment.status == 'paid':
+		if current_user.payment.status == 'paid':
 			current_user.add_order_to_order_list(current_user.order)
 			current_user.update_order_id()
 			current_user.reset_payment()
@@ -656,10 +669,4 @@ async def fake_bank(id, status: str = None):
 # Description : View current list of order
 @app.get('/order_list/')
 async def show_order_list(current_user=Depends(Sys.get_current_user)):
-	return {'order_list': [{"purchased_item":[{"cover":book.cover,
-                                            	"name":book.name} for book in order.get_item],
-							'total':order.total} for order in current_user.order_list]}
- 
-@app.delete('/cancel_order')
-async def cancel_order(current_user=Depends(Sys.get_current_user)):
-	current_user.cancel_order(shop)
+	return {'order_list': current_user.order_list}

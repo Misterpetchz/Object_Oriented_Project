@@ -4,6 +4,7 @@ class Order:
 		self.__order_id = order_id
 		self.__order_status = order_status
 		self.__total = total
+		self.__user = user
 
 # + Getter / Setter {START}
 

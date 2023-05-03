@@ -169,12 +169,12 @@ pookantong_book2 = Book(
                        )
 batalog.add_book(pookantong_book1)
 batalog.add_book(pookantong_book2)
-nonthaburi1.add_book_to_stock(pookantong_book1)
-nonthaburi1.add_book_to_stock(pookantong_book2)
-# bangkok.add_book_to_stock(pookantong_book1)
-moon_branch.add_book_to_stock(pookantong_book2)
-rangsit.add_book_to_stock(pookantong_book1)
-rangsit.add_book_to_stock(pookantong_book2)
+nonthaburi1.add_product(pookantong_book1)
+nonthaburi1.add_product(pookantong_book2)
+# bangkok.add_product(pookantong_book1)
+moon_branch.add_product(pookantong_book2)
+rangsit.add_product(pookantong_book1)
+rangsit.add_product(pookantong_book2)
 
 
 
@@ -235,7 +235,7 @@ def get_book(name:Optional[str] = ''):
         for i in batalog.list_all_of_book:
             if name.lower() == i._name.lower():
                 return i
-#################################  MAINPAGE  ####################################
+#################################  MAINPAGE  ####################################        
 @app.get("/")
 async def home(request:Request):
     event.event_dis(batalog)
@@ -303,7 +303,7 @@ async def view_book(request:Request,book_name:str):
     event.event_dis(batalog)
     return templates.TemplateResponse("bookdetail.html", {"request":request,"book":get_book(book_name)})
 
-#################################  BASKETPAGE  ####################################
+#################################  BASKETPAGE  ####################################  
 @app.get("/books/{bookname}/rating", tags=["books"])
 async def show_book_rating(bookname):
     book = batalog.find_book_by_name(bookname)
@@ -409,13 +409,13 @@ async def add_branch(data:AddBranchDTO):
 @app.put("/ModifyBranch/{branch_name}", tags=["branch"])
 async def modify_branch(data : ModifyBranchDTO, branch_name):
     select_branch = shop.select_branch(branch_name)
-    select_branch.modify_branch(data.branch_name,
-                                data.open_time,
-                                data.location,
-                                data.tel,
-                                data.line_id,
-                                data.facebook_id,
-                                [],
+    select_branch.modify_branch(data.branch_name, 
+                                data.open_time, 
+                                data.location, 
+                                data.tel, 
+                                data.line_id, 
+                                data.facebook_id, 
+                                [], 
                                 [])
     return {"Modify Success"}
 
@@ -432,9 +432,9 @@ async def get_event():
 
 @app.post("/AddEvent/", tags=["event"])
 async def add_event(data : EventDTO):
-    shop.list_of_event.append((EventDiscount(data.event_name,
-                                    data.event_start,
-                                    data.event_end,
+    shop.list_of_event.append((EventDiscount(data.event_name, 
+                                    data.event_start, 
+                                    data.event_end, 
                                     data.discounted_percentage,
                                     data.event_genre)))
     return {"Add Event Success"}
@@ -466,7 +466,7 @@ async def make_order(current_user : Customer = Depends(Sys.get_current_user)):
                                 current_user._full_name))
     current_user.basket.book_item = []
     return {"payment_id" : current_user.payment_id}
-
+    
 @app.get('/payment/{id}')
 async def get_payment(id, current_user = Depends(Sys.get_current_user), payment_type:str = None):
     if id == current_user.payment_id:
@@ -477,10 +477,10 @@ async def get_payment(id, current_user = Depends(Sys.get_current_user), payment_
         elif payment_type.lower() == 'creditcard':
             # return info credit card
             current_user.make_payment(payment_type)
-            return {"payment" : {'card_num' : current_user.credit_card.card_num,
+            return {"payment" : {'card_num' : current_user.credit_card.card_num, 
                                  'expire_date' : current_user.credit_card.expire_date}}
-
-# Check Status api
+        
+# Check Status api        
 @app.get('/payment_status/{id}')
 async def check_payment(id, current_user = Depends(Sys.get_current_user)):
     if id == current_user.payment_id:
@@ -490,7 +490,7 @@ async def check_payment(id, current_user = Depends(Sys.get_current_user)):
             current_user.reset_payment()
             return {"status" : 'paid'}
         # return {"status" : current_user.payment.status}
-
+    
 # Bank api
 @app.post('/payment_status/{id}')
 async def fake_bank(id, status:str = None):
@@ -588,7 +588,7 @@ async def search_book(name:str):
                         "score":x._rating_score,
                         "brief":x._brief}
                        for x in batalog.list_of_book if x._amount_in_stock != 0]}
-
+    
 @app.put("/books/{bookname}", tags=["books"])
 async def modify_book_to_catalog(bookname, data:ModifyBookDTO):
     book = batalog.find_book_by_name(bookname)

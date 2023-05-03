@@ -9,7 +9,6 @@ export default function OrderList() {
 			.get("http://localhost:8000/order_list/")
 			.then((response) => {
 				setOrderList(response.data.order_list);
-				console.log(response.data.order_list)
 			})
 			.catch(function (error) {
 				console.log(error, "error");
@@ -21,14 +20,15 @@ export default function OrderList() {
 			<div>
 				{orderList.map((order) => (
 					<div>
-						{order.purchased_item.map((item) => (
-							<div class="book">
-								<img class="book_img" src={item.cover}/>
-								<p class="book_detail">{item.name}</p>
+						{order._purchased_item.map((item) => (
+							<div>
+								<p>{item._cover}</p>
+								<p>{item._name}</p>
 							</div>
 						))}
 						<div>
-							<p>{order.total}</p>
+							<p>{order._user}</p>
+							<p>{order._total}</p>
 						</div>
 					</div>
 				))}

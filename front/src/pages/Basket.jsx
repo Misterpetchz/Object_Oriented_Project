@@ -3,10 +3,6 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-export const setPayment = (payment_id) => {
-	localStorage.setItem("payment_local_id", payment_id); // make up your own token
-};
-
 function Basket() {
 	const navigate = useNavigate();
 	const [basket, setBasket] = useState([]);
@@ -27,12 +23,7 @@ function Basket() {
 		axios
 			.get(`http://localhost:8000/make_order`)
 			.then((response) => {
-				if (response.data.payment_id === null){
-				}
-				else{
-					setPayment(response.data.payment_id)
-					navigate(`/payment/${response.data.payment_id}`);
-				}
+				navigate(`/payment/${response.data.payment_id}`);
 			})
 			.catch(function (error) {
 				console.log(error, "error");

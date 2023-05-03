@@ -1,3 +1,6 @@
+from Modules.Catalog import *
+
+
 class Basket:
 	def __init__(self):
 		self.__book_item = []
@@ -26,8 +29,8 @@ class Basket:
 # Description : Add book to basket
 	def add_book(self, book):
 		self.__book_item.append(book)
-
-	def add_book_to_basket(self, book_item, book):
+  
+	def add_book_to_basket(self, book_item, book: Book):
 		if book.stock_amount > 0:
 			for i in self.__book_item:
 				if i.name.lower() == book_item.name.lower():
@@ -40,7 +43,7 @@ class Basket:
 				book.stock_amount -= 1
 				self.__price += book_item.price
 
-	def reduce_amount(self, book_item, book):
+	def reduce_amount(self, book_item, book: Book):
 		for item in self.__book_item:
 			if book_item == item.name:
 				item.amount = item.amount-1
@@ -49,7 +52,7 @@ class Basket:
 				if item.amount == 0:
 					self.__book_item.remove(item)
 
-	def add_amount(self, book_item, book):
+	def add_amount(self, book_item, book: Book):
 		if book.stock_amount > 0:
 			for item in self.__book_item:
 				if book_item == item.name:
@@ -57,21 +60,8 @@ class Basket:
 					book.stock_amount -= 1
 					self.__price += item.price
 
-	def delete_item(self, book_item, book):
+	def delete_item(self, book_item, book: Book):
 		for item in self.__book_item:
 			if book_item == item.name:
 				book.stock_amount += item.amount
-				self.__price -= item.price * item.amount
 				self.__book_item.remove(item)
-
-	def clear_item(self,bookshop):
-		for item in self.__book_item:
-			for book in bookshop.list_all_of_book:
-				if item.name == book.name:
-					book.stock_amount += item.amount
-					self.__book_item.remove(item)
-					self.__price -= item.price * item.amount
-  
-	def clear_basket(self):
-		self.__book_item = []
-		self.__price = 0
