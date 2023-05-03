@@ -168,9 +168,9 @@ rangsit.add_product(pookantong_book2)
 pookantong_book1.add_rating(
 	Rating(10, "Bad ending, I don't like it", pookaneiei))
 pookantong_book1.add_rating(Rating(5, "OK, I don't like it", pookaneiei2))
-pookaneiei1.add_book_to_basket(BookItem(pookantong_book1), pookantong_book1)
-pookaneiei1.add_book_to_basket(BookItem(pookantong_book2), pookantong_book2)
-pookaneiei1.add_book_to_basket(BookItem(pookantong_book1), pookantong_book1)
+pookaneiei1.basket.add_book_to_basket(BookItem(pookantong_book1), pookantong_book1)
+pookaneiei1.basket.add_book_to_basket(BookItem(pookantong_book2), pookantong_book2)
+pookaneiei1.basket.add_book_to_basket(BookItem(pookantong_book1), pookantong_book1)
 
 event = EventDiscount("dan", datetime.date(2023, 3, 31),
 					  datetime.date(2023, 4, 30), 0.9, 'Shounen')
