@@ -39,7 +39,7 @@ function ViewBranch() {
 						branch.product &&
 						branch.product.map((product, index) => (
 							<div key={index}>
-								<span>{product._name}</span>
+								<span>{product.name}</span>
 							</div>
 						))}
 				</div>

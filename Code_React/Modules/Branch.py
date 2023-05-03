@@ -108,15 +108,15 @@ class Branch():
 # * DUPLICATE FUNCTION : 01
 	def add_book_to_stock(self, book: Book):
 		if book not in self.__product_in_stock:
-			self._product_in_stock.append(book)
+			self.__product_in_stock.append(book)
 
 # Description : Return book in stock that has the same name as input string
 	def find_book_in_stock(self, book_name):
-		for book in self._product_in_stock:
+		for book in self.__product_in_stock:
 			if book_name == book._name:
 				return book
 
 # Description : Remove book from stock if the instance of the book are the same as input instance
 	def remove_book_from_stock(self, book: Book):
-		if book in self._product_in_stock:
-			self._product_in_stock.remove(book)
+		if book in self.__product_in_stock:
+			self.__product_in_stock.remove(book)

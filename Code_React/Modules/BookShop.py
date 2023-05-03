@@ -59,7 +59,7 @@ class BookShop():
 	def search_branch(self, branch_name):
 		available = []
 		for element in self.__list_of_branch:
-			if branch_name in element.branch_name:
+			if branch_name.lower() in element.branch_name.lower():
 				available.append(element)
 		return available
 
@@ -77,7 +77,7 @@ class BookShop():
 	def search_book(self, search_string):
 		list_of_book = []
 		for element in self.__all_list_of_book:
-			if search_string in element.name:
+			if search_string.lower() in element.name.lower():
 				list_of_book.append(element)
 		return list_of_book
 
