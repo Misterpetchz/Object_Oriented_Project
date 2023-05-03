@@ -255,4 +255,5 @@ class Customer(UserAccount):
 		for item in self.basket.book_item:
 			if book_item == item.name:
 				book.stock_amount += item.amount
+				self.basket.price -= (item.price*item.amount)
 				self.basket.book_item.remove(item)		

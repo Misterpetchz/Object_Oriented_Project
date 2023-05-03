@@ -156,7 +156,7 @@ class Book:
 		self.__new_price = new_price
 
 	@new_price.setter
-	def old_price(self, new_new_price):
+	def new_price(self, new_new_price):
 		self.__new_price = new_new_price
 
 	@property

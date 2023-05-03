@@ -274,7 +274,7 @@ async def add_book_to_basket(bookname: str, amount: int, current_user: Customer 
 @app.put("/basket/add_amount/{bookname}", tags=["user"])
 async def add_amount(bookname: str, current_user: Customer = Depends(Sys.get_current_user)):
 	book = shop.find_book_by_name(bookname)
-	current_user.basket.add_amount(bookname, book)
+	current_user.add_amount(bookname, book)
 
 
 # Description : Reduce amount to the existing book in the basket
@@ -282,14 +282,14 @@ async def add_amount(bookname: str, current_user: Customer = Depends(Sys.get_cur
 @app.put("/basket/reduce_amount/{bookname}", tags=["user"])
 async def reduce_amount(bookname: str, current_user: Customer = Depends(Sys.get_current_user)):
 	book = shop.find_book_by_name(bookname)
-	current_user.basket.reduce_amount(bookname, book)
+	current_user.reduce_amount(bookname, book)
 
 
 # Description : Delete the existing book in the basket
 @app.delete("/basket/delete_item/{bookname}", tags=["user"])
 async def delete_amount(bookname: str, current_user: Customer = Depends(Sys.get_current_user)):
 	book = shop.find_book_by_name(bookname)
-	current_user.basket.delete_item(bookname, book)
+	current_user.delete_item(bookname, book)
 
 # Description : Add rating to the book
 @app.post("/books/{bookname}/addrating", tags=["books"])
