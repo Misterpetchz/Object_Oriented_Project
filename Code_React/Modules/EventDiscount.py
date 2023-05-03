@@ -1,6 +1,5 @@
 from Modules.Book import Book
 from datetime import datetime
-import math
 import datetime
 
 
@@ -49,12 +48,3 @@ class EventDiscount():
 		if isinstance(new_end, str):
 			self.__event_genre = new_genre
 
-# Description : Apply discount to all book in database
-	def event_dis(self, catalog):
-		for i in catalog.list_all_of_book:
-			if self.__event_genre in i.genre:
-				self.apply_discount(i)
-
-# Description : Method to calculate discounted price
-	def apply_discount(self, book):
-		book.new_price = math.floor(book.price * self.__discounted_percentage)

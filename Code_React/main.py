@@ -51,8 +51,8 @@ app.add_middleware(
 	allow_headers=["*"],
 )
 
-
-shop = BookShop()
+shop = BookShop(EventDiscount("dan", datetime.date(2023, 3, 31),
+					  datetime.date(2023, 4, 30), 0.9, 'Shounen'))
 User_DB = []
 list_credit_card = []
 
@@ -172,9 +172,6 @@ pookaneiei1.add_book_to_basket(BookItem(pookantong_book1), pookantong_book1)
 pookaneiei1.add_book_to_basket(BookItem(pookantong_book2), pookantong_book2)
 pookaneiei1.add_book_to_basket(BookItem(pookantong_book1), pookantong_book1)
 
-event = EventDiscount("dan", datetime.date(2023, 3, 31),
-					  datetime.date(2023, 4, 30), 0.9, 'Shounen')
-
 
 # Description : Check the current user
 async def get_current_active_user(current_user=Depends(Sys.get_current_user)):
@@ -186,7 +183,6 @@ async def get_current_active_user(current_user=Depends(Sys.get_current_user)):
 # Description : Home page of the website suppose to show some the book that are in stock
 @app.get("/", tags=["books"])
 async def home():
-	event.event_dis(shop)
 	return {"catalog": [{"cover": x.cover,
 						 "name": x.name,
 						 "creator": x.creator,
@@ -201,7 +197,6 @@ async def home():
 # Description : Check the details of the selected book
 @app.get("/books/{bookname}", tags=["books"])
 async def show_book(bookname: str | None = None):
-	event.event_dis(shop)
 	book = shop.find_book_by_name(bookname)
 	if book == None:
 		raise HTTPException(status_code=404, detail="Book not found")
@@ -254,7 +249,6 @@ async def delete_amount(bookname: str, current_user: Customer = Depends(Sys.get_
 # Description : Add book instance to the basket
 @app.post("/books/{bookname}/add_book_to_basket", tags=["user"])
 async def add_book_to_basket(bookname: str, amount: int, current_user: Customer = Depends(Sys.get_current_user)):
-	event.event_dis(shop)
 	book = shop.find_book_by_name(bookname)
 	if book == None:
 		raise HTTPException(status_code=404, detail="Book not found")
@@ -267,7 +261,6 @@ async def add_book_to_basket(bookname: str, amount: int, current_user: Customer 
 # * DUPLICATE FUNCTION : 02
 @app.post("/add_amount", tags=["user"])
 async def add_book_to_basket(book_item, current_user: Customer = Depends(Sys.get_current_user)):
-	event.event_dis(shop)
 	book = shop.find_book_by_name(book_item)
 	current_user.add_amount(book_item, book)
 	return {"status": "Success"}
@@ -277,7 +270,6 @@ async def add_book_to_basket(book_item, current_user: Customer = Depends(Sys.get
 # * DUPLICATE FUNCTION : 03
 @app.post("/reduce_amount", tags=["user"])
 async def add_book_to_basket(book_item, current_user: Customer = Depends(Sys.get_current_user)):
-	event.event_dis(shop)
 	book = shop.find_book_by_name(book_item)
 	current_user.reduce_amount(book_item, book)
 	return {"status": "Success"}
@@ -391,6 +383,7 @@ async def modify_book_to_catalog(bookname, data: ModifyBookDTO):
 	book = shop.find_book_by_name(bookname)
 	book.modify_book(data.cover, data.brief, data.creator, data.name, data.book_info, data.book_publisher, data.book_preview,
 					 data.critic_review, data.table_of_content, data.summary, data.genre, data.date_created, data.price, data.amount)
+	shop.apply_discount()
 	return {"status": "Success"}
 
 
@@ -488,7 +481,6 @@ async def remove_from_basket(data: RemoveBookDTO, current_user: Customer = Depen
 # Description : Search for the book by its name
 @app.post("/search", tags=["books"])
 async def search_book(name: str):
-	event.event_dis(shop)
 	list_of_book = shop.search_book(name)
 	return {"searchlist": [{"cover": x.cover,
 							"name": x.name,
@@ -584,11 +576,12 @@ async def remove_branch(branch_name):
 # Description : Modify ongoing event
 @app.put("/ModifyEvent/", tags=["event"])
 async def modify_event(data: ModifyEventDTO):
-	event.modify_event(data.event_name,
+	shop.event.modify_event(data.event_name,
 					   data.event_start,
 					   data.event_end,
 					   data.discounted_percentage,
 					   data.event_genre)
+	shop.apply_discount()
 	return {"Modify Success"}
 
 
