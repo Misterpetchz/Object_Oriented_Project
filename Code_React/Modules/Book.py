@@ -152,7 +152,11 @@ class Book:
 		return self.__new_price
 
 	@new_price.setter
-	def new_price(self, new_new_price):
+	def new_price(self, new_price):
+		self.__new_price = new_price
+
+	@new_price.setter
+	def old_price(self, new_new_price):
 		self.__new_price = new_new_price
 
 	@property
@@ -222,26 +226,13 @@ class Book:
 				self.__amount_in_stock = amount
 
 
-class BookItem():
-	def __init__(self, book):
-		self.__cover = book.cover
-		self.__creator = book.creator
-		self.__name = book.name
-		self.__book_info = book.book_info
-		self.__genre = book.genre
-		self.__date_created = book.date_created
-		self.__amount = 1
-		self.__price = book.new_price
+class BookItem(Book):
+	def __init__(self, cover, brief, creator, name, book_info, book_publisher, book_preview, critic_review, table_of_content, summary, genre, date_created, price, amount, book_item_amount):
+		super().__init__(cover, brief, creator, name, book_info, book_publisher, book_preview, critic_review, table_of_content, summary, genre, date_created, price, amount)
+		self.__amount = book_item_amount
 
 # + Getter / Setter {START}
 
-	@property
-	def cover(self):
-		return self.__cover
-
-	@cover.setter
-	def cover(self, new_cover):
-		self.__cover = new_cover
 
 	@property
 	def amount(self):
@@ -250,49 +241,4 @@ class BookItem():
 	@amount.setter
 	def amount(self, new_amount):
 		self.__amount = new_amount
-
-	@property
-	def creator(self):
-		return self.__creator
-
-	@creator.setter
-	def creator(self, new_creator):
-		self.__creator = new_creator
-
-	@property
-	def name(self):
-		return self.__name
-
-	@name.setter
-	def name(self, new_name):
-		self.__name = new_name
-
-	@property
-	def book_info(self):
-		return self.__book_info
-
-	@book_info.setter
-	def book_info(self, new_info):
-		self.__book_info = new_info
-
-	@property
-	def genre(self):
-		return self.__genre
-
-	@genre.setter
-	def genre(self, new_genre):
-		self.__genre = new_genre
-
-	@property
-	def date_created(self):
-		return self.__date_created
-
-	@date_created.setter
-	def date_created(self, new_date):
-		self.__date_created = new_date
-
-	@property
-	def price(self):
-		return self.__price
-
 # + Getter / Setter {END}
