@@ -212,3 +212,47 @@ class Customer(UserAccount):
 	def toJSON(self):
 		return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
 		pass
+
+# Description : Add book to to the basket
+# * Also shouldn't be here
+	def add_book_to_basket(self, book_item, book: Book):
+		if book.stock_amount > 0:
+			for i in self.__basket.book_item:
+				if i.name.lower() == book_item.name.lower():
+					i.amount = i.amount + 1
+					book.stock_amount -= 1
+					self.__basket.price += book_item.price
+					return None
+			else:
+				self.__basket.add_book(book_item)
+				book.stock_amount -= 1
+				self.__basket.price += book_item.price
+
+# Description : Reduce amount of the book in the basket
+# * Also shouldn't be here
+	def reduce_amount(self, book_item, book: Book):
+		for item in self.basket.book_item:
+			if book_item == item.name:
+				item.amount = item.amount-1
+				book.stock_amount += 1
+				self.basket.price -= item.price
+				if item.amount == 0:
+					self.basket.book_item.remove(item)
+
+# Description : Increase amount of the book in the basket
+# * Also shouldn't be here
+	def add_amount(self, book_item, book: Book):
+		if book.stock_amount > 0:
+			for item in self.basket.book_item:
+				if book_item == item.name:
+					item.amount = item.amount+1
+					book.stock_amount -= 1
+					self.basket.price += item.price
+
+# Description : Clear the selected book from the basket
+# * Also shouldn't be here
+	def delete_item(self, book_item, book: Book):
+		for item in self.basket.book_item:
+			if book_item == item.name:
+				book.stock_amount += item.amount
+				self.basket.book_item.remove(item)		
