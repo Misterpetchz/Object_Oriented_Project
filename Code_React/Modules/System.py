@@ -77,5 +77,5 @@ class System:
 # Description : Check the owner of the payment returned user instance
 	def find_user_by_payment_id(self, id):
 		for user in self.__User_DB:
-			if id == user.payment_id:
+			if isinstance(user, Customer) and id == user.payment_id:
 				return user
