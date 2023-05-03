@@ -256,3 +256,10 @@ class Customer(UserAccount):
 			if book_item == item.name:
 				book.stock_amount += item.amount
 				self.basket.book_item.remove(item)		
+
+	def cancel_order(self, book_shop):
+		for book in self.__order.get_item:
+			books = book_shop.find_book_by_name(book.name)
+			books.stock_amount += book.amount
+		self.reset_payment()
+		self.__order_id -= 1

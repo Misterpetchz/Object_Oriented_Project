@@ -2,6 +2,7 @@ import React from "react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { setPayment, fetchPayment } from "../auth";
 
 function Basket() {
 	const navigate = useNavigate();
@@ -23,6 +24,7 @@ function Basket() {
 		axios
 			.get(`http://localhost:8000/make_order`)
 			.then((response) => {
+				setPayment(response.data.payment_id)
 				navigate(`/payment/${response.data.payment_id}`);
 			})
 			.catch(function (error) {
@@ -62,6 +64,7 @@ function Basket() {
 				console.log(error, "error");
 			});
 	};
+
 
 	return (
 		<div style={{ minHeight: 800, marginTop: 30 }}>

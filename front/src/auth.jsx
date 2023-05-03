@@ -8,6 +8,14 @@ export const setRole = (role) => {
 	localStorage.setItem("role", role); // make up your own token
 };
 
+export const setPayment = (payment_id) => {
+	localStorage.setItem("payment", payment_id);
+};
+
+export const fetchPayment = () => {
+	return localStorage.getItem("payment");
+};
+
 export const fetchToken = () => {
 	return localStorage.getItem("access_token");
 };
