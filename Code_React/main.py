@@ -340,9 +340,9 @@ async def add_credit_card(credit_card: CreditCards, current_user=Depends(Sys.get
 # Description : Add credit card to the customer overwrite if one already exist
 @app.put("/Creditcard/edit", tags=["user"])
 async def modify_credit_card(credit_card: CreditCards, current_user=Depends(Sys.get_current_user)):
-	if (bool(re.match(r"[0-9]{2}/[0-9]{2}", credit_card.expire_date))
-		and bool(re.match(r"[0-9]{16}", credit_card.card_num))
-			and bool(re.match(r"[0-9]{3}", credit_card.cvc))):
+	if (bool(re.match(r"^[0-9]{2}/[0-9]{2}$", credit_card.expire_date))
+		and bool(re.match(r"^[0-9]{16}$", credit_card.card_num))
+			and bool(re.match(r"^[0-9]{3}$", credit_card.cvc))):
 		if (current_user.credit_card == None):
 			current_user.add_credit_card(CreditCard(credit_card.card_num,
 													credit_card.expire_date,
