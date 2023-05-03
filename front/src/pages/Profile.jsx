@@ -4,6 +4,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import CreditCard from "./CreditCard";
 import { CustomerOnlyButton } from "../auth";
+import { fetchPayment } from "../auth";
 
 export default function Profile() {
 	const navigate = useNavigate();
@@ -23,6 +24,13 @@ export default function Profile() {
 		window.location.reload(false);
 	};
 
+	const go_to_order = () => {
+		console.log(fetchPayment())
+		if(fetchPayment() != null){
+		navigate(`/payment/${fetchPayment()}`);}
+	};
+
+
 	return (
 		<>
 			<div style={{ marginTop: 20, minHeight: 700 }}>
@@ -39,6 +47,11 @@ export default function Profile() {
 						Edit
 					</Link>
 				)}
+				<div>
+					<button onClick={go_to_order}>
+						Order
+					</button>
+				</div>
 			</div>
 			{CustomerOnlyButton() && (
 				<div>

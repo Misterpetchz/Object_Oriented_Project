@@ -31,6 +31,17 @@ export default function Payment() {
 		return () => clearTimeout(timeoutId);
 	}, [delay]);
 
+	const cancel_order = () => {
+		axios
+			.delete(`http://localhost:8000/cancel_order`)
+			.then(() => {
+				Navigate('/')
+			})
+			.catch(function (error) {
+				console.log(error, "error");
+			});
+	};
+
 	return (
 		<div>
 			<h2>Order</h2>
@@ -46,6 +57,11 @@ export default function Payment() {
 			</div>
 			<div>
 				<SelectMethod />
+			</div>
+			<div>
+				<button onClick={cancel_order}>
+					Cancel Order
+				</button>
 			</div>
 		</div>
 	);
