@@ -172,11 +172,10 @@ class Customer(UserAccount):
 # Description : Make order with the item in the basket
 # * Also shouldn't be here
 	def make_order(self, order):
-		if len(self.__basket.book_item) > 0 and self.__payment == None:
-			# self.__order_list.append(order)
-			# self.__order_id += 1
+		if len(self.__basket.book_item) > 0 and self.__payment == None and self.__order == None:
 			self.__order = order
 			self.generate_seed(self._email + str(self.__order_id))
+			self.__basket.clear_basket()
 
 # Description : Make payment for the order
 # * Also shouldn't be here
@@ -184,10 +183,10 @@ class Customer(UserAccount):
 		current_date = datetime.date.today()
 		format_date = current_date.strftime('%d-%m-%Y')
 		if payment_type.lower() == 'qrcode':
-			self.__payment = ViaQrCode(self.__basket.price, format_date)
+			self.__payment = ViaQrCode(self.__order.total, format_date)
 			return self.__payment.generate_qr_code()
 		elif payment_type.lower() == 'creditcard':
-			self.__payment = ViaCreditCard(self.__basket.price, format_date)
+			self.__payment = ViaCreditCard(self.__order.total, format_date)
 
 # Description : Make order with the item in the basket
 # * Also shouldn't be here
@@ -205,6 +204,13 @@ class Customer(UserAccount):
 		self.__payment = None
 		self.__payment_id = None
 		self.__order = None
+  
+	def cancel_order(self, book_shop):
+		for book in self.__order.get_item:
+			books = book_shop.find_book_by_name(book.name)
+			books.stock_amount += book.amount
+		self.reset_payment()
+		self.__order_id -= 1
 
 # Description : Print user data into json form
 	def toJSON(self):

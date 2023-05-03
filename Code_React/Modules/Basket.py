@@ -71,3 +71,7 @@ class Basket:
 					book.stock_amount += item.amount
 					self.__book_item.remove(item)
 					self.__price -= item.price * item.amount
+  
+	def clear_basket(self):
+		self.__book_item = []
+		self.__price = 0

@@ -4,6 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 
 import SelectMethod from "../component/SelectMethodPayment";
 
+
 export default function Payment() {
 	const Navigate = useNavigate();
 	const { id } = useParams();
@@ -31,23 +32,31 @@ export default function Payment() {
 		return () => clearTimeout(timeoutId);
 	}, [delay]);
 
+	const cancel_order= () =>{
+		axios.delete(`http://localhost:8000/cancel_order/`)
+		.then(
+			Navigate(`/`)
+			)
+	}
+
 	return (
 		<div>
 			<h2>Order</h2>
-			{order &&
-				order._purchased_item &&
-				order._purchased_item.map((item) => (
+			{order&&order.order.map((item) => (
 					<div>
-						<p>Name : {item._name}</p>
-						<p>Price : {item._price}</p>
-						<p>Amount : {item._amount}</p>
+						<p>Name : {item.name}</p>
+						<p>Price : {item.price}</p>
+						<p>Amount : {item.amount}</p>
 					</div>
 				))}
 			<div>
-				<p>Total : {order._total}</p>
+				<p>Total : {order.total}</p>
 			</div>
 			<div>
 				<SelectMethod />
+			</div>
+			<div>
+					<button onClick={cancel_order}>Cancel Order</button>
 			</div>
 		</div>
 	);
