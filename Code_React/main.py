@@ -168,9 +168,6 @@ rangsit.add_product(pookantong_book2)
 pookantong_book1.add_rating(
 	Rating(10, "Bad ending, I don't like it", pookaneiei))
 pookantong_book1.add_rating(Rating(5, "OK, I don't like it", pookaneiei2))
-pookaneiei1.add_book_to_basket(BookItem(pookantong_book1), pookantong_book1)
-pookaneiei1.add_book_to_basket(BookItem(pookantong_book2), pookantong_book2)
-pookaneiei1.add_book_to_basket(BookItem(pookantong_book1), pookantong_book1)
 
 event = EventDiscount("dan", datetime.date(2023, 3, 31),
 					  datetime.date(2023, 4, 30), 0.9, 'Shounen')
@@ -259,29 +256,46 @@ async def add_book_to_basket(bookname: str, amount: int, current_user: Customer 
 	if book == None:
 		raise HTTPException(status_code=404, detail="Book not found")
 	for i in range(amount):
-		current_user.add_book_to_basket(BookItem(book), book)
+		current_user.add_book_to_basket(BookItem(
+											book.cover,
+											book.brief,
+											book.creator,
+											book.name,
+											book.book_info,
+											book.book_publisher,
+											book.book_preview,
+											book.critic_review,
+											book.table_of_content,
+											book.summary,
+											book.genre,
+											book.date_created,
+											book.price,
+											book.stock_amount,
+           									1), book)
 	return {"status": "Success"}
 
 
 # Description : Add amount to the existing book in the basket
 # * DUPLICATE FUNCTION : 02
-@app.post("/add_amount", tags=["user"])
-async def add_book_to_basket(book_item, current_user: Customer = Depends(Sys.get_current_user)):
-	event.event_dis(shop)
-	book = shop.find_book_by_name(book_item)
-	current_user.add_amount(book_item, book)
-	return {"status": "Success"}
+@app.put("/basket/add_amount/{bookname}", tags=["user"])
+async def add_amount(bookname: str, current_user: Customer = Depends(Sys.get_current_user)):
+	book = shop.find_book_by_name(bookname)
+	current_user.basket.add_amount(bookname, book)
 
 
 # Description : Reduce amount to the existing book in the basket
 # * DUPLICATE FUNCTION : 03
-@app.post("/reduce_amount", tags=["user"])
-async def add_book_to_basket(book_item, current_user: Customer = Depends(Sys.get_current_user)):
-	event.event_dis(shop)
-	book = shop.find_book_by_name(book_item)
-	current_user.reduce_amount(book_item, book)
-	return {"status": "Success"}
+@app.put("/basket/reduce_amount/{bookname}", tags=["user"])
+async def reduce_amount(bookname: str, current_user: Customer = Depends(Sys.get_current_user)):
+	book = shop.find_book_by_name(bookname)
+	current_user.basket.reduce_amount(bookname, book)
 
+
+# Description : Delete the existing book in the basket
+@app.delete("/basket/delete_item/{bookname}", tags=["user"])
+async def delete_amount(bookname: str, current_user: Customer = Depends(Sys.get_current_user)):
+	book = shop.find_book_by_name(bookname)
+	current_user.basket.delete_item(bookname, book)
 
 # Description : Add rating to the book
 @app.post("/books/{bookname}/addrating", tags=["books"])
@@ -436,7 +450,7 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
 async def view_info(userid=Depends(Sys.get_current_user)):
 	if (isinstance(userid, Customer)):
 		return {"address": userid.address,
-				"email ": userid.email,
+				"email": userid.email,
 				"full_name": userid.full_name,
 				"gender": userid.gender,
 				"tel": userid.tel,
@@ -609,7 +623,10 @@ async def make_order(current_user: Customer = Depends(Sys.get_current_user)):
 async def get_payment(id, current_user=Depends(Sys.get_current_user), payment_type: str = None):
 	if id == current_user.payment_id:
 		if payment_type is None:
-			return current_user.order
+			return {"order": [{"name": book.name,
+								"price": book.price,
+								"amount": book.amount} for book in current_user.order.get_item],
+					"total":current_user.order.total}
 		elif payment_type.lower() == 'qrcode':
 			return {"payment": current_user.make_payment(payment_type)}
 		elif payment_type.lower() == 'creditcard':
@@ -622,7 +639,9 @@ async def get_payment(id, current_user=Depends(Sys.get_current_user), payment_ty
 @app.get('/payment_status/{id}')
 async def check_payment(id, current_user=Depends(Sys.get_current_user)):
 	if id == current_user.payment_id:
-		if current_user.payment.status == 'paid':
+		if current_user.payment == None:
+			return {"status": None}
+		elif current_user.payment.status == 'paid':
 			current_user.add_order_to_order_list(current_user.order)
 			current_user.update_order_id()
 			current_user.reset_payment()
@@ -641,4 +660,6 @@ async def fake_bank(id, status: str = None):
 # Description : View current list of order
 @app.get('/order_list/')
 async def show_order_list(current_user=Depends(Sys.get_current_user)):
-	return {'order_list': current_user.order_list}
+	return {'order_list': [{"purchased_item":[{"cover":book.cover,
+                                            	"name":book.name} for book in order.get_item],
+							'total':order.total} for order in current_user.order_list]}
