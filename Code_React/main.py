@@ -56,7 +56,6 @@ shop = BookShop()
 User_DB = []
 list_credit_card = []
 
-list_branch = BranchList()
 Sys = System()
 
 
@@ -551,12 +550,6 @@ async def get_branch():
 	return {"name": [{"branch_name": x.branch_name} for x in shop.list_of_branch]}
 
 
-# Description : Return list of branch with the input book in stock
-@app.get("/get_add_book_to_branch/")
-async def get_book_stock(book_name):
-	return shop.check_stock(book_name)
-
-
 # Description : Add book to the branch stock
 @app.post("/AddBookToBranch/", tags=["branch"])
 async def add_book_to_stock(data: AddBookToBranch):
@@ -596,9 +589,7 @@ async def modify_branch(data: ModifyBranchDTO, branch_name):
 								data.location,
 								data.tel,
 								data.line_id,
-								data.facebook_id,
-								[],
-								[])
+								data.facebook_id)
 	return {"Modify Success"}
 
 

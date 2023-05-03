@@ -1,6 +1,3 @@
-from Modules.Catalog import *
-
-
 class Basket:
 	def __init__(self):
 		self.__book_item = []
