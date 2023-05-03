@@ -10,15 +10,6 @@ export const fetchPayment = () => {
 	return localStorage.getItem("payment_local_id");
 };
 
-export function RequirePaymentButton() {
-	let payment_local_id = fetchPayment();
-	if (!payment_local_id) {
-		return false;
-	} else {
-		return true;
-	}
-}
-
 export default function Profile() {
 	const navigate = useNavigate();
 	const [user, setUser] = useState("");

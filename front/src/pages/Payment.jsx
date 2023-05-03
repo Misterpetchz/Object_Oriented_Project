@@ -5,10 +5,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import SelectMethod from "../component/SelectMethodPayment";
 
 
-export const setPayment = (payment_id) => {
-	localStorage.setItem("payment_local_id", payment_id); // make up your own token
-};
-
 export default function Payment() {
 	const Navigate = useNavigate();
 	const { id } = useParams();
@@ -37,7 +33,6 @@ export default function Payment() {
 	}, [delay]);
 
 	const cancel_order= () =>{
-		setPayment(null)
 		axios.delete(`http://localhost:8000/cancel_order/`)
 		.then(
 			Navigate(`/`)
