@@ -389,8 +389,9 @@ async def view_branch(name: str):
 			"tel": x.tel,
 			"line_id": x.line_id,
 			"facebook_id": x.facebook_id,
-			"product": x.product_in_stock
+			"product": [{"name" : product.name} for product in x.product_in_stock]
 			}
+ 
 
 
 # Description : View the info of the selected book

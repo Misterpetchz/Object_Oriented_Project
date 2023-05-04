@@ -12,6 +12,7 @@ function ViewBranch() {
 			.get(`http://localhost:8000/branch/${params.name}`)
 			.then((result) => {
 				setBranch(result.data);
+				console.log(branch.product);
 			})
 			.catch(function (error) {
 				console.log(error, "error");
@@ -36,7 +37,6 @@ function ViewBranch() {
 				<div>
 					<h3>Products in stock</h3>
 					{branch.product &&
-						branch.product &&
 						branch.product.map((product, index) => (
 							<div key={index}>
 								<span>{product.name}</span>
