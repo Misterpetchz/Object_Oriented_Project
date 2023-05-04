@@ -263,7 +263,7 @@ async def add_book_to_basket(bookname: str, amount: int, current_user: Customer 
 											book.summary,
 											book.genre,
 											book.date_created,
-											book.price,
+											book.new_price,
 											book.stock_amount,
            									1), book)
 	return {"status": "Success"}
@@ -611,7 +611,6 @@ async def make_order(current_user: Customer = Depends(Sys.get_current_user)):
 								  True,
 								  current_user.basket.price,
 								  current_user.full_name))
-	current_user.basket.book_item = []
 	return {"payment_id": current_user.payment_id}
 
 

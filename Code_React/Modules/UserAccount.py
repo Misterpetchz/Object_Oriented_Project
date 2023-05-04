@@ -179,6 +179,7 @@ class Customer(UserAccount):
 			# self.__order_id += 1
 			self.__order = order
 			self.generate_seed(self._email + str(self.__order_id))
+			self.__basket.book_item = []
 
 # Description : Make payment for the order
 # * Also shouldn't be here
