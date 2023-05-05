@@ -507,14 +507,6 @@ async def search_book(name: str):
 						   for x in list_of_book if x.stock_amount != 0]}
 
 
-# Description : View the book info by its name
-@app.put("/books/{bookname}", tags=["books"])
-async def modify_book_to_catalog(bookname, data: ModifyBookDTO):
-	book = shop.find_book_by_name(bookname)
-	book.modify_book(data)
-	return {"status": "Success"}
-
-
 # Description : Delete the book by its name
 @app.delete("/books/{bookname}", tags=["books"])
 async def delete_book(bookname):

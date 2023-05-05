@@ -221,6 +221,7 @@ class Book:
 		if isinstance(price, str):
 			if price != '':
 				self.__price = price
+				self.__new_price = price
 		if isinstance(amount, str):
 			if amount != '':
 				self.__amount_in_stock = amount
