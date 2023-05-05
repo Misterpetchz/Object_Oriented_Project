@@ -108,7 +108,7 @@ class Branch():
 # Description : Return book in stock that has the same name as input string
 	def find_book_in_stock(self, book_name):
 		for book in self.__product_in_stock:
-			if book_name == book._name:
+			if book_name == book.name:
 				return book
 
 # Description : Remove book from stock if the instance of the book are the same as input instance
