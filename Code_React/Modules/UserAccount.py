@@ -180,6 +180,7 @@ class Customer(UserAccount):
 			self.__order = order
 			self.generate_seed(self._email + str(self.__order_id))
 			self.__basket.book_item = []
+			self.__basket.price = 0
 
 # Description : Make payment for the order
 # * Also shouldn't be here
