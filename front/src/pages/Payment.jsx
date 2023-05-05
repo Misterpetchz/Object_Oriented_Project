@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
+import { setPayment } from "../auth";
 
 import SelectMethod from "../component/SelectMethodPayment";
 
@@ -21,6 +22,7 @@ export default function Payment() {
 			});
 		axios.get(`http://localhost:8000/payment_status/${id}`).then((response) => {
 			if (response.data.status === "paid") {
+				localStorage.removeItem("payment");
 				Navigate(`/order_list`);
 			}
 		});
@@ -35,6 +37,7 @@ export default function Payment() {
 		axios
 			.delete(`http://localhost:8000/cancel_order`)
 			.then(() => {
+				localStorage.removeItem("payment");
 				Navigate('/')
 			})
 			.catch(function (error) {

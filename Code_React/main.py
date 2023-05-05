@@ -158,12 +158,12 @@ pookantong_book2 = Book(
 )
 shop.add_book(pookantong_book1)
 shop.add_book(pookantong_book2)
-nonthaburi1.add_product(pookantong_book1)
-nonthaburi1.add_product(pookantong_book2)
-bangkok.add_product(pookantong_book1)
-moon_branch.add_product(pookantong_book2)
-rangsit.add_product(pookantong_book1)
-rangsit.add_product(pookantong_book2)
+nonthaburi1.add_book_to_stock(pookantong_book1)
+nonthaburi1.add_book_to_stock(pookantong_book2)
+bangkok.add_book_to_stock(pookantong_book1)
+moon_branch.add_book_to_stock(pookantong_book2)
+rangsit.add_book_to_stock(pookantong_book1)
+rangsit.add_book_to_stock(pookantong_book2)
 
 pookantong_book1.add_rating(
 	Rating(10, "Bad ending, I don't like it", pookaneiei))
@@ -263,7 +263,7 @@ async def add_book_to_basket(bookname: str, amount: int, current_user: Customer 
 											book.summary,
 											book.genre,
 											book.date_created,
-											book.price,
+											book.new_price,
 											book.stock_amount,
            									1), book)
 	return {"status": "Success"}
@@ -389,8 +389,9 @@ async def view_branch(name: str):
 			"tel": x.tel,
 			"line_id": x.line_id,
 			"facebook_id": x.facebook_id,
-			"product": x.product_in_stock
+			"product": [{"name" : product.name} for product in x.product_in_stock]
 			}
+ 
 
 
 # Description : View the info of the selected book
@@ -610,7 +611,6 @@ async def make_order(current_user: Customer = Depends(Sys.get_current_user)):
 								  True,
 								  current_user.basket.price,
 								  current_user.full_name))
-	current_user.basket.book_item = []
 	return {"payment_id": current_user.payment_id}
 
 
