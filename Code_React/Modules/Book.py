@@ -211,7 +211,7 @@ class Book:
 		if isinstance(genre, list):
 			for thing in genre:
 				if thing not in self.__genre:
-					self.__genre.append(genre)
+					self.__genre.append(thing)
 			for old in self.__genre:
 				if old not in genre:
 					self.__genre.remove(old)
