@@ -190,7 +190,7 @@ class Customer(UserAccount):
 			return self.__payment.generate_qr_code()
 		elif payment_type.lower() == 'creditcard':
 			self.__payment = ViaCreditCard(self.__basket.price, format_date)
-
+   
 # Description : Make order with the item in the basket
 # * Also shouldn't be here
 	def add_order_to_order_list(self, order):

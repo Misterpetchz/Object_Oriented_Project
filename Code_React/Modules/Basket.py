@@ -30,3 +30,7 @@ class Basket:
 	def add_book(self, book):
 		self.__book_item.append(book)
   
+	def clear_item(self):
+		self.__book_item = []
+		self.__price = 0
+  

@@ -18,8 +18,8 @@ export default function CreditCard() {
 		return (
 			<>
 				<div style={{ marginTop: 20, minHeight: 700 }}>
-					<h1>Credit Card Test</h1>
-					<p>Testy, Test?</p>
+					<h1>Credit Card</h1>
+					<p>No card</p>
 					<Link to="/profile/credit_card/edit" className="btn btn-primary">
 						Add Card
 					</Link>
@@ -30,11 +30,10 @@ export default function CreditCard() {
 		return (
 			<>
 				<div style={{ marginTop: 20, minHeight: 700 }}>
-					<h1>Credit Card Test</h1>
-					<p>Testy, Test?</p>
-					<ul>{credit_card.credit_card_num}</ul>
-					<ul>{credit_card.credit_card_exp}</ul>
-					<ul>{credit_card.credit_card_cvc}</ul>
+					<h1>Credit Card</h1>
+					<ul>Card number : {credit_card.credit_card_num}</ul>
+					<ul>Exp date : {credit_card.credit_card_exp}</ul>
+					<ul>CVC : {credit_card.credit_card_cvc}</ul>
 					<Link to="/profile/credit_card/edit" className="btn btn-primary">
 						Edit Card
 					</Link>

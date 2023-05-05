@@ -417,10 +417,6 @@ async def info_verification(data: EditProfile, id=Depends(Sys.get_current_user))
 						data.email_noti,
 						data.sms_noti)
 		return {"status": "Success"}
-	elif (isinstance(id, Admin)):
-		id.edit_profile(data.password or id.password, data.full_name or id.full_name,
-						data.gender or id.gender, data.tel or id.tel)
-		return {"status": "Success"}
 
 
 # Description : Check the username and password and call the function to create token for user
@@ -610,7 +606,7 @@ async def make_order(current_user: Customer = Depends(Sys.get_current_user)):
 								  True,
 								  current_user.basket.price,
 								  current_user.full_name))
-	current_user.basket.book_item = []
+	current_user.basket.clear_item()
 	return {"payment_id": current_user.payment_id}
 
 

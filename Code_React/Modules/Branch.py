@@ -115,3 +115,5 @@ class Branch():
 	def remove_book_from_stock(self, book: Book):
 		if book in self.__product_in_stock:
 			self.__product_in_stock.remove(book)
+   
+	
