@@ -72,11 +72,6 @@ class Admin(UserAccount):
 		self.__permission = permission
 		self._disabled = False
 
-# Description : Add event to the database
-	def add_event(self, book: BookItem, event_discount: EventDiscount):
-		if isinstance(event_discount, EventDiscount):
-			book.event_discount.append(event_discount)
-
 
 class Customer(UserAccount):
 	def __init__(self, email, password, fullname, gender, tel, email_noti, sms_noti, address):
