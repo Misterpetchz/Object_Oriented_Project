@@ -12,7 +12,7 @@ import hashlib
 
 SECRET_KEY = "0ecb3c3265b8073a4686a79606109099c6116152a390597514c9eff447fb1f94"
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTE = 30
+ACCESS_TOKEN_EXPIRE_MINUTE = 120
 PWD_CONTEXT = CryptContext(schemes=["bcrypt"], deprecated="auto")
 OAUTH2_SCHEME = OAuth2PasswordBearer(tokenUrl="token")
 

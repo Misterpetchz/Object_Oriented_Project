@@ -30,6 +30,9 @@ export default function Profile() {
 		navigate(`/payment/${fetchPayment()}`);}
 	};
 
+	const go_to_order_list = () => {
+		navigate(`/order_list`)
+	}
 
 	return (
 		<>
@@ -52,11 +55,17 @@ export default function Profile() {
 						Order
 					</button>
 				</div>
+				<div>
+					<button onClick={go_to_order_list}>
+						Order List
+					</button>
+				</div>
 			</div>
 			{CustomerOnlyButton() && (
 				<div>
 					<CreditCard />
 				</div>
+				
 			)}
 		</>
 	);
