@@ -20,6 +20,7 @@ export default function Profile() {
 	const signOut = () => {
 		localStorage.removeItem("access_token");
 		localStorage.removeItem("role");
+		localStorage.removeItem("payment");
 		navigate("/");
 		window.location.reload(false);
 	};
